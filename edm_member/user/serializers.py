@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
            weight = validated_data['weight'],
            diet_purpose = validated_data['diet_purpose'],
            gender = validated_data['gender'],
-           password = validated_data['password']
+           password = validated_data['password'],
        )
        return user
    
@@ -30,4 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
            'diet_purpose',
            'password',
            'gender',
+           'uuid',
+           'created_at',
+           'updated_at',
            ]

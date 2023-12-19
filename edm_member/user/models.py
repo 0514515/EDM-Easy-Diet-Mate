@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.utils import timezone
+import uuid
 
 # 유저 CRUD 쿼리 정의
 class UserManager(BaseUserManager):
@@ -20,7 +22,6 @@ class UserManager(BaseUserManager):
             raise ValueError('must have user diet_purpose')
         if not gender:
             raise ValueError('must have user gender')
-            
         
         user = self.model(
             email = self.normalize_email(email),
@@ -34,8 +35,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-        
-
+    
 # 회원 모델
 class User(AbstractBaseUser):
     active_level_choice = [
@@ -59,7 +59,7 @@ class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     email = models.EmailField(default='', max_length=100, null=False, blank=False, unique=True)
     name = models.CharField(default='', max_length=10, null=False, blank=False)
-    birthdate = models.DateField(null=False,)
+    birthdate = models.DateField(null=False)
     active_level = models.CharField(
         max_length=7,
         null=False,
@@ -81,13 +81,21 @@ class User(AbstractBaseUser):
         null=False,
         blank=False,
         choices=gender_choice,
-        default='남자'
+        default='남자',
+        )
+    uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
     )
+    
+    created_at = models.DateTimeField(editable=False,auto_now_add=True)
+    updated_at = models.DateTimeField(editable=False,auto_now=True)
     
     # User 모델의 필수 필드
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     
+    # manager
     manager = UserManager()
     
     # username 필드 정의
