@@ -1,9 +1,76 @@
-from django.shortcuts import render
-from .serializers import UserSerializer
+
+from .serializers import *
 from .models import User
 from rest_framework import generics
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.hashers import check_password
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated,AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # 회원가입
 class CreateUser(generics.CreateAPIView):
-    queryset = User.manager.all()
-    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+    serializer_class = UserCreateSerializer
+    
+    def post(self, request, *args, **kwargs):
+        
+        return self.create(request, *args, **kwargs)
+    
+
+class Login(APIView):
+    serializer_class = UserLoginSerializer
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        email = request.data['email']
+        password = request.data['password']
+        
+        user = User.objects.filter(email=email).first()
+
+
+        # 계정 없을 때
+        if user is None:
+            return Response(
+                {"message" : "존재하지 않는 아이디입니다."}, status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        # 비밀번호 틀렸을 때
+        if not check_password(password, user.password):
+            return Response(
+                {"message":"비밀번호가 틀렸습니다."},status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        # 정보 다 맞으면
+        if user is not None:
+  
+            token = TokenObtainPairSerializer.get_token(user) # 리프레시 토큰 생성
+            refresh_token = str(token)
+            access_token = str(token.access_token)
+            
+            response = Response(
+                {
+                    "access": access_token,
+                    "refresh": refresh_token,
+                },
+                status=status.HTTP_200_OK
+            )
+            
+            response.set_cookie("access_token",access_token,httponly=True)
+            response.set_cookie("refresh_token",refresh_token,httponly=True)
+            return response
+        
+        else:
+            return Response(
+                {"message","로그인에 실패하였습니다"}, status=status.HTTP_400_BAD_REQUEST
+            )
+            
+class HelloWorldView(APIView):
+    def post(self, request):
+        return Response(data={"hello":"world"}, status=status.HTTP_200_OK)
+
+# # 회원탈퇴
+# class DeleteUser(generics.DestroyAPIView):
+#     queryset

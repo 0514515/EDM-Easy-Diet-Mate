@@ -36,6 +36,24 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
+    def create_superuser(self, email, password, name):
+        user = self.create_user(
+            email,
+            name=name,
+            password=password,
+            active_level='level 1',
+            height='0',
+            weight='0',
+            birthdate=timezone.now,
+            diet_purpose='loss weight',
+            gender='남자',
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+    
+    
+
 # 회원 모델
 class User(AbstractBaseUser):
     active_level_choice = [
@@ -46,9 +64,9 @@ class User(AbstractBaseUser):
         ('level 5','5레벨'),
         ]
     diet_purpose_choice = [
-        ('loss_weight','체중 감량'),
-        ('keep_weight','체중 유지'),
-        ('gain_weight','체중 증량'),
+        ('loss weight','체중 감량'),
+        ('keep weight','체중 유지'),
+        ('gain weight','체중 증량'),
     ]
     gender_choice =[
         ('man','남자'),
@@ -59,7 +77,7 @@ class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     email = models.EmailField(default='', max_length=100, null=False, blank=False, unique=True)
     name = models.CharField(default='', max_length=10, null=False, blank=False)
-    birthdate = models.DateField(null=False)
+    birthdate = models.DateField(default=timezone.now, null=False)
     active_level = models.CharField(
         max_length=7,
         null=False,
@@ -67,8 +85,8 @@ class User(AbstractBaseUser):
         choices=active_level_choice,
         default='level 1',
         )
-    height = models.CharField(default=0, null=False, blank=False, max_length=7)
-    weight = models.CharField(default=0, null=False, blank=False, max_length=7)
+    height = models.SmallIntegerField(default=0, null=False, blank=False,)
+    weight = models.SmallIntegerField(default=0, null=False, blank=False,)
     diet_purpose= models.CharField(
         max_length=11,
         null=False,
@@ -95,8 +113,8 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     
-    # manager
-    manager = UserManager()
+    # objects
+    objects = UserManager()
     
     # username 필드 정의
     USERNAME_FIELD = 'email'
@@ -108,3 +126,16 @@ class User(AbstractBaseUser):
     
     def __str__(self):
         return self.name
+    
+    # 기본 유저 모델 admin용
+    def has_perm(self, perm, obj=None):
+        return True
+    
+    # 기본 유저 모델 admin용
+    def has_module_perms(self, app_label):
+        return True
+    
+    # 기본 유저 모델 admin용
+    @property
+    def is_staff(self):
+        return self.is_admin
