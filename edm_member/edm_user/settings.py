@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +27,7 @@ SECRET_KEY = "django-insecure-t*w0m@b(8y6g9xilq5=-fldl$*0lu=wp4d^(f+=o(lx=1pa#gd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.66']
+# ALLOWED_HOSTS = ['192.168.0.66']
 
 
 # Application definition
@@ -102,11 +101,11 @@ WSGI_APPLICATION = "edm_user.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('PORT'),
+        'NAME': 'user_service',
+        'USER': 'user_service',
+        'PASSWORD': 'aivle',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 

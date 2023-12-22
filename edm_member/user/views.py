@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .permissions import IPBasedPermission
 
 def user_error_response(message="", display_message="",status=status.HTTP_400_BAD_REQUEST):
     return Response(
@@ -21,6 +22,7 @@ def user_error_response(message="", display_message="",status=status.HTTP_400_BA
 
 # 회원가입
 class CreateUser(generics.CreateAPIView):
+    # permission_classes = [IPBasedPermission]
     permission_classes = [AllowAny]
     serializer_class = UserCreateSerializer
     
