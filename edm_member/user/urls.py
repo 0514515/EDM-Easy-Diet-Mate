@@ -1,13 +1,12 @@
 from django.urls import path, include
 from . import views
 from rest_framework import urls
-from rest_framework_simplejwt.views import TokenRefreshView,TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 
 urlpatterns =[
-    path('user/', views.CreateUser.as_view()),
-    path('login/', views.Login.as_view(),),
+    path('user/', views.CreateUser.as_view()), # 유저 생성
+    path('login/', views.Login.as_view(),), # 로그인
     path("auth/refresh/",TokenRefreshView.as_view()), # access 토큰 재발급
-    path('hello/', views.HelloWorldView.as_view(), name='hello_world'),
     # path('api-auth/', include('rest_framework.urls')),
 ]

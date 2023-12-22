@@ -2,7 +2,6 @@ from .models import User
 from rest_framework import serializers
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    
     # 검증을 통과한 값인 validated_data의 값만을 넣어줌.
     def create(self, validated_data):
        user = User.objects.create_user(
@@ -43,3 +42,10 @@ class UserLoginSerializer(serializers.ModelSerializer):
             "password"
         ]
         
+class DeleteUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "email",
+            "password"
+        ]

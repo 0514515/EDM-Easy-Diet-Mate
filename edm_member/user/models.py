@@ -57,20 +57,20 @@ class UserManager(BaseUserManager):
 # 회원 모델
 class User(AbstractBaseUser):
     active_level_choice = [
-        ('level 1','1레벨'),
-        ('level 2','2레벨'),
-        ('level 3','3레벨'),
-        ('level 4','4레벨'),
-        ('level 5','5레벨'),
+        ('1','1'),
+        ('2','2'),
+        ('3','3'),
+        ('4','4'),
+        ('5','5'),
         ]
     diet_purpose_choice = [
-        ('loss weight','체중 감량'),
-        ('keep weight','체중 유지'),
-        ('gain weight','체중 증량'),
+        ('체중 감량','체중 감량'),
+        ('체중 유지','체중 유지'),
+        ('체중 증량','체중 증량'),
     ]
     gender_choice =[
-        ('man','남자'),
-        ('woman','여자')
+        ('남자','남자'),
+        ('여자','여자')
     ]
     
     # User 모델의 필드
