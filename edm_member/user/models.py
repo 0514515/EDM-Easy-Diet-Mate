@@ -30,6 +30,7 @@ class UserManager(BaseUserManager):
             active_level = active_level,
             height = height,
             weight = weight,
+            gender = gender,
             diet_purpose = diet_purpose,
         )
         user.set_password(password)
@@ -70,7 +71,7 @@ class User(AbstractBaseUser):
     ]
     gender_choice =[
         ('남자','남자'),
-        ('여자','여자')
+        ('여자','여자'),
     ]
     
     # User 모델의 필드
