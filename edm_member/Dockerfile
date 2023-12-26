@@ -1,11 +1,15 @@
+# Python 이미지 사용
 FROM python:3.11.5
 
-RUN apt-get update && apt-get install -y python3-pip && apt-get clean
+# 작업 디렉토리 설정
+WORKDIR /app
 
-WORKDIR /djangoproject/
-add . /djangoproject/
-RUN python -m pip install --upgrade pip
-RUN pip3 install --no-cache-dir torch
+# 의존성 파일 복사 및 설치
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip3 install -r requirements.txt
-RUN python manage.py makemigrations
+# 프로젝트 파일 복사
+COPY . .
+
+# Gunicorn 실행
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "edm_user.wsgi:application"]

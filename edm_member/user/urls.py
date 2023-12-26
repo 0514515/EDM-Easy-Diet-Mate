@@ -7,6 +7,9 @@ from rest_framework_simplejwt.views import TokenRefreshView
 urlpatterns =[
     path('user/', views.CreateUser.as_view()), # 유저 생성
     path('login/', views.Login.as_view(),), # 로그인
-    path("auth/refresh/",TokenRefreshView.as_view()), # access 토큰 재발급
+    path('auth/refresh/',TokenRefreshView.as_view()), # access 토큰 재발급
+    path('user/info/',views.delete_or_patch), # 유저 정보 조회
+    
+    
     # path('api-auth/', include('rest_framework.urls')),
 ]

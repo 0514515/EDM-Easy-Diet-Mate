@@ -30,6 +30,7 @@ class UserManager(BaseUserManager):
             active_level = active_level,
             height = height,
             weight = weight,
+            gender = gender,
             diet_purpose = diet_purpose,
         )
         user.set_password(password)
@@ -70,7 +71,7 @@ class User(AbstractBaseUser):
     ]
     gender_choice =[
         ('남자','남자'),
-        ('여자','여자')
+        ('여자','여자'),
     ]
     
     # User 모델의 필드
@@ -124,8 +125,8 @@ class User(AbstractBaseUser):
         'name',
         ]
     
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
     
     # 기본 유저 모델 admin용
     def has_perm(self, perm, obj=None):

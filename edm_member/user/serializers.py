@@ -1,7 +1,22 @@
 from .models import User
 from rest_framework import serializers
 
-class UserCreateSerializer(serializers.ModelSerializer):
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'email',
+            'name',
+            'birthdate',
+            'active_level',
+            'height',
+            'weight',
+            'diet_purpose',
+            'gender',
+        ]
+
+class CreateUserSerializer(serializers.ModelSerializer):
     # 검증을 통과한 값인 validated_data의 값만을 넣어줌.
     def create(self, validated_data):
        user = User.objects.create_user(
@@ -34,7 +49,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
            'updated_at',
            ]
        
-class UserLoginSerializer(serializers.ModelSerializer):
+class LoginUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -42,10 +57,13 @@ class UserLoginSerializer(serializers.ModelSerializer):
             "password"
         ]
         
-class DeleteUserSerializer(serializers.ModelSerializer):
+class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "email",
-            "password"
+            "uuid",
+            "height",
+            "weight",
+            "active_level",
+            "diet_purpose"
         ]

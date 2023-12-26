@@ -27,8 +27,6 @@ SECRET_KEY = "django-insecure-t*w0m@b(8y6g9xilq5=-fldl$*0lu=wp4d^(f+=o(lx=1pa#gd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['192.168.0.66']
-
 
 # Application definition
 
@@ -46,9 +44,10 @@ INSTALLED_APPS = [
 
 #JWT
 REST_FRAMEWORK = {	
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 토큰기반 permission
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
@@ -104,7 +103,7 @@ DATABASES = {
         'NAME': 'user_service',
         'USER': 'user_service',
         'PASSWORD': 'aivle',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '3306',
     }
 }
