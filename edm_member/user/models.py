@@ -125,8 +125,8 @@ class User(AbstractBaseUser):
         'name',
         ]
     
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
     
     # 기본 유저 모델 admin용
     def has_perm(self, perm, obj=None):
