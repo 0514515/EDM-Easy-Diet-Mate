@@ -104,7 +104,7 @@ class Login(APIView):
             )
 
 
-@api_view(['PATCH','DELETE'])
+@api_view(['GET','PATCH','DELETE'])
 def delete_or_patch(request):
     if request.method=='PATCH':
         try:
@@ -195,6 +195,39 @@ def delete_or_patch(request):
                 message="delete user failed",
                 status=status.HTTP_400_BAD_REQUEST
             )
+          
+    elif request.method=='GET':
+        try:
+            data = UpdateUserSerializer(request.data).data
+            
+            user = User.objects.filter(uuid=data["uuid"]).first()
+            
+            if not user:
+                print("user is not exists")
+                return user_response(
+                    message="user is not exists",
+                    display_message="존재하지 않는 회원입니다.",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                
+            serializer = UpdateUserSerializer(user, data=data, partial=True)
+            print(serializer)
+            
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    "user" : UserInfoSerializer(user).data,
+                }
+                )
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return user_response(
+                display_message="회원 조회에 실패하였습니다.",
+                message="patch user failed",
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
     else:
         return Response({"message": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 

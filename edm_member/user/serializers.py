@@ -14,6 +14,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'weight',
             'diet_purpose',
             'gender',
+            'uuid',
         ]
 
 class CreateUserSerializer(serializers.ModelSerializer):
