@@ -1,12 +1,18 @@
 from rest_framework import serializers
-from .models import Meal_Date
-
-# class MealSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Meal_Date
-#         fields = ("__all__")
+from .models import Usermeal, Nutrient, Usermealevaluation
 
 
 class MealSerializer(serializers.ModelSerializer):   
-    def create(self, validated_data):
-        meal = Meal_Date.objects.create_     
+     class Meta:
+        model = Usermeal
+        fields = '__all__'    
+
+class NutrientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nutrient
+        fieds = '__all__'
+
+class UsermealevaluationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usermealevaluation
+        fieds = '__all__'

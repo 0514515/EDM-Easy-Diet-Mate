@@ -2,10 +2,12 @@ from django.urls import include, path
 from rest_framework import routers
 from . import views
 
-router = routers.DefaultRouter() # DefaultRouter 설정
-router.register('Meal', views.MealViewSet, basename = 'meal') # Mealviewset과 Meal_Date 이라는 router 등록
+router = routers.DefaultRouter()
+router.register(r'Meal', views.Mealviewset, basename='meal')
+router.register(r'Nutrient', views.Nutrientviewset, basename='nutrient')
 
 urlpatterns = [
-    path('add/', views.MealViewSet.as_view()),
-    path('calender/', include(router.urls)),
+    path('api/', include(router.urls)),
+    path('evaluation/', views.Mealviewset.as_view({'get': 'list', 'post': 'create'}), name='test_evaluation'),
+    path('user_meal_evaluation/', views.display_user_meal_evaluation, name='user_meal_evaluation'),
 ]
