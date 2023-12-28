@@ -105,7 +105,7 @@ class Login(APIView):
 
 
 @api_view(['GET','PATCH','DELETE'])
-def delete_or_patch(request):
+def user_info(request):
     if request.method=='PATCH':
         try:
             data = UpdateUserSerializer(request.data).data
@@ -124,7 +124,7 @@ def delete_or_patch(request):
             print(serializer)
             
             if serializer.is_valid():
-                serializer.save()
+                serializer.update()
                 return user_response(
                     display_message="회원 수정이 완료되었습니다.",
                     message="update user success",
@@ -224,7 +224,7 @@ def delete_or_patch(request):
         except:
             return user_response(
                 display_message="회원 조회에 실패하였습니다.",
-                message="patch user failed",
+                message="search user failed",
                 status=status.HTTP_400_BAD_REQUEST
             )
         

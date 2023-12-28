@@ -104,6 +104,7 @@ class User(AbstractBaseUser):
         )
     uuid = models.UUIDField(
         default=uuid.uuid4,
+        unique=True,
         editable=False,
     )
     
