@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-!$n=45l=4rk#8029nrk08zy93^z&&=g9^(0@fe9ts)$p7pqp5d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','192.168.10.110']
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "Meal_Date",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -75,8 +77,12 @@ WSGI_APPLICATION = "edm_diet.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        'NAME' : 'user_diet',
+        'USER' : 'meal_db',
+        'PASSWORD' : 'aivle',
+        'HOST' : '192.168.56.1',
+        'PORT' : '3306',
     }
 }
 
