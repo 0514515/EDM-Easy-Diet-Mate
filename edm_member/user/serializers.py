@@ -62,9 +62,8 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "uuid",
             "height",
             "weight",
             "active_level",
-            "diet_purpose"
+            "diet_purpose",
         ]

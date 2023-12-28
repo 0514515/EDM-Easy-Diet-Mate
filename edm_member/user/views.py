@@ -122,7 +122,7 @@ def user_info(request):
         try:
             data = UpdateUserSerializer(request.data).data
             
-            user = User.objects.filter(uuid=data["uuid"]).first()
+            user = User.objects.filter(uuid=uuid).first()
             
             if not user:
                 print("user is not exists")
@@ -136,7 +136,7 @@ def user_info(request):
             print(serializer)
             
             if serializer.is_valid():
-                serializer.update()
+                serializer.update(instance=user,validated_data=data)
                 return user_response(
                     display_message="회원 수정이 완료되었습니다.",
                     message="update user success",
@@ -144,7 +144,8 @@ def user_info(request):
                 )
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except:
+        except Exception as e:
+            print(type(e),e)
             return user_response(
                 display_message="회원 수정에 실패하였습니다.",
                 message="patch user failed",
@@ -157,7 +158,6 @@ def user_info(request):
         try:
             email = request.data['email']
             password = request.data['password']
-            uuid = request.data['uuid']
             
             user1 = User.objects.filter(uuid=uuid).first()
             user2 = User.objects.filter(email=email).first()
