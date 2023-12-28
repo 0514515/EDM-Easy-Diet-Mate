@@ -103,7 +103,6 @@ class Login(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-
 @api_view(['GET','PATCH','DELETE'])
 def user_info(request):
     if request.method=='PATCH':

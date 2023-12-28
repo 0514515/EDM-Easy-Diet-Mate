@@ -54,6 +54,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    
+    # API 브라우저 뷰 비활성화
+    'DEFAULT_RENDERER_CLASSES': [
+    'rest_framework.renderers.JSONRenderer',
+    ]
 }
 
 REST_USE_JWT = True
@@ -185,3 +190,4 @@ CORS_ALLOW_METHODS  =  [
     'POST' , 
     'PUT' , 
 ]
+

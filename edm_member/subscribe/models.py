@@ -2,7 +2,9 @@ from django.db import models
 from user.models import User
 
 class SubscribeManager(models.Manager):
-    pass
+    def create_subscribe(self, from_user, to_user):
+        subscribe = self.create(subscribe_from=from_user, subscribe_to=to_user)
+        return subscribe
 
 class Subscribe(models.Model):
     subscribe_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_subscribe',to_field="uuid")
@@ -11,3 +13,6 @@ class Subscribe(models.Model):
     
     # 매니저
     objects = SubscribeManager()
+    
+    class Meta:
+        unique_together = [['subscribe_from', 'subscribe_to']]

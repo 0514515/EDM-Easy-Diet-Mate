@@ -10,6 +10,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    restart: always
 
   nginx:
     image: nginx:latest
@@ -21,6 +22,7 @@ services:
       - /path/to/your/media:/app/media
     depends_on:
       - web
+    restart: always
 
   db:
     image: mysql:8.0.20
@@ -31,6 +33,7 @@ services:
       MYSQL_USER: user_service
       MYSQL_PASSWORD: aivle
       MYSQL_ROOT_PASSWORD: aivle  # 여기는 MySQL의 root 비밀번호 설정
-
+      restart: always
+      
 volumes:
   mysql_data:
