@@ -9,6 +9,9 @@ from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQUEST):
     return Response(
@@ -104,7 +107,17 @@ class Login(APIView):
             )
 
 @api_view(['GET','PATCH','DELETE'])
+@permission_classes([IsAuthenticated])
 def user_info(request):
+    
+    jwt_authenticator = JWTAuthentication()
+    try:
+        validated_token = jwt_authenticator.get_validated_token(request.headers.get('Authorization').split(' ')[1])
+        uuid = jwt_authenticator.get_user(validated_token).uuid
+
+    except Exception as e:
+        return Response({"message": "Invalid token"}, status=status.HTTP_403_FORBIDDEN)
+    
     if request.method=='PATCH':
         try:
             data = UpdateUserSerializer(request.data).data
@@ -199,7 +212,8 @@ def user_info(request):
         try:
             data = UpdateUserSerializer(request.data).data
             
-            user = User.objects.filter(uuid=data["uuid"]).first()
+            print(uuid)
+            user = User.objects.filter(uuid=uuid).first()
             
             if not user:
                 print("user is not exists")
