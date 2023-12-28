@@ -106,7 +106,7 @@ class Login(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-@api_view(['GET','PATCH','DELETE'])
+@api_view(['GET','PATCH','POST'])
 @permission_classes([IsAuthenticated])
 def user_info(request):
     
@@ -121,7 +121,6 @@ def user_info(request):
     if request.method=='PATCH':
         try:
             user = User.objects.filter(uuid=uuid).first()
-            print("@@@",request.data)
             data = request.data
             if data['height']=='':
                 data['height']=user.height
@@ -152,7 +151,6 @@ def user_info(request):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(type(e),e)
             return user_response(
                 display_message="회원 수정에 실패하였습니다.",
                 message="patch user failed",
@@ -160,7 +158,7 @@ def user_info(request):
             )
     
     
-    elif request.method=='DELETE':
+    elif request.method=='POST':
         
         try:
             email = request.data['email']
@@ -219,7 +217,6 @@ def user_info(request):
         try:
             data = UpdateUserSerializer(request.data).data
             
-            print(uuid)
             user = User.objects.filter(uuid=uuid).first()
             
             if not user:
