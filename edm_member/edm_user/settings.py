@@ -113,7 +113,7 @@ DATABASES = {
         'NAME': 'user_service',
         'USER': 'user_service',
         'PASSWORD': 'aivle',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

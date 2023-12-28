@@ -120,9 +120,15 @@ def user_info(request):
     
     if request.method=='PATCH':
         try:
+            user = User.objects.filter(uuid=uuid).first()
+            print("@@@",request.data)
+            data = request.data
+            if data['height']=='':
+                data['height']=user.height
+            if data['weight']=='':
+                data['weight']=user.weight
             data = UpdateUserSerializer(request.data).data
             
-            user = User.objects.filter(uuid=uuid).first()
             
             if not user:
                 print("user is not exists")
@@ -136,6 +142,7 @@ def user_info(request):
             print(serializer)
             
             if serializer.is_valid():
+                print(data['height'])
                 serializer.update(instance=user,validated_data=data)
                 return user_response(
                     display_message="회원 수정이 완료되었습니다.",
