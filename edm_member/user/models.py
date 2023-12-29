@@ -141,3 +141,7 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    
+    class Meta:
+        verbose_name = "회원"
+        verbose_name_plural = "회원 목록"
