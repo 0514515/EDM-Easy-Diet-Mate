@@ -7,21 +7,21 @@ import uuid
 class UserManager(BaseUserManager):
     def create_user(self, email, name, birthdate, active_level, height, weight, diet_purpose, gender, password=None):
         if not email:
-            raise ValueError('must have user email')
+            raise ValueError('이메일 주소는 필수입니다.')
         if not name:
-            raise ValueError('must have user name')
+            raise ValueError('이름은 필수입니다.')
         if not birthdate:
-            raise ValueError('must have user birthdate')
+            raise ValueError('생년월일은 필수입니다.')
         if not active_level:
-            raise ValueError('must have user active level')
+            raise ValueError('활동 수준은 필수입니다.')
         if not height:
-            raise ValueError('must have user height')
+            raise ValueError('키는 필수입니다.')
         if not weight:
-            raise ValueError('must have user weight')
+            raise ValueError('체중은 필수입니다.')
         if not diet_purpose:
-            raise ValueError('must have user diet_purpose')
+            raise ValueError('다이어트 목적은 필수입니다.')
         if not gender:
-            raise ValueError('must have user gender')
+            raise ValueError('성별은 필수입니다.')
         
         user = self.model(
             email = self.normalize_email(email),

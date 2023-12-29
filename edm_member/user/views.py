@@ -29,18 +29,10 @@ class CreateUser(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
     
     def post(self, request, *args, **kwargs):
-        
-        user = User.objects.filter(email=request.data['email'])
-        
-        # 회원 존재 여부 확인
-        if user:
-            return user_response(
-                message="user is already exists",
-                display_message="이미 존재하는 회원입니다.",
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        return self.create(request, *args, **kwargs)
+        try:
+            return self.create(request, *args, **kwargs)
+        except UserAlreadyExistsException as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class Login(APIView):
     serializer_class = LoginUserSerializer
