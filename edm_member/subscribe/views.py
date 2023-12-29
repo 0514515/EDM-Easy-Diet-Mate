@@ -73,7 +73,7 @@ def subscribe(request):
                 )
             
         except Exception as e:
-            print("@@@@@@@@@@@@@@@@@@error",type(e),e)
+            print("error",type(e),e)
             return Response(
                 {
                     "message":"error",

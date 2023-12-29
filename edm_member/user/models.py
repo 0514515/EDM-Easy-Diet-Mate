@@ -45,7 +45,7 @@ class UserManager(BaseUserManager):
             active_level='level 1',
             height='0',
             weight='0',
-            birthdate=timezone.now,
+            birthdate='1900-01-01',
             diet_purpose='loss weight',
             gender='남자',
         )

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import json,os
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +25,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ALLOWED_HOSTS = ['20.18.18.99','127.0.0.1']
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-t*w0m@b(8y6g9xilq5=-fldl$*0lu=wp4d^(f+=o(lx=1pa#gd"
+secret_file = os.path.join(BASE_DIR, 'secrets.json') # secrets.json 파일 위치를 명시
+
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,6 +57,7 @@ INSTALLED_APPS = [
     "user",
     "subscribe",
     "corsheaders",
+    "board",
 ]
 
 #JWT
@@ -113,7 +128,7 @@ DATABASES = {
         'NAME': 'user_service',
         'USER': 'user_service',
         'PASSWORD': 'aivle',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
@@ -164,7 +179,7 @@ AUTH_USER_MODEL = 'user.User'
 
 # url 끝에 자동 슬래시 기능.
 # 서버 실행시 에러로 인해 False 해놓음.
-APPEND_SLASH=False
+APPEND_SLASH=True
 
 CORS_ALLOW_HEADERS = [ # 허용할 헤더
     "accept",
@@ -191,3 +206,5 @@ CORS_ALLOW_METHODS  =  [
     'PUT' , 
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
