@@ -38,4 +38,6 @@ services:
       restart: always
       
 volumes:
+  static_volume:
+  media_volume:
   mysql_data:
