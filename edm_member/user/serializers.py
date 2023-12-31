@@ -2,6 +2,8 @@ from .models import User
 from rest_framework import serializers
 from .exceptions import UserAlreadyExistsException
 from datetime import date
+from django.utils import timezone
+
 
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,35 +78,41 @@ class CreateUserSerializer(serializers.ModelSerializer):
         
     # 검증을 통과한 값인 validated_data의 값만을 넣어줌.
     def create(self, validated_data):
-       user = User.objects.create_user(
-           email = validated_data['email'],
-           name = validated_data['name'],
-           birthdate = validated_data['birthdate'],
-           active_level = validated_data['active_level'],
-           height = validated_data['height'],
-           weight = validated_data['weight'],
-           diet_purpose = validated_data['diet_purpose'],
-           gender = validated_data['gender'],
-           password = validated_data['password'],
-       )
-       return user
+        agreed_to_privacy_policy = validated_data.pop('agreed_to_privacy_policy', False)
+        
+        user = User.objects.create_user(
+            email=validated_data['email'],
+            name=validated_data['name'],
+            birthdate=validated_data['birthdate'],
+            active_level=validated_data['active_level'],
+            height=validated_data['height'],
+            weight=validated_data['weight'],
+            diet_purpose=validated_data['diet_purpose'],
+            gender=validated_data['gender'],
+            password=validated_data['password'],
+        )
+
+        if agreed_to_privacy_policy:
+            user.agreed_to_privacy_policy = True
+            user.privacy_policy_agreed_at = timezone.now()
+            user.save()
+        return user
    
     class Meta:
-       model = User
-       fields = [
-           'email',
-           'name',
-           'birthdate',
-           'active_level',
-           'height',
-           'weight',
-           'diet_purpose',
-           'password',
-           'gender',
-           'uuid',
-           'created_at',
-           'updated_at',
-           ]
+        model = User
+        fields = [
+            'email',
+            'name',
+            'birthdate',
+            'active_level',
+            'height',
+            'weight',
+            'diet_purpose',
+            'gender',
+            'password',
+            'agreed_to_privacy_policy',  # 추가
+            # uuid, created_at, updated_at은 회원가입 시 입력하지 않으므로 포함시키지 않음
+        ]
        
 
        

@@ -110,6 +110,8 @@ class User(AbstractBaseUser):
     
     created_at = models.DateTimeField(editable=False,auto_now_add=True)
     updated_at = models.DateTimeField(editable=False,auto_now=True)
+    agreed_to_privacy_policy = models.BooleanField(default=False)
+    privacy_policy_agreed_at = models.DateTimeField(null=True, blank=True)
     
     # User 모델의 필수 필드
     is_active = models.BooleanField(default=True)
@@ -145,3 +147,11 @@ class User(AbstractBaseUser):
     class Meta:
         verbose_name = "회원"
         verbose_name_plural = "회원 목록"
+        
+        
+class PrivacyPolicy(models.Model):
+    content = models.TextField()  # 개인정보 처리방침 내용
+    updated_at = models.DateTimeField(auto_now=True)  # 업데이트 날짜
+
+    def __str__(self):
+        return f"Privacy Policy updated at {self.updated_at}"

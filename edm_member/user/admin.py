@@ -1,6 +1,6 @@
 from django.contrib import admin
-from board.models import FAQ, Notice, CardNews
-from .models import User
+from board.models import *
+from .models import *
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
@@ -41,3 +41,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(FAQ, FAQAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(CardNews, CardNewsAdmin)
+admin.site.register(PrivacyPolicy)

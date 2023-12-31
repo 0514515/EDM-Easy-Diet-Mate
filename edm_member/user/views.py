@@ -1,6 +1,6 @@
 
 from .serializers import *
-from .models import User
+from .models import *
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.http import JsonResponse
 
 def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQUEST):
     return Response(
@@ -24,15 +25,26 @@ def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQU
 
 # 회원가입
 class CreateUser(generics.CreateAPIView):
-    # permission_classes = [IPBasedPermission]
     permission_classes = [AllowAny]
     serializer_class = CreateUserSerializer
     
     def post(self, request, *args, **kwargs):
-        try:
-            return self.create(request, *args, **kwargs)
-        except UserAlreadyExistsException as e:
-            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            # 개인정보 처리방침에 동의했는지 확인
+            if not serializer.validated_data.get('agreed_to_privacy_policy', False):
+                return Response({
+                    'message' : 'agreement must be True',
+                    'display_message': "개인정보 처리방침에 동의해야 합니다."
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            
+            try:
+                return self.create(request, *args, **kwargs)
+            except UserAlreadyExistsException as e:
+                return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # 유효성 검증에 실패한 경우의 에러 메시지
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Login(APIView):
     serializer_class = LoginUserSerializer
@@ -239,6 +251,11 @@ def user_info(request):
         
     else:
         return Response({"message": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    
+def privacy_policy(request):
+    policy = PrivacyPolicy.objects.latest('updated_at')
+    return JsonResponse({'content': policy.content})
 
 # class UserInfoApi(APIView):
 # uuid 기반 유저 정보 단일 조회
