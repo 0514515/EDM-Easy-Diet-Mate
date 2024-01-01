@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # collectstatic 명령 실행
-RUN python manage.py collectstatic --no-input
+RUN python manage.py collectstatic
 
 # Gunicorn 실행
 CMD ["gunicorn", "-b", "0.0.0.0:8000", "edm_user.wsgi:application"]

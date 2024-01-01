@@ -13,6 +13,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import JsonResponse
+import re
 
 def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQUEST):
     return Response(
@@ -22,6 +23,35 @@ def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQU
         },
         status=status
     )
+    
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def check_email_existence(request):
+    email = request.data.get('email', '')
+
+    if not email:
+        return Response(
+            {'message': '이메일은 필수입니다.', 'display_message': '이메일 주소를 입력하세요.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    if not re.match(r'^[\w\.-]+@[\w\.-]+$', email):
+        return Response(
+            {'message': '유효한 이메일 형식이 아닙니다.', 'display_message': '유효한 이메일 주소를 입력하세요.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # 이메일이 이미 존재하는지 확인합니다.
+    if User.objects.filter(email=email).exists():
+        return Response(
+            {'message': '이미 사용 중인 이메일입니다.', 'display_message': '이미 사용 중인 이메일입니다.'},
+            status=status.HTTP_200_OK
+        )
+    else:
+        return Response(
+            {'message': '사용 가능한 이메일입니다.', 'display_message': '사용 가능한 이메일입니다.'},
+            status=status.HTTP_200_OK
+        )
 
 # 회원가입
 class CreateUser(generics.CreateAPIView):
