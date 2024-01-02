@@ -104,7 +104,7 @@ def subscribe(request):
                 "subscribe": serializer.data,
                 "message": "Subscribe is success",
                 "display_message": "구독이 완료되었습니다."
-            }, status=status.HTTP_201_CREATED)
+            }, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
