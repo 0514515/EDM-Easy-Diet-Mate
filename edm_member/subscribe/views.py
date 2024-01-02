@@ -45,30 +45,68 @@ def subscribe(request):
     #     serializer = SubscribeSerializer(subscriptions, many=True)
     #     return Response(serializer.data)
 
+    # elif request.method == 'POST':
+    #     subscribe_to_uuid = request.data.get('subscribe_to')
+        
+    #     if not is_valid_uuid(request.data.get('subscribe_to')):
+    #         return Response({'message':"subscribe_to's uuid is invalid",
+    #                          "display_message":"유저를 찾을 수 없습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        
+    #     # 구독 존재 체크
+    #     if Subscribe.objects.filter(subscribe_from=user, subscribe_to__uuid=subscribe_to_uuid).exists():
+    #         return Response({
+    #             "message" : "subscribe already exists",
+    #             "display_message" : "이미 구독하고 있습니다."
+    #             }, status=status.HTTP_400_BAD_REQUEST)
+        
+    #     data = {'subscribe_from': user.uuid, 'subscribe_to': request.data.get('subscribe_to')}
+    #     serializer = SubscribeSerializer(data=data)
+        
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(
+    #             {   "subscribe" : serializer.data,
+    #                 "message" : "subscribe is success",
+    #                 "display_messgage" : "구독이 완료되었습니다."
+    #             }, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     elif request.method == 'POST':
-        subscribe_to_uuid = request.data.get('subscribe_to')
-        
-        if not is_valid_uuid(request.data.get('subscribe_to')):
-            return Response({'message':"subscribe_to's uuid is invalid",
-                             "display_message":"유저를 찾을 수 없습니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # 구독 존재 체크
-        if Subscribe.objects.filter(subscribe_from=user, subscribe_to__uuid=subscribe_to_uuid).exists():
+        user = request.user
+        email = request.data.get('email')
+        name = request.data.get('name')
+
+        # 이메일과 이름으로 사용자 찾기
+        try:
+            subscribe_to_user = User.objects.get(email=email, name=name)
+        except User.DoesNotExist:
+            return Response({'message': "User not found", "display_message": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+        # 자기 자신을 구독하는 것을 방지
+        if user.uuid == subscribe_to_user.uuid:
             return Response({
-                "message" : "subscribe already exists",
-                "display_message" : "이미 구독하고 있습니다."
-                }, status=status.HTTP_400_BAD_REQUEST)
-        
-        data = {'subscribe_from': user.uuid, 'subscribe_to': request.data.get('subscribe_to')}
-        serializer = SubscribeSerializer(data=data)
-        
+                "message": "Cannot subscribe to oneself",
+                "display_message": "자기 자신을 구독할 수 없습니다."
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        # 구독 존재 체크
+        if Subscribe.objects.filter(subscribe_from=user, subscribe_to=subscribe_to_user).exists():
+            return Response({
+                "message": "Subscribe already exists",
+                "display_message": "이미 구독하고 있습니다."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # 구독 생성
+        subscribe_data = {'subscribe_from': user.uuid, 'subscribe_to': subscribe_to_user.uuid}
+        serializer = SubscribeSerializer(data=subscribe_data)
         if serializer.is_valid():
             serializer.save()
-            return Response(
-                {   "subscribe" : serializer.data,
-                    "message" : "subscribe is success",
-                    "display_messgage" : "구독이 완료되었습니다."
-                }, status=status.HTTP_201_CREATED)
+            return Response({
+                "subscribe": serializer.data,
+                "message": "Subscribe is success",
+                "display_message": "구독이 완료되었습니다."
+            }, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
