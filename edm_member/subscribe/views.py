@@ -74,11 +74,10 @@ def subscribe(request):
     elif request.method == 'POST':
         user = request.user
         email = request.data.get('email')
-        name = request.data.get('name')
 
         # 이메일과 이름으로 사용자 찾기
         try:
-            subscribe_to_user = User.objects.get(email=email, name=name)
+            subscribe_to_user = User.objects.get(email=email)
         except User.DoesNotExist:
             return Response({'message': "User not found", "display_message": "유저를 찾을 수 없습니다."}, status=status.HTTP_404_NOT_FOUND)
 

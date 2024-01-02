@@ -1,8 +1,10 @@
 from django.contrib import admin
 from board.models import *
-from .models import *
+from user.models import *
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from subscribe.models import *
+from django.contrib.admin.views.main import ChangeList
 
 class FAQAdmin(admin.ModelAdmin):
     list_display = ['title', 'content']  # 리스트에서 보여줄 필드
@@ -36,9 +38,23 @@ class UserAdmin(BaseUserAdmin):
 class CardNewsAdmin(admin.ModelAdmin):
     list_display = ['title']  # 관리자 페이지에서 보여질 필드
     search_fields = ['title']  # 검색 가능한 필드
+    
+class SubscribeAdmin(admin.ModelAdmin):
+    # 사용자의 이메일과 이름을 조합하는 메서드를 정의합니다.
+    def subscribe_from_info(self, obj):
+        return f"{obj.subscribe_from.email} <{obj.subscribe_from.name}>"
+    subscribe_from_info.short_description = '구독하는 사용자'
+
+    def subscribe_to_info(self, obj):
+        return f"{obj.subscribe_to.email} <{obj.subscribe_to.name}>"
+    subscribe_to_info.short_description = '구독받는 사용자'
+
+    list_display = ('subscribe_from_info', 'subscribe_to_info', 'created_at')
+
+    search_fields = ('subscribe_from__email', 'subscribe_from__name', 'subscribe_to__email', 'subscribe_to__name')
 
 admin.site.register(User, UserAdmin)
 admin.site.register(FAQ, FAQAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(CardNews, CardNewsAdmin)
-admin.site.register(PrivacyPolicy)
+admin.site.register(Subscribe, SubscribeAdmin)

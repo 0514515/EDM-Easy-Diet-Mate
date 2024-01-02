@@ -10,7 +10,7 @@ class FAQ(models.Model):
 
     class Meta:
         verbose_name = "자주 묻는 질문"
-        verbose_name_plural = "자주 묻는 질문들"
+        verbose_name_plural = "자주 묻는 질문 목록"
         
 
 class Notice(models.Model):
@@ -23,7 +23,7 @@ class Notice(models.Model):
 
     class Meta:
         verbose_name = "공지사항"
-        verbose_name_plural = "공지사항들"
+        verbose_name_plural = "공지사항 목록"
         
 class CardNews(models.Model):
     title = models.CharField(max_length=200, verbose_name="제목")
@@ -35,4 +35,4 @@ class CardNews(models.Model):
 
     class Meta:
         verbose_name = "카드뉴스"
-        verbose_name_plural = "카드뉴스들"
+        verbose_name_plural = "카드뉴스 목록"

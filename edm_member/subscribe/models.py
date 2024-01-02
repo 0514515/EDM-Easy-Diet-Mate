@@ -16,3 +16,5 @@ class Subscribe(models.Model):
     
     class Meta:
         unique_together = [['subscribe_from', 'subscribe_to']]
+        verbose_name = "구독"
+        verbose_name_plural = "구독 목록"  # 관리자 페이지에서 표시될 목록 제목
