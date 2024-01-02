@@ -1,6 +1,7 @@
 
 from .serializers import *
 from .models import *
+from subscribe.models import *
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
@@ -262,7 +263,6 @@ def user_info(request):
                 )
                 
             serializer = UpdateUserSerializer(user, data=data, partial=True)
-            print(serializer)
             
             if serializer.is_valid():
                 serializer.save()

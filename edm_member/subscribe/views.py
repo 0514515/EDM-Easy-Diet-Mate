@@ -93,3 +93,4 @@ def subscribe(request):
         except Exception as e:
             # 기타 예외 상황에 대한 처리
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        

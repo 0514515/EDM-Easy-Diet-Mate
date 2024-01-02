@@ -28,7 +28,8 @@ class Notice(models.Model):
 class CardNews(models.Model):
     title = models.CharField(max_length=200, verbose_name="제목")
     image = models.ImageField(upload_to='cardnews_images/', verbose_name="이미지")
-
+    link = models.URLField(max_length=250, verbose_name="링크",default='')
+    
     def __str__(self):
         return self.title
 
