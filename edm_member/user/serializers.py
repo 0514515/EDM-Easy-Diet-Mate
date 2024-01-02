@@ -47,7 +47,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return value
     
     def validate_active_level(self, value):
-        if value not in ['1', '2', '3', '4', '5']:
+        if value not in ['1레벨 - 주 2회 미만, 움직임 거의 없는 사무직',
+              '2레벨 - 주 3~4회 이하, 움직임 조금 있는 직종',
+              '3레벨 - 주 5회 이하, 운송업 종사자',
+              '4레벨 - 주 6회 이상, 인부 혹은 광부',
+              '5레벨 - 운동 선수']:
             raise serializers.ValidationError("활동 수준은 1부터 5 사이의 값이어야 합니다.")
         return value
     

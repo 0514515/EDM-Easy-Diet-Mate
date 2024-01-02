@@ -58,11 +58,11 @@ class UserManager(BaseUserManager):
 # 회원 모델
 class User(AbstractBaseUser):
     active_level_choice = [
-        ('1','1'),
-        ('2','2'),
-        ('3','3'),
-        ('4','4'),
-        ('5','5'),
+        ('1레벨 - 주 2회 미만, 움직임 거의 없는 사무직', '1레벨 - 주 2회 미만, 움직임 거의 없는 사무직'),
+        ('2레벨 - 주 3~4회 이하, 움직임 조금 있는 직종', '2레벨 - 주 3~4회 이하, 움직임 조금 있는 직종'),
+        ('3레벨 - 주 5회 이하, 운송업 종사자', '3레벨 - 주 5회 이하, 운송업 종사자'),
+        ('4레벨 - 주 6회 이상, 인부 혹은 광부', '4레벨 - 주 6회 이상, 인부 혹은 광부'),
+        ('5레벨 - 운동 선수', '5레벨 - 운동 선수'),
         ]
     diet_purpose_choice = [
         ('체중 감량','체중 감량'),
@@ -80,7 +80,7 @@ class User(AbstractBaseUser):
     name = models.CharField(default='', max_length=10, null=False, blank=False)
     birthdate = models.DateField(default=timezone.now, null=False)
     active_level = models.CharField(
-        max_length=7,
+        max_length=29,
         null=False,
         blank=False,
         choices=active_level_choice,
