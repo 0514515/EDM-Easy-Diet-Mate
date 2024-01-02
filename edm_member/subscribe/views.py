@@ -131,3 +131,12 @@ def subscribe(request):
             # 기타 예외 상황에 대한 처리
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+        
+@api_view(['GET'])
+def get_user_name(request, uuid):
+    try:
+        user = User.objects.get(uuid=uuid)
+        serializer = UserNameSerializer(user)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
