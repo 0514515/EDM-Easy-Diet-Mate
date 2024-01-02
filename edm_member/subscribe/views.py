@@ -29,8 +29,6 @@ def is_valid_uuid(uuid_to_test, version=4):
 @permission_classes([IsAuthenticated])
 def subscribe(request):
     user = request.user
-    
-    
 
     if request.method == 'GET':
         subscriptions = Subscribe.objects.filter(subscribe_from=user)
@@ -135,8 +133,19 @@ def subscribe(request):
 @api_view(['GET'])
 def get_user_name(request, uuid):
     try:
-        user = User.objects.get(uuid=uuid)
-        serializer = UserNameSerializer(user)
+        # 요청을 보낸 사용자 (토큰 소유자)
+        request_user = request.user
+
+        # Path parameter로 받은 UUID의 사용자
+        target_user = User.objects.filter(uuid=uuid).first()
+
+        # 두 사용자 간의 구독 관계 확인
+        if not Subscribe.objects.filter(subscribe_from=request_user, subscribe_to=target_user).exists():
+            return Response({'message': 'No subscription found',"display_message":"구독이 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 구독 관계가 있는 경우, 이름 반환
+        serializer = UserNameSerializer(target_user)
         return Response(serializer.data)
+
     except User.DoesNotExist:
         return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)

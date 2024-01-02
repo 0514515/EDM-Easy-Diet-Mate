@@ -22,7 +22,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('email', 'name', 'is_active', 'is_admin')
     list_filter = ('is_active', 'is_admin')
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'name', 'birthdate', 'active_level', 'height', 'weight', 'diet_purpose', 'gender')}),
+        (None, {'fields': ('email', 'password', 'name', 'birthdate', 'active_level', 'height', 'weight', 'diet_purpose', 'gender',)}),
         ('Permissions', {'fields': ('is_active', 'is_admin')}),
     )
     add_fieldsets = (
@@ -51,7 +51,7 @@ class SubscribeAdmin(admin.ModelAdmin):
 
     list_display = ('subscribe_from_info', 'subscribe_to_info', 'created_at')
 
-    search_fields = ('subscribe_from__email', 'subscribe_from__name', 'subscribe_to__email', 'subscribe_to__name')
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(FAQ, FAQAdmin)
