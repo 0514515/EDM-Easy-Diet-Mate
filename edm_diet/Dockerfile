@@ -14,4 +14,4 @@ COPY . .
 # RUN python manage.py collectstatic
 
 # Gunicorn 실행
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "edm_user.wsgi:application"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "edm_diet.wsgi:application"]
