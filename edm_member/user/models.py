@@ -155,3 +155,7 @@ class PrivacyPolicy(models.Model):
 
     def __str__(self):
         return f"Privacy Policy updated at {self.updated_at}"
+    
+    class Meta:
+        verbose_name = "개인정보 처리방침"
+        verbose_name_plural = "개인정보 처리방침 목록"

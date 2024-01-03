@@ -50,9 +50,14 @@ class SubscribeAdmin(admin.ModelAdmin):
     subscribe_to_info.short_description = '구독받는 사용자'
 
     list_display = ('subscribe_from_info', 'subscribe_to_info', 'created_at')
+    
+class PrivacyPolicyAdmin(admin.ModelAdmin):
+    list_display = ['updated_at']
+    search_fields = ['content']
 
 
 
+admin.site.register(PrivacyPolicy, PrivacyPolicyAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(FAQ, FAQAdmin)
 admin.site.register(Notice, NoticeAdmin)
