@@ -37,10 +37,23 @@ def get_secret(setting, secrets=secrets):
  
 SECRET_KEY = get_secret("SECRET_KEY")
 
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+   
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "set the {} enviroment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+    
+API_KEY1 = get_secret("key1")  
+API_KEY2 = get_secret("key2")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.10.110', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -57,14 +70,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
 ]
 
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': timedelta(days=365*10),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=365*10),
-#     'ROTATE_REFRESH_TOKENS': False,
-#     'BLACKLIST_AFTER_ROTATION': True,
-#     # 'TOKEN_USER_CLASS': 'user.User',
-#     # 'USER_ID_FIELD': 'uuid'
-# }
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -76,17 +81,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# REST_FRAMEWORK = {  
-#     # 토큰기반 permission
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticated',
-#     ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ),
-# }
-
-# REST_USE_JWT = False
 
 ROOT_URLCONF = "edm_diet.urls"
 
@@ -113,8 +107,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=365*10),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
-    # 'TOKEN_USER_CLASS': 'Meal_Date.CustomUser',
-    'USER_ID_FIELD': 'uuid'
+    'USER_ID_FIELD': 'uuid',
 }
 
 # Database

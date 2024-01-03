@@ -31,7 +31,6 @@ class Usermeal(models.Model):
 class Usermealevaluation(models.Model):
     user_id = models.UUIDField(default=uuid.uuid4, max_length=32)
     meal_date = models.DateField(blank=True, null=True)
-    sys_config = models.FloatField(blank=True, null=True)
     sum_carb = models.FloatField(blank=True, null=True)
     sum_sugar = models.FloatField(blank=True, null=True)
     sum_protein = models.FloatField(blank=True, null=True)
@@ -40,20 +39,3 @@ class Usermealevaluation(models.Model):
 
     class Meta:
         db_table = 'usermealevaluation'
-
-
-# class Usermealnutrientlink(models.Model):
-#     usermeal = models.ForeignKey(Usermeal, models.CASCADE) # The composite primary key (usermeal_id, nutrient_id) found, that is not supported. The first column is selected.
-#     nutrient = models.ForeignKey(Nutrient, models.CASCADE)
-
-#     class Meta:
-#         db_table = 'usermealnutrientlink'
-#         unique_together = (('usermeal', 'nutrient'),)
-
-# models.py
-# from django.contrib.auth.models import AbstractUser
-# from django.db import models
-# import uuid
-
-# class CustomUser(AbstractUser):
-#     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
