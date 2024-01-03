@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import json,os
+from datetime import timedelta
 from django.core.exceptions import ImproperlyConfigured
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -55,6 +57,15 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
 ]
 
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(days=365*10),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=365*10),
+#     'ROTATE_REFRESH_TOKENS': False,
+#     'BLACKLIST_AFTER_ROTATION': True,
+#     # 'TOKEN_USER_CLASS': 'user.User',
+#     # 'USER_ID_FIELD': 'uuid'
+# }
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -65,17 +76,17 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-REST_FRAMEWORK = {  
-    # 토큰기반 permission
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
+# REST_FRAMEWORK = {  
+#     # 토큰기반 permission
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticated',
+#     ),
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+# }
 
-REST_USE_JWT = True
+# REST_USE_JWT = False
 
 ROOT_URLCONF = "edm_diet.urls"
 
@@ -97,6 +108,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "edm_diet.wsgi.application"
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365*10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365*10),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    # 'TOKEN_USER_CLASS': 'Meal_Date.CustomUser',
+    'USER_ID_FIELD': 'uuid'
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -105,9 +124,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         'NAME' : 'user_diet',
-        'USER' : 'meal_db',
+        'USER' : 'user_diet',
         'PASSWORD' : 'aivle',
-        'HOST' : '192.168.56.1',
+        'HOST' : 'localhost',
         'PORT' : '3306',
     }
 }
@@ -153,3 +172,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# AUTH_USER_MODEL = 'Meal_Date.CustomUser'
