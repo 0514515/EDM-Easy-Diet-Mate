@@ -174,3 +174,9 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # AUTH_USER_MODEL = 'Meal_Date.CustomUser'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = '/app/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/app/media/'
