@@ -105,30 +105,6 @@ def subscribe(request):
             }, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        try:
-            # 요청 본문에서 subscribe_to UUID를 가져옵니다.
-            subscribe_to_uuid = request.data.get('subscribe_to')
-
-            # 요청을 보낸 사용자의 UUID (토큰에서 가져옴)와 subscribe_to_uuid를 사용하여 구독 객체를 찾습니다.
-            subscription = Subscribe.objects.get(subscribe_from=request.user, subscribe_to__uuid=subscribe_to_uuid)
-
-            # 구독 객체를 삭제합니다.
-            subscription.delete()
-            return Response({
-                "message" : "subscribe delete success",
-                "display_message" : "구독 삭제에 성공하였습니다."
-            })
-
-        except Subscribe.DoesNotExist:
-            # 구독 객체가 존재하지 않는 경우, 에러 메시지를 반환합니다.
-            return Response({'message': 'subscribe not found.',
-                             "display_message":"구독이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            # 기타 예외 상황에 대한 처리
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
         
 @api_view(['GET'])
 def get_user_name(request, uuid):
@@ -149,3 +125,24 @@ def get_user_name(request, uuid):
 
     except User.DoesNotExist:
         return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_subscription(request, uuid):
+    # User (from token)
+    request_user = request.user
+
+    # UUID of the subscribed person (from path parameter)
+    target_user_uuid = uuid
+
+    # Check if subscription exists
+    try:
+        subscription = Subscribe.objects.get(subscribe_from=request_user, subscribe_to__uuid=target_user_uuid)
+    except Subscribe.DoesNotExist:
+        return Response({'message': 'Subscription not found', "display_message": "구독이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Delete the subscription
+    subscription.delete()
+
+    # Return a success response
+    return Response({'message': 'Subscription deleted successfully', "display_message": "구독이 삭제되었습니다."}, status=status.HTTP_200_OK)
