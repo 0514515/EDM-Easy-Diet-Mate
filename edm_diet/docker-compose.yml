@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn -b 0.0.0.0:8000 edm_user.wsgi:application
+    volumes:
+      - static_volume:/app/static/
+      - media_volume:/app/media/
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/app/static/
+      - media_volume:/app/media/
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+    restart: always
+
+  db:
+    image: mysql:8.0.20
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: user_diet
+      MYSQL_USER: user_diet
+      MYSQL_PASSWORD: aivle
+      MYSQL_ROOT_PASSWORD: aivle  # 여기는 MySQL의 root 비밀번호 설정
+      restart: always
+      
+volumes:
+  static_volume:
+  media_volume:
+  mysql_data:
