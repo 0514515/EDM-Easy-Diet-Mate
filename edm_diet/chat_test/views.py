@@ -75,7 +75,6 @@ def chatbot_view(request):
             token = validate_token(request)
             user_uuid = str(get_user_info(token).get('uuid',''))
             
-            
             data = json.loads(request.body.decode('utf-8'))
             print(data)
             inputText = data.get('message')
@@ -118,19 +117,8 @@ def chatGPT(inputText, key1, key2, user_uuid):
     # DB
     user_uid_after = user_uuid.replace('-','')
     user_meals = Usermealevaluation.objects.filter(user_id=user_uid_after, meal_date__range=[today-timedelta(days=7),today]).values(
-            'sum_carb', 'sum_sugar', 'sum_protein', 'sun_fat', 'meal_evaluation'
+            'sum_carb', 'sum_sugar', 'sum_protein', 'sum_fat', 'meal_evaluation', 'sum_kcal'
             )   
-    print(user_meals)
-    example = """date	carbs	protein	fat	sugar	result
-      2023-12-27  100 80 48 88 bad
-      2023-12-26	100	10	450	20	good
-      2023-12-25	300	100	100	10	normal
-      2023-12-20	300	100	400	50	not bad
-      2023-12-22	40	100	124	123	perfect
-      2023-12-03	120	300	40	25	perfect
-      2023-12-15	90	800	400	50	bad"""
-    
-    
       
     # 식단 평가 대화 : 1
     if result == "assistant: 1":

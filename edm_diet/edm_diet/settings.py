@@ -50,6 +50,9 @@ def get_secret(setting, secrets=secrets):
 API_KEY1 = get_secret("key1")  
 API_KEY2 = get_secret("key2")
 
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

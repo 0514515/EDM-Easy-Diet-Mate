@@ -12,18 +12,39 @@ class Nutrient(models.Model):
     nat_mg = models.FloatField(blank=True, null=True)
     col_mg = models.FloatField(blank=True, null=True)
 
+    def serialize(self):
+        return {
+            "food_name": self.food_name,
+            "weight_g": self.weight_g,
+            "energy_kcal": self.energy_kcal,
+            "carbs_g": self.carbs_g,
+            "sugar_g": self.sugar_g,
+            "fat_g": self.fat_g,
+            "protein_g": self.protein_g,
+            "nat_mg": self.nat_mg,
+            "col_mg": self.col_mg,
+        }
+        
     class Meta:
         db_table = 'nutrient'
-
+    
 
 class Usermeal(models.Model):
-    # id = models.AutoField(primary_key = True)
-    #user_id = models.CharField(max_length=255, null=False)
     user_id = models.UUIDField(default=uuid.uuid4, max_length=32)
     meal_type = models.TextField(blank=True, null=True)
     meal_date = models.DateField(blank=True, null=True)
-    image_link = models.TextField(blank=True, null=True)
+    image_link = models.ImageField(upload_to='images/')
     food_name = models.ForeignKey(Nutrient, on_delete=models.CASCADE, to_field='food_name', related_name='usermeals')
+    
+    def serialize(self):
+        return {
+            "user_id": self.user_id,
+            "meal_type": self.meal_type,
+            "meal_date": self.meal_date,
+            "image_link": self.image_link,
+            "food_name": self.food_name,
+        }
+    
     class Meta:
         db_table = 'usermeal'
 
@@ -34,7 +55,10 @@ class Usermealevaluation(models.Model):
     sum_carb = models.FloatField(blank=True, null=True)
     sum_sugar = models.FloatField(blank=True, null=True)
     sum_protein = models.FloatField(blank=True, null=True)
-    sun_fat = models.FloatField(blank=True, null=True)
+    sum_fat = models.FloatField(blank=True, null=True)
+    sum_kcal = models.FloatField(blank=True, null=True)
+    sum_nat = models.FloatField(blank=True, null=True)
+    sum_col = models.FloatField(blank=True, null=True)
     meal_evaluation = models.TextField(blank=True, null=True)
 
     class Meta:

@@ -1,11 +1,9 @@
 from django.shortcuts import render
-from django.http import Http404, HttpRequest, JsonResponse
+from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Usermeal, Nutrient, Usermealevaluation
-from .serializers import MealSerializer, NutrientSerializer 
+from .models import *
 from datetime import datetime
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import requests
@@ -26,13 +24,15 @@ def display_user_meal_evaluation(request):
         meal_date = request.query_params.get('meal_date', '2023-12-29')
         
         # 데이터베이스에서 해당 user_uid에 해당하는 객체 가져오기
-        user_object = Usermeal.objects.get(user_id=user_id)
+        #user_object = Usermeal.objects.get(user_id=user_id)
         diet_rating = evaluate_user_meal(token, meal_date)
         user_meal_nut = get_user_meal(user_id, meal_date)
-        template_data = {'diet_rating': diet_rating, 'carbs': user_meal_nut[0], 'protein': user_meal_nut[1], 'fat': user_meal_nut[2], 'sugar': user_meal_nut[3]}
+        template_data = {'diet_rating': diet_rating, 'carbs': user_meal_nut[0], 'protein': user_meal_nut[1], 'fat': user_meal_nut[2], 'sugar': user_meal_nut[3], 'kcal' : user_meal_nut[4],
+                         'nat': user_meal_nut[5], 'col': user_meal_nut[6]}
 
         save_user_evaluation(user_id, meal_date, diet_rating, user_meal_nut)
-        return render(request, 'user_meal_evaluation.html', template_data)
+        return JsonResponse(template_data, safe=False)
+        #return render(request, 'user_meal_evaluation.html', template_data)
     
     except ObjectDoesNotExist:
         # 데이터베이스에서 해당 user_uid에 해당하는 객체가 없을 때의 예외 처리
@@ -78,7 +78,7 @@ def get_user_info(token):
 def get_user_meal(user_uid, meal_time):
     user_uid_after = user_uid.replace('-','')
     user_meals = Usermeal.objects.filter(user_id=user_uid_after, meal_date=meal_time).values(
-        'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g'
+        'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
     )
 
     meal_nutrient = []
@@ -89,6 +89,9 @@ def get_user_meal(user_uid, meal_time):
             'protein': user_meal['food_name__protein_g'],
             'fat': user_meal['food_name__fat_g'],
             'sugar': user_meal['food_name__sugar_g'],
+            'kcal' : user_meal['food_name__energy_kcal'],
+            'nat' : user_meal['food_name__nat_mg'],
+            'col' : user_meal['food_name__col_mg']
         }
         meal_nutrient.append(total)
 
@@ -96,8 +99,10 @@ def get_user_meal(user_uid, meal_time):
     prot = sum_nutrients(meal_nutrient, 'protein')
     fat = sum_nutrients(meal_nutrient, 'fat')
     sugar = sum_nutrients(meal_nutrient, 'sugar')
-
-    return carbs, prot, fat, sugar
+    kcal = sum_nutrients(meal_nutrient, 'kcal')
+    nat = sum_nutrients(meal_nutrient, 'nat')
+    col = sum_nutrients(meal_nutrient, 'col')
+    return carbs, prot, fat, sugar, kcal, nat, col
 
 def sum_nutrients(meal_nutrient, nutrient_key):
     return sum(item[nutrient_key] for item in meal_nutrient)
@@ -208,11 +213,27 @@ def evaluate(user_meal_nut, recommend):
     
 def save_user_evaluation(user_id, meal_date, diet_rating, user_meal_nut):
     # 이미 저장된 데이터가 있는지 확인
-    existing_evaluation = Usermealevaluation.objects.filter(user_id=user_id, meal_date=meal_date).first()
+    existing_evaluation = Usermealevaluation.objects.filter(user_id=user_id, meal_date=meal_date)
 
     if existing_evaluation:
-        # 이미 해당 조건을 만족하는 데이터가 있으면 아무것도 하지 않음
-        return existing_evaluation
+        # 이미 해당 조건을 만족하는 데이터가 있으면 삭제후 생성및 저장
+        existing_evaluation.delete()
+        
+        new_data = Usermealevaluation(
+            user_id=user_id,
+            meal_date=meal_date,
+            sum_carb=user_meal_nut[0],
+            sum_sugar=user_meal_nut[3],
+            sum_protein=user_meal_nut[1],
+            sum_fat=user_meal_nut[2],
+            meal_evaluation=diet_rating,
+            sum_kcal=user_meal_nut[4],
+            sum_nat=user_meal_nut[5],
+            sum_col=user_meal_nut[6]
+        )
+        new_data.save()
+        return new_data
+    
     else:
         # 조건을 만족하는 데이터가 없으면 새로운 데이터를 생성하고 저장
         new_data = Usermealevaluation(
@@ -221,8 +242,11 @@ def save_user_evaluation(user_id, meal_date, diet_rating, user_meal_nut):
             sum_carb=user_meal_nut[0],
             sum_sugar=user_meal_nut[3],
             sum_protein=user_meal_nut[1],
-            sun_fat=user_meal_nut[2],
-            meal_evaluation=diet_rating
+            sum_fat=user_meal_nut[2],
+            meal_evaluation=diet_rating,
+            sum_kcal=user_meal_nut[4],
+            sum_nat=user_meal_nut[5],
+            sum_col=user_meal_nut[6]
         )
         new_data.save()
         return new_data
