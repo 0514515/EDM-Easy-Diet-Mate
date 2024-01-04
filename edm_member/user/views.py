@@ -313,11 +313,13 @@ class PasswordResetView(APIView):
                     [email],
                     fail_silently=False,
                 )
-                return Response({"message": "비밀번호 재설정 이메일이 전송되었습니다."}, status=status.HTTP_200_OK)
+                return Response({
+                    "display_message": "비밀번호 재설정 이메일이 전송되었습니다.",
+                    "message:": "password-reset email posted"}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
-                return Response({"message": "이 이메일을 가진 사용자가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"display_message": "이 이메일을 가진 사용자가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
         print(serializer.errors)
-        return Response({"message" : "오류가 발생하였습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"display_message" : "오류가 발생하였습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
 def build_password_reset_link(user, request):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
