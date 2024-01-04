@@ -58,8 +58,8 @@ def get_user_meal_evaluation(request):
     
     user_uid_after = user_uuid.replace('-','')
 
-    user_meals = list(Usermeal.objects.filter(user_id=user_uid_after))
-    user_meals_evaluation = list(Usermealevaluation.objects.filter(user_id=user_uid_after))
+    user_meals = list(Usermeal.objects.filter(user_uuid=user_uid_after))
+    user_meals_evaluation = list(Usermealevaluation.objects.filter(user_uuid=user_uid_after))
     
     meal_serializers = MealSerializer(user_meals,  many=True)
     meal_evaluation_serializers = UsermealevaluationSerializer(user_meals_evaluation,  many=True)
@@ -110,10 +110,10 @@ def save_user_meal(request):
             data = request.data.get('predict', {}).get('ktFoodsInfo', {})
             for region_key, meal_data in data.items():
                 Usermeal.objects.create( 
-                    user_id = user_uuid,
+                    user_uuid = user_uuid,
                     meal_type = request.data.get('mealType'),
                     meal_date = request.data.get('mealdate'),
-                    image_link = request.data.get('imagelink'),
+                    imagelink = request.data.get('imagelink'),
                     food_name_id = meal_data.get('food_name'),
                 )
                 
@@ -129,10 +129,10 @@ def save_user_meal(request):
                 nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
                 if nutrient_obj:
                     Usermeal.objects.create(
-                        user_id=user_uuid,
+                        user_uuid=user_uuid,
                         meal_type = request.data.get('mealType'),
                         meal_date = request.data.get('mealdate'),
-                        image_link = request.data.get('imagelink'),
+                        imagelink = request.data.get('imagelink'),
                         food_name = nutrient_obj,
                     )
                     

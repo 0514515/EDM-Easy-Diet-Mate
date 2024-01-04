@@ -116,7 +116,7 @@ def chatGPT(inputText, key1, key2, user_uuid):
     
     # DB
     user_uid_after = user_uuid.replace('-','')
-    user_meals = Usermealevaluation.objects.filter(user_id=user_uid_after, meal_date__range=[today-timedelta(days=7),today]).values(
+    user_meals = Usermealevaluation.objects.filter(user_uuid=user_uid_after, meal_date__range=[today-timedelta(days=7),today]).values(
             'sum_carb', 'sum_sugar', 'sum_protein', 'sum_fat', 'meal_evaluation', 'sum_kcal'
             )   
       
