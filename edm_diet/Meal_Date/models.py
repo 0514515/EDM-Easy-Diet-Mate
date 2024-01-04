@@ -30,18 +30,18 @@ class Nutrient(models.Model):
     
 
 class Usermeal(models.Model):
-    user_id = models.UUIDField(default=uuid.uuid4, max_length=32)
+    user_uuid = models.UUIDField(default=uuid.uuid4, max_length=32)
     meal_type = models.TextField(blank=True, null=True)
     meal_date = models.DateField(blank=True, null=True)
-    image_link = models.ImageField(upload_to='images/')
+    imagelink = models.ImageField(upload_to='images/')
     food_name = models.ForeignKey(Nutrient, on_delete=models.CASCADE, to_field='food_name', related_name='usermeals')
     
     def serialize(self):
         return {
-            "user_id": self.user_id,
+            "user_uuid": self.user_uuid,
             "meal_type": self.meal_type,
             "meal_date": self.meal_date,
-            "image_link": self.image_link,
+            "imagelink": self.imagelink,
             "food_name": self.food_name,
         }
     
@@ -50,7 +50,7 @@ class Usermeal(models.Model):
 
 
 class Usermealevaluation(models.Model):
-    user_id = models.UUIDField(default=uuid.uuid4, max_length=32)
+    user_uuid = models.UUIDField(default=uuid.uuid4, max_length=32)
     meal_date = models.DateField(blank=True, null=True)
     sum_carb = models.FloatField(blank=True, null=True)
     sum_sugar = models.FloatField(blank=True, null=True)

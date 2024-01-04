@@ -65,12 +65,19 @@ def get_user_meal_evaluation(request):
     meal_evaluation_serializers = UsermealevaluationSerializer(user_meals_evaluation,  many=True)
 
     user_meals_data = meal_serializers.data
-    user_meals_evaluation_data = meal_evaluation_serializers.data
+    #user_meals_evaluation_data = meal_evaluation_serializers.data
     
+    user_meals_evaluation_data = [
+    { 'meal_date': item['meal_date'], 'meal_evaluation': item['meal_evaluation'] } 
+    for item in meal_evaluation_serializers.data
+    ]
     response_data = {
-        'user_meals_data': user_meals_data, 
-        'user_meals_evaluation': user_meals_evaluation_data
+    'user_meals_evaluation': user_meals_evaluation_data
     }
+    # response_data = {
+    #     'user_meals_data': user_meals_data, 
+    #     'user_meals_evaluation': user_meals_evaluation_data
+    # }
     
     return JsonResponse(response_data, safe=False)
 
