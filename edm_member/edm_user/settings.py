@@ -128,7 +128,7 @@ DATABASES = {
         'NAME': 'user_service',
         'USER': 'user_service',
         'PASSWORD': 'aivle',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
@@ -209,3 +209,10 @@ CORS_ALLOW_METHODS  =  [
     'POST' , 
     'PUT' , 
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = get_secret("EMAIL")
+EMAIL_HOST_PASSWORD = get_secret("PASSWORD")
+EMAIL_USE_TLS = True

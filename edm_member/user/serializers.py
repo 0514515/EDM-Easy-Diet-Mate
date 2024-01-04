@@ -4,6 +4,12 @@ from .exceptions import UserAlreadyExistsException
 from datetime import date
 from django.utils import timezone
 
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        # 필요한 경우 여기에서 추가적인 이메일 검증을 할 수 있습니다
+        return value
 
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:

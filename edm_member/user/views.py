@@ -9,12 +9,20 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from rest_framework.decorators import api_view
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import JsonResponse
 import re
+from .serializers import PasswordResetSerializer
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.urls import reverse
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from six import text_type
+
 
 def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQUEST):
     return Response(
@@ -286,6 +294,41 @@ def user_info(request):
 def privacy_policy(request):
     policy = PrivacyPolicy.objects.latest('updated_at')
     return JsonResponse({'content': policy.content})
+
+
+class PasswordResetView(APIView):
+    User = get_user_model()
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            try:
+                user = User.objects.get(email=email)
+                reset_link = build_password_reset_link(user, request)
+                send_mail(
+                    '비밀번호 재설정 요청',
+                    f'비밀번호를 재설정하려면 여기를 클릭하세요: {reset_link}',
+                    'from@example.com',
+                    [email],
+                    fail_silently=False,
+                )
+                return Response({"message": "비밀번호 재설정 이메일이 전송되었습니다."}, status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                return Response({"message": "이 이메일을 가진 사용자가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+        print(serializer.errors)
+        return Response({"message" : "오류가 발생하였습니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+def build_password_reset_link(user, request):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = token_generator.make_token(user)
+    return request.build_absolute_uri(reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
+
+class TokenGenerator(PasswordResetTokenGenerator):
+    def _make_hash_value(self, user, timestamp):
+        return text_type(user.pk) + text_type(timestamp)
+
+token_generator = TokenGenerator()
 
 # class UserInfoApi(APIView):
 # uuid 기반 유저 정보 단일 조회
