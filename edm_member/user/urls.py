@@ -3,6 +3,7 @@ from . import views
 from rest_framework import urls
 from rest_framework_simplejwt.views import TokenRefreshView
 from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.views import PasswordResetCompleteView
 
 urlpatterns =[
     path('user/', views.CreateUser.as_view()), # 유저 생성
@@ -13,5 +14,6 @@ urlpatterns =[
     path('check-email-existence/', views.check_email_existence, name='check_email_existence'),
     path('password-reset/',views.PasswordResetView.as_view(),name='password-reset'),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', views.MyPasswordResetCompleteView.as_view(), name='password_reset_complete'),
     # path('api-auth/', include('rest_framework.urls')),
 ]
