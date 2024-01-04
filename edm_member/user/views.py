@@ -350,7 +350,7 @@ class PasswordResetView(APIView):
             user = User.objects.get(email=email)
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            reset_link = f"http://127.0.0.1:8000/api/reset/{uid}/{token}"
+            reset_link = f"http://edm.japaneast.cloudapp.azure.com/api/reset/{uid}/{token}"
             send_mail(
                 "비밀번호 재설정 요청",
                 f"비밀번호를 재설정하려면 다음 링크를 클릭하세요: {reset_link}",
