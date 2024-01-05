@@ -29,10 +29,26 @@ def display_user_meal_evaluation(request):
         diet_rating = evaluate_user_meal(token, meal_date)
         user_meal_nut = get_user_meal(uuid, meal_date, meal_type, meal_serving)
         
-        template_data = {'diet_rating': diet_rating[0], 'carbs': user_meal_nut[0], 'protein': user_meal_nut[1], 'fat': user_meal_nut[2], 'sugar': user_meal_nut[3], 'kcal' : user_meal_nut[4],
-                         'nat': user_meal_nut[5], 'col': user_meal_nut[6]}
+        print(diet_rating, "!@#!@#!@#" )
+        template_data = {'diet_rating': diet_rating[0], 
+                        'total_carbs': diet_rating[1][0], 
+                         'total_protein': diet_rating[1][1], 
+                         'total_fat': diet_rating[1][2], 
+                         'total_sugar': diet_rating[1][3], 
+                         'total_kcal' : diet_rating[1][4],
+                         'total_nat': diet_rating[1][5], 
+                         'total_col': diet_rating[1][6], 
+                         'carbs': user_meal_nut[0], 
+                         'protein': user_meal_nut[1], 
+                         'fat': user_meal_nut[2], 
+                         'sugar': user_meal_nut[3], 
+                         'kcal' : user_meal_nut[4],
+                         'nat': user_meal_nut[5], 
+                         'col': user_meal_nut[6]
+                         }
 
-        save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1], meal_type)
+        print(template_data, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1])
         return JsonResponse(template_data, safe=False)
         #return render(request, 'user_meal_evaluation.html', template_data)
     
@@ -244,7 +260,7 @@ def evaluate(user_meal_nut, recommend):
         return 'not bad'
 
     
-def save_user_evaluation(uuid, meal_date, diet_rating, user_meal_nut, meal_type):
+def save_user_evaluation(uuid, meal_date, diet_rating, user_meal_nut):
     # 이미 저장된 데이터가 있는지 확인
     existing_evaluation = Usermealevaluation.objects.filter(uuid=uuid, meal_date=meal_date)
 

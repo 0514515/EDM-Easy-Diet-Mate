@@ -107,16 +107,20 @@ def save_user_meal(request):
     
     try:
         if request.data.get('inferResult') == '1':
-            
+        
         # 요청한 JSON 데이터 파싱
             data = request.data.get('predict', {}).get('ktFoodsInfo', {})
+            meal_date = request.data.get('mealdate')
+            meal_type = request.data.get('mealType')
+            existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type)
+            existing_evaluation.delete()
             for region_key, meal_data in data.items():
                 Usermeal.objects.create( 
                     uuid = uuid,
-                    meal_type = request.data.get('mealType'),
-                    meal_date = request.data.get('mealdate'),
+                    meal_type = meal_type,
+                    meal_date = meal_date,
                     imagelink = request.data.get('imagelink'),
-                    food_name_id = meal_data.get('food_name'),
+                    food_name_id = meal_data.get('food_name')
                 )
                 
             return Response({"모두 저장 완료"}, status=status.HTTP_200_OK)
@@ -124,19 +128,33 @@ def save_user_meal(request):
         else :
             
             data = request.data.get('predict', {}).get('foodNames', [])
-            meal = MealSerializer(data=request.data)
-            print(meal)
+            meal_date = request.data.get('mealdate')
+            meal_type = request.data.get('mealType')
+            existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type)
+            existing_evaluation.delete()
+                    
             for food_name in data:
                 # Nutrient 모델에서 해당 food_name이 존재하는지 확인
+                
                 nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
                 if nutrient_obj:
-                    Usermeal.objects.create(
-                        uuid=uuid,
-                        meal_type = request.data.get('mealType'),
-                        meal_date = request.data.get('mealdate'),
+                    
+                    print("save")
+                    Usermeal.objects.create( 
+                        uuid = uuid,
+                        meal_type = meal_type,
+                        meal_date = meal_date,
                         imagelink = request.data.get('imagelink'),
                         food_name = nutrient_obj,
                     )
+                    
+                    # Usermeal.objects.create(
+                    #     uuid=uuid,
+                    #     meal_type = request.data.get('mealType'),
+                    #     meal_date = request.data.get('mealdate'),
+                    #     imagelink = request.data.get('imagelink'),
+                    #     food_name = nutrient_obj,
+                    # )
                     
                 else :
                     print("데이터베이스에 일치하는 데이터가 없습니다: ", food_name)
