@@ -64,7 +64,7 @@ def get_user_meal_evaluation(request):
     
     meal_serializers = MealSerializer(user_meals,  many=True)
     meal_evaluation_serializers = UsermealevaluationSerializer(user_meals_evaluation,  many=True)
-
+    
     user_meals_data = meal_serializers.data
     #user_meals_evaluation_data = meal_evaluation_serializers.data
     

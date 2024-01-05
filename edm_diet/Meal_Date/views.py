@@ -22,15 +22,17 @@ def display_user_meal_evaluation(request):
         user_info = get_user_info(token)
         uuid = str(user_info.get('uuid', '')) # 실제로는 이렇게 사용자 식별자를 추출하는 코드를 추가해야 합니다.
         meal_date = request.query_params.get('meal_date', '2023-12-29')
+        meal_type = request.query_params.get('meal_type', '아침')
+        meal_serving = float(request.query_params.get('meal_serving', 1))
         
         # 데이터베이스에서 해당 user_uid에 해당하는 객체 가져오기
-        #user_object = Usermeal.objects.get(user_id=user_id)
         diet_rating = evaluate_user_meal(token, meal_date)
-        user_meal_nut = get_user_meal(uuid, meal_date)
-        template_data = {'diet_rating': diet_rating, 'carbs': user_meal_nut[0], 'protein': user_meal_nut[1], 'fat': user_meal_nut[2], 'sugar': user_meal_nut[3], 'kcal' : user_meal_nut[4],
+        user_meal_nut = get_user_meal(uuid, meal_date, meal_type, meal_serving)
+        
+        template_data = {'diet_rating': diet_rating[0], 'carbs': user_meal_nut[0], 'protein': user_meal_nut[1], 'fat': user_meal_nut[2], 'sugar': user_meal_nut[3], 'kcal' : user_meal_nut[4],
                          'nat': user_meal_nut[5], 'col': user_meal_nut[6]}
 
-        save_user_evaluation(uuid, meal_date, diet_rating, user_meal_nut)
+        save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1], meal_type)
         return JsonResponse(template_data, safe=False)
         #return render(request, 'user_meal_evaluation.html', template_data)
     
@@ -75,7 +77,37 @@ def get_user_info(token):
     except Exception as e:
         return JsonResponse({'error': f"An error occurred: {e}"}, status=500)
 
-def get_user_meal(uuid, meal_time):
+def get_user_meal(uuid, meal_time, meal_type, meal_serving):
+    user_uid_after = uuid.replace('-','')
+    user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_time, meal_type = meal_type).values(
+        'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
+    )
+
+    meal_nutrient = []
+
+    for user_meal in user_meals:
+        total = {
+            'carbs': user_meal['food_name__carbs_g'],
+            'protein': user_meal['food_name__protein_g'],
+            'fat': user_meal['food_name__fat_g'],
+            'sugar': user_meal['food_name__sugar_g'],
+            'kcal' : user_meal['food_name__energy_kcal'],
+            'nat' : user_meal['food_name__nat_mg'],
+            'col' : user_meal['food_name__col_mg']
+        }
+        meal_nutrient.append(total)
+
+    carbs = sum_nutrients(meal_nutrient, 'carbs') * meal_serving
+    prot = sum_nutrients(meal_nutrient, 'protein') * meal_serving
+    fat = sum_nutrients(meal_nutrient, 'fat') * meal_serving
+    sugar = sum_nutrients(meal_nutrient, 'sugar') * meal_serving
+    kcal = sum_nutrients(meal_nutrient, 'kcal') * meal_serving
+    nat = sum_nutrients(meal_nutrient, 'nat') * meal_serving
+    col = sum_nutrients(meal_nutrient, 'col') * meal_serving
+    
+    return carbs, prot, fat, sugar, kcal, nat, col
+
+def evaluate_date_meal(uuid, meal_time):
     user_uid_after = uuid.replace('-','')
     user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_time).values(
         'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
@@ -102,6 +134,7 @@ def get_user_meal(uuid, meal_time):
     kcal = sum_nutrients(meal_nutrient, 'kcal')
     nat = sum_nutrients(meal_nutrient, 'nat')
     col = sum_nutrients(meal_nutrient, 'col')
+    
     return carbs, prot, fat, sugar, kcal, nat, col
 
 def sum_nutrients(meal_nutrient, nutrient_key):
@@ -121,10 +154,10 @@ def evaluate_user_meal(token, meal_time):
     user_data = (user_height, user_weight, user_birthdate, user_gender, user_active_level, user_diet_purpose)
     recommend_nutrients = calculate(*user_data)
     
-    user_meal_nut = get_user_meal(uuid, meal_time)
+    user_meal_nut = evaluate_date_meal(uuid, meal_time)
     diet_rating = evaluate(user_meal_nut, recommend_nutrients)
     
-    return diet_rating
+    return diet_rating, user_meal_nut
 
 def calculate_age(birth_date):
     today = datetime.now()
@@ -211,7 +244,7 @@ def evaluate(user_meal_nut, recommend):
         return 'not bad'
 
     
-def save_user_evaluation(uuid, meal_date, diet_rating, user_meal_nut):
+def save_user_evaluation(uuid, meal_date, diet_rating, user_meal_nut, meal_type):
     # 이미 저장된 데이터가 있는지 확인
     existing_evaluation = Usermealevaluation.objects.filter(uuid=uuid, meal_date=meal_date)
 
