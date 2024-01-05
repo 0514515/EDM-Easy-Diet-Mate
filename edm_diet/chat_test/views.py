@@ -23,7 +23,7 @@ class OpenAI_Client:
         
         
 #binary_model = 'ft:gpt-3.5-turbo-0613:personal::8aQw2MU1'
-binary_model = 'ft:gpt-3.5-turbo-1106:personal::8clwLsDM'
+binary_model = 'ft:gpt-3.5-turbo-1106:personal::8dZMIYUW'
 
 # settings에 들어감
 API_KEY1 = settings.API_KEY1

@@ -165,17 +165,17 @@ def get_subscribe_meal_evaluation(request):
     meal_serializers = MealSerializer(data_meal,  many=True)
     meal_evaluation_serializers = UsermealevaluationSerializer(data_evaluation,  many=True)
     
-    user_meals_data = [
-    {
-    'meal_date': item['meal_date'],
-    'meal_type': item['meal_type'],
-    'imagelink' : item['imagelink'],
-    "predict":{
-        "food_name": [item['food_name']], 
-        }
-    }
-    for item in meal_serializers.data
-    ]
+    # user_meals_data = [
+    # {
+    # 'meal_date': item['meal_date'],
+    # 'meal_type': item['meal_type'],
+    # 'imagelink' : item['imagelink'],
+    # "predict":{
+    #     "food_name": [item['food_name']], 
+    #     }
+    # }
+    # for item in meal_serializers.data
+    # ]
      
     user_meals_evaluation_data = [
     {
