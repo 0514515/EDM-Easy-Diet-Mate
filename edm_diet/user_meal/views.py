@@ -55,12 +55,12 @@ def get_user_info(token):
 @permission_classes([AllowAny])
 def get_user_meal_evaluation(request):
     token = validate_token(request)
-    user_uuid = str(get_user_info(token).get('uuid',''))
+    uuid = str(get_user_info(token).get('uuid',''))
     
-    user_uid_after = user_uuid.replace('-','')
+    user_uid_after = uuid.replace('-','')
 
-    user_meals = list(Usermeal.objects.filter(user_uuid=user_uid_after))
-    user_meals_evaluation = list(Usermealevaluation.objects.filter(user_uuid=user_uid_after))
+    user_meals = list(Usermeal.objects.filter(uuid=user_uid_after))
+    user_meals_evaluation = list(Usermealevaluation.objects.filter(uuid=user_uid_after))
     
     meal_serializers = MealSerializer(user_meals,  many=True)
     meal_evaluation_serializers = UsermealevaluationSerializer(user_meals_evaluation,  many=True)
@@ -103,7 +103,7 @@ class SaveUserMeal(APIView):
 def save_user_meal(request):
     
     token = validate_token(request)
-    user_uuid = str(get_user_info(token).get('uuid',''))
+    uuid = str(get_user_info(token).get('uuid',''))
     
     try:
         if request.data.get('inferResult') == '1':
@@ -112,7 +112,7 @@ def save_user_meal(request):
             data = request.data.get('predict', {}).get('ktFoodsInfo', {})
             for region_key, meal_data in data.items():
                 Usermeal.objects.create( 
-                    user_uuid = user_uuid,
+                    uuid = uuid,
                     meal_type = request.data.get('mealType'),
                     meal_date = request.data.get('mealdate'),
                     imagelink = request.data.get('imagelink'),
@@ -131,7 +131,7 @@ def save_user_meal(request):
                 nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
                 if nutrient_obj:
                     Usermeal.objects.create(
-                        user_uuid=user_uuid,
+                        uuid=uuid,
                         meal_type = request.data.get('mealType'),
                         meal_date = request.data.get('mealdate'),
                         imagelink = request.data.get('imagelink'),

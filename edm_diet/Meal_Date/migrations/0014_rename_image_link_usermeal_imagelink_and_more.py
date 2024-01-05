@@ -17,11 +17,11 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name="usermeal",
             old_name="user_id",
-            new_name="user_uuid",
+            new_name="uuid",
         ),
         migrations.RenameField(
             model_name="usermealevaluation",
             old_name="user_id",
-            new_name="user_uuid",
+            new_name="uuid",
         ),
     ]

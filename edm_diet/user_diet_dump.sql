@@ -338,7 +338,7 @@ DROP TABLE IF EXISTS `usermeal`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usermeal` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_uuid` char(32) NOT NULL,
+  `uuid` char(32) NOT NULL,
   `meal_type` longtext,
   `meal_date` date DEFAULT NULL,
   `imagelink` varchar(100) NOT NULL,
@@ -368,7 +368,7 @@ DROP TABLE IF EXISTS `usermealevaluation`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usermealevaluation` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_uuid` char(32) NOT NULL,
+  `uuid` char(32) NOT NULL,
   `meal_date` date DEFAULT NULL,
   `sum_carb` double DEFAULT NULL,
   `sum_sugar` double DEFAULT NULL,

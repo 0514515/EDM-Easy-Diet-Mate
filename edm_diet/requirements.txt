@@ -20,7 +20,7 @@ multidict==6.0.4
 mysql==0.0.3
 mysqlclient==2.2.1
 numpy==1.26.2
-openai==0.28.0
+openai==0.28
 pandas==2.1.4
 pillow==10.2.0
 pydantic==2.5.3

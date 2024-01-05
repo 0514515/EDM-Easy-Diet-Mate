@@ -73,7 +73,7 @@ def chatbot_view(request):
     if request.method == 'POST':
         try:
             token = validate_token(request)
-            user_uuid = str(get_user_info(token).get('uuid',''))
+            uuid = str(get_user_info(token).get('uuid',''))
             
             data = json.loads(request.body.decode('utf-8'))
             print(data)
@@ -88,7 +88,7 @@ def chatbot_view(request):
             key2 = OpenAI_Client(API_KEY2)
             
             # OpenAI API를 이용한 처리
-            response = chatGPT(inputText, key1, key2, user_uuid)
+            response = chatGPT(inputText, key1, key2, uuid)
             print(response)
             return JsonResponse({'message': response})
 
@@ -99,7 +99,7 @@ def chatbot_view(request):
         return JsonResponse({'error' : 'Method not allowed'}, status=405)
         
 
-def chatGPT(inputText, key1, key2, user_uuid):
+def chatGPT(inputText, key1, key2, uuid):
     
     response = key2.chat_completion(
         model= binary_model,
@@ -115,8 +115,8 @@ def chatGPT(inputText, key1, key2, user_uuid):
     today = datetime.now()
     
     # DB
-    user_uid_after = user_uuid.replace('-','')
-    user_meals = Usermealevaluation.objects.filter(user_uuid=user_uid_after, meal_date__range=[today-timedelta(days=7),today]).values(
+    user_uid_after = uuid.replace('-','')
+    user_meals = Usermealevaluation.objects.filter(uuid=user_uid_after, meal_date__range=[today-timedelta(days=7),today]).values(
             'sum_carb', 'sum_sugar', 'sum_protein', 'sum_fat', 'meal_evaluation', 'sum_kcal'
             )   
       
