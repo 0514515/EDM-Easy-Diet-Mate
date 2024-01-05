@@ -195,7 +195,7 @@ def get_subscribe_meal_evaluation(request):
     # 중복을 제거한 최종 결과물
     formatted_user_meals = []
     for meal_data in meal_serializers.data:
-        meal_key = (meal_data['meal_date'], meal_data['meal_type'], meal_data['imagelink'])
+        meal_key = (meal_data['meal_date'], meal_data['meal_type'])
         if meal_key not in unique_combinations:
             unique_combinations.add(meal_key)
             formatted_user_meals.append({
@@ -208,7 +208,7 @@ def get_subscribe_meal_evaluation(request):
             })
         else:
         # 이미 존재하는 키에 대해 foodNames에 추가
-            existing_meal = next(item for item in formatted_user_meals if item["mealdate"] == meal_data["meal_date"] and item["mealType"] == meal_data["meal_type"] and item["imagelink"] == meal_data["imagelink"])
+            existing_meal = next(item for item in formatted_user_meals if item["mealdate"] == meal_data["meal_date"] and item["mealType"] == meal_data["meal_type"])
             existing_meal["predict"]["foodNames"].append(meal_data["food_name"])
             
 # 최종 결과물을 user_meals_data에 반영
