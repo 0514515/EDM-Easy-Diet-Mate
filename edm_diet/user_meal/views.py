@@ -12,6 +12,7 @@ import requests
 from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework import generics
+from datetime import datetime, timedelta
 
 def validate_token(request):
     authorization_header = request.headers.get('Authorization')
@@ -166,3 +167,44 @@ def save_user_meal(request):
         # 데이터 처리 중 발생할 수 있는 예외 처리
         return Response({"message": f"오류: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 # Create your views here.
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_subscribe_meal_evaluation(request):
+    uuid = request.query_params.get('uuid')
+    user_uid_after = uuid.replace('-','')
+    today = datetime.now()
+    
+    data_meal = list(Usermeal.objects.filter(uuid = user_uid_after,  meal_date__range=[today-timedelta(days=7),today]))
+    data_evaluation = list(Usermealevaluation.objects.filter(uuid = user_uid_after, meal_date__range=[today-timedelta(days=7),today]))
+    
+    meal_serializers = MealSerializer(data_meal,  many=True)
+    meal_evaluation_serializers = UsermealevaluationSerializer(data_evaluation,  many=True)
+    
+    user_meals_data = [
+    {
+    'meal_date': item['meal_date'],
+    'meal_type': item['meal_type'],
+    'imagelink' : item['imagelink'],
+    'food_name' : item['food_name'],   
+    }
+    for item in meal_serializers.data
+    ]
+    
+    user_meals_evaluation_data = [
+    {'meal_date': item['meal_date'],
+     'sum_carb': item['sum_carb'],
+     'sum_sugar': item['sum_sugar'],
+     'sum_protein': item['sum_carb'],
+     'sum_fat': item['sum_fat'],
+     'sum_col': item['sum_col'],
+     'meal_evaluation': item['meal_evaluation'],
+     } 
+    for item in meal_evaluation_serializers.data
+    ]
+    response_data = {
+    'user_meals_evaluation': user_meals_evaluation_data,
+    'user_meals': user_meals_data,
+    }
+    
+    return JsonResponse(response_data, safe=False)
