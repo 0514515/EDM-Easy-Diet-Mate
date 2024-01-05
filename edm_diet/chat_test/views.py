@@ -117,7 +117,7 @@ def chatGPT(inputText, key1, key2, uuid):
     # DB
     user_uid_after = uuid.replace('-','')
     user_meals = Usermealevaluation.objects.filter(uuid=user_uid_after, meal_date__range=[today-timedelta(days=7),today]).values(
-            'sum_carb', 'sum_sugar', 'sum_protein', 'sum_fat', 'meal_evaluation', 'sum_kcal'
+            'meal_date', 'sum_carb', 'sum_sugar', 'sum_protein', 'sum_fat', 'meal_evaluation', 'sum_kcal'
             )   
       
     # 식단 평가 대화 : 1
@@ -150,8 +150,4 @@ def chatGPT(inputText, key1, key2, uuid):
         daily_result = daily_response["choices"][0]["message"]["content"]
         print("일상대화 bot")
         return daily_result
-
-
-    
-# Create your views here.
 

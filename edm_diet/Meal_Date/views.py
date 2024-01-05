@@ -20,7 +20,7 @@ def display_user_meal_evaluation(request):
     
     try:
         user_info = get_user_info(token)
-        uuid = str(user_info.get('uuid', '')) # 실제로는 이렇게 사용자 식별자를 추출하는 코드를 추가해야 합니다.
+        uuid = str(user_info.get('uuid', '')) 
         meal_date = request.query_params.get('meal_date', '2023-12-29')
         meal_type = request.query_params.get('meal_type', '아침')
         meal_serving = float(request.query_params.get('meal_serving', 1))
@@ -29,7 +29,6 @@ def display_user_meal_evaluation(request):
         diet_rating = evaluate_user_meal(token, meal_date)
         user_meal_nut = get_user_meal(uuid, meal_date, meal_type, meal_serving)
         
-        print(diet_rating, "!@#!@#!@#" )
         template_data = {'diet_rating': diet_rating[0], 
                         'total_carbs': diet_rating[1][0], 
                          'total_protein': diet_rating[1][1], 
@@ -47,10 +46,8 @@ def display_user_meal_evaluation(request):
                          'col': user_meal_nut[6]
                          }
 
-        print(template_data, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1])
         return JsonResponse(template_data, safe=False)
-        #return render(request, 'user_meal_evaluation.html', template_data)
     
     except ObjectDoesNotExist:
         # 데이터베이스에서 해당 user_uid에 해당하는 객체가 없을 때의 예외 처리
@@ -247,17 +244,17 @@ def evaluate(user_meal_nut, recommend):
     max_error = max(errors)
 
     if all(error <= 10 for error in errors):
-        return 'perfect'
+        return 'Perfect'
     elif all(error <= 15 for error in errors):
-        return 'very good'
+        return 'Very Good'
     elif all(error <= 20 for error in errors):
-        return 'good'
+        return 'Good'
     elif all(error <= 25 for error in errors):
-        return 'not bad'
+        return 'Not Bad'
     elif max_error >= 40 or any(error > 30 for error in errors):
-        return 'bad'
+        return 'Bad'
     else:
-        return 'not bad'
+        return 'Not Bad'
 
     
 def save_user_evaluation(uuid, meal_date, diet_rating, user_meal_nut):

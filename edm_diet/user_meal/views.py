@@ -60,14 +60,9 @@ def get_user_meal_evaluation(request):
     
     user_uid_after = uuid.replace('-','')
 
-    user_meals = list(Usermeal.objects.filter(uuid=user_uid_after))
     user_meals_evaluation = list(Usermealevaluation.objects.filter(uuid=user_uid_after))
     
-    meal_serializers = MealSerializer(user_meals,  many=True)
     meal_evaluation_serializers = UsermealevaluationSerializer(user_meals_evaluation,  many=True)
-    
-    user_meals_data = meal_serializers.data
-    #user_meals_evaluation_data = meal_evaluation_serializers.data
     
     user_meals_evaluation_data = [
     { 'meal_date': item['meal_date'], 'meal_evaluation': item['meal_evaluation'] } 
@@ -76,10 +71,6 @@ def get_user_meal_evaluation(request):
     response_data = {
     'user_meals_evaluation': user_meals_evaluation_data
     }
-    # response_data = {
-    #     'user_meals_data': user_meals_data, 
-    #     'user_meals_evaluation': user_meals_evaluation_data
-    # }
     
     return JsonResponse(response_data, safe=False)
 
@@ -148,14 +139,6 @@ def save_user_meal(request):
                         imagelink = request.data.get('imagelink'),
                         food_name = nutrient_obj,
                     )
-                    
-                    # Usermeal.objects.create(
-                    #     uuid=uuid,
-                    #     meal_type = request.data.get('mealType'),
-                    #     meal_date = request.data.get('mealdate'),
-                    #     imagelink = request.data.get('imagelink'),
-                    #     food_name = nutrient_obj,
-                    # )
                     
                 else :
                     print("데이터베이스에 일치하는 데이터가 없습니다: ", food_name)
