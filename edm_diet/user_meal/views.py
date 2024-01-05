@@ -13,6 +13,7 @@ from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework import generics
 from datetime import datetime, timedelta
+from collections import defaultdict
 
 def validate_token(request):
     authorization_header = request.headers.get('Authorization')
@@ -169,13 +170,16 @@ def get_subscribe_meal_evaluation(request):
     'meal_date': item['meal_date'],
     'meal_type': item['meal_type'],
     'imagelink' : item['imagelink'],
-    'food_name' : item['food_name'],   
+    "predict":{
+        "food_name": [item['food_name']], 
+        }
     }
     for item in meal_serializers.data
     ]
-    
+     
     user_meals_evaluation_data = [
-    {'meal_date': item['meal_date'],
+    {
+     'meal_date': item['meal_date'],
      'sum_carb': item['sum_carb'],
      'sum_sugar': item['sum_sugar'],
      'sum_protein': item['sum_carb'],
@@ -185,6 +189,60 @@ def get_subscribe_meal_evaluation(request):
      } 
     for item in meal_evaluation_serializers.data
     ]
+    
+    unique_combinations = set()
+
+    # 중복을 제거한 최종 결과물
+    formatted_user_meals = []
+    for meal_data in meal_serializers.data:
+        meal_key = (meal_data['meal_date'], meal_data['meal_type'], meal_data['imagelink'])
+        if meal_key not in unique_combinations:
+            unique_combinations.add(meal_key)
+            formatted_user_meals.append({
+                "mealType": meal_data["meal_type"],
+                "mealdate": meal_data["meal_date"],
+                "imagelink": meal_data["imagelink"],
+                "predict": {
+                    "foodNames": [meal_data["food_name"]],
+                }
+            })
+        else:
+        # 이미 존재하는 키에 대해 foodNames에 추가
+            existing_meal = next(item for item in formatted_user_meals if item["mealdate"] == meal_data["meal_date"] and item["mealType"] == meal_data["meal_type"] and item["imagelink"] == meal_data["imagelink"])
+            existing_meal["predict"]["foodNames"].append(meal_data["food_name"])
+            
+# 최종 결과물을 user_meals_data에 반영
+    user_meals_data = {"user_meals": formatted_user_meals}
+    # unique_meals = defaultdict(list)
+
+    # # user_meals 데이터 그룹화
+    # for meal in user_meals_data["user_meals"]:
+    #     key = (meal["meal_date"], meal["meal_type"], meal["imagelink"])
+    #     unique_meals[key].append(meal["predict"]["food_name"][0])
+
+    # # 최종 결과물 구성
+    # user_meals_data = [
+    #     {
+    #         "mealType": meal["meal_type"],
+    #         "mealdate": meal["meal_date"],
+    #         "imagelink": meal["imagelink"],
+    #         "predict": {
+    #             "food_names": unique_meals[key],
+    #         }
+    #     }
+    #     for key, food_names in unique_meals.items()
+    # ]
+
+
+    # # unique_user_meals_data = []
+    # # unique_combinations = set()
+
+    # # for meal_data in meal_serializers.data:
+    # #     meal_key = (meal_data['meal_date'], meal_data['meal_type'], meal_data['imagelink'])
+    # #     if meal_key not in unique_combinations:
+    # #         unique_combinations.add(meal_key)
+    # #         unique_user_meals_data.append(meal_data)
+    
     response_data = {
     'user_meals_evaluation': user_meals_evaluation_data,
     'user_meals': user_meals_data,
