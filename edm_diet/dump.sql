@@ -1,404 +1,401 @@
--- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
---
--- Host: localhost    Database: user_diet
--- ------------------------------------------------------
--- Server version	8.0.20
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `auth_group`
---
-
-DROP TABLE IF EXISTS `auth_group`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_group` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_group`
---
-
-LOCK TABLES `auth_group` WRITE;
-/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_group_permissions`
---
-
-DROP TABLE IF EXISTS `auth_group_permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_group_permissions` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `group_id` int NOT NULL,
-  `permission_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
-  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_group_permissions`
---
-
-LOCK TABLES `auth_group_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_permission`
---
-
-DROP TABLE IF EXISTS `auth_permission`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_permission` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `content_type_id` int NOT NULL,
-  `codename` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
-  CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_permission`
---
-
-LOCK TABLES `auth_permission` WRITE;
-/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add nutrient',7,'add_nutrient'),(26,'Can change nutrient',7,'change_nutrient'),(27,'Can delete nutrient',7,'delete_nutrient'),(28,'Can view nutrient',7,'view_nutrient'),(29,'Can add usermealevaluation',8,'add_usermealevaluation'),(30,'Can change usermealevaluation',8,'change_usermealevaluation'),(31,'Can delete usermealevaluation',8,'delete_usermealevaluation'),(32,'Can view usermealevaluation',8,'view_usermealevaluation'),(33,'Can add usermeal',9,'add_usermeal'),(34,'Can change usermeal',9,'change_usermeal'),(35,'Can delete usermeal',9,'delete_usermeal'),(36,'Can view usermeal',9,'view_usermeal');
-/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user`
---
-
-DROP TABLE IF EXISTS `auth_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `password` varchar(128) NOT NULL,
-  `last_login` datetime(6) DEFAULT NULL,
-  `is_superuser` tinyint(1) NOT NULL,
-  `username` varchar(150) NOT NULL,
-  `first_name` varchar(150) NOT NULL,
-  `last_name` varchar(150) NOT NULL,
-  `email` varchar(254) NOT NULL,
-  `is_staff` tinyint(1) NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `date_joined` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user`
---
-
-LOCK TABLES `auth_user` WRITE;
-/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$600000$mIZWsri1YeXWP89BpZeyjY$g06Jz7KyqGrt5uAM73NsPLwa851xwChH0q+J0kYGwYg=','2024-01-03 16:31:42.569442',1,'admin','','','test@test.com',1,1,'2024-01-03 02:11:51.191488');
-/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user_groups`
---
-
-DROP TABLE IF EXISTS `auth_user_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_user_groups` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `group_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
-  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
-  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
-  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user_groups`
---
-
-LOCK TABLES `auth_user_groups` WRITE;
-/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `auth_user_user_permissions`
---
-
-DROP TABLE IF EXISTS `auth_user_user_permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `auth_user_user_permissions` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `permission_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
-  KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
-  CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `auth_user_user_permissions`
---
-
-LOCK TABLES `auth_user_user_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `django_admin_log`
---
-
-DROP TABLE IF EXISTS `django_admin_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `django_admin_log` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `action_time` datetime(6) NOT NULL,
-  `object_id` longtext,
-  `object_repr` varchar(200) NOT NULL,
-  `action_flag` smallint unsigned NOT NULL,
-  `change_message` longtext NOT NULL,
-  `content_type_id` int DEFAULT NULL,
-  `user_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`),
-  KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
-  CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
-  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
-  CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `django_admin_log`
---
-
-LOCK TABLES `django_admin_log` WRITE;
-/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2024-01-03 05:18:35.428298','1','Usermeal object (1)',1,'[{\"added\": {}}]',9,1),(2,'2024-01-03 06:42:12.534885','1','Usermealevaluation object (1)',3,'',8,1),(3,'2024-01-03 06:44:48.240504','2','Usermealevaluation object (2)',3,'',8,1),(4,'2024-01-03 08:34:36.904033','1','Usermeal object (1)',2,'[{\"changed\": {\"fields\": [\"Meal date\"]}}]',9,1),(5,'2024-01-03 08:34:53.286121','1','Usermeal object (1)',2,'[{\"changed\": {\"fields\": [\"Meal date\"]}}]',9,1),(6,'2024-01-03 08:35:19.702941','2','Usermeal object (2)',1,'[{\"added\": {}}]',9,1),(7,'2024-01-03 08:35:41.353758','3','Usermeal object (3)',1,'[{\"added\": {}}]',9,1),(8,'2024-01-03 08:36:00.316011','4','Usermeal object (4)',1,'[{\"added\": {}}]',9,1),(9,'2024-01-03 08:36:22.396422','5','Usermeal object (5)',1,'[{\"added\": {}}]',9,1),(10,'2024-01-03 08:36:46.153245','6','Usermeal object (6)',1,'[{\"added\": {}}]',9,1),(11,'2024-01-03 08:37:03.621117','7','Usermeal object (7)',1,'[{\"added\": {}}]',9,1),(12,'2024-01-03 08:37:33.565479','8','Usermeal object (8)',1,'[{\"added\": {}}]',9,1),(13,'2024-01-04 01:45:00.615327','22','Usermeal object (22)',3,'',9,1),(14,'2024-01-04 01:45:00.636671','21','Usermeal object (21)',3,'',9,1),(15,'2024-01-04 01:45:00.643465','20','Usermeal object (20)',3,'',9,1),(16,'2024-01-04 01:45:00.650966','19','Usermeal object (19)',3,'',9,1),(17,'2024-01-04 01:45:00.657806','18','Usermeal object (18)',3,'',9,1),(18,'2024-01-04 01:45:00.665571','17','Usermeal object (17)',3,'',9,1),(19,'2024-01-04 01:45:00.672161','16','Usermeal object (16)',3,'',9,1),(20,'2024-01-04 01:45:00.678550','15','Usermeal object (15)',3,'',9,1),(21,'2024-01-04 01:45:00.686785','14','Usermeal object (14)',3,'',9,1),(22,'2024-01-04 01:45:00.693889','13','Usermeal object (13)',3,'',9,1),(23,'2024-01-04 01:45:00.704426','12','Usermeal object (12)',3,'',9,1),(24,'2024-01-04 01:45:00.711120','11','Usermeal object (11)',3,'',9,1),(25,'2024-01-04 01:45:00.718431','10','Usermeal object (10)',3,'',9,1),(26,'2024-01-04 01:45:00.724528','9','Usermeal object (9)',3,'',9,1),(27,'2024-01-04 01:47:47.225792','24','Usermeal object (24)',3,'',9,1),(28,'2024-01-04 01:47:47.248311','23','Usermeal object (23)',3,'',9,1),(29,'2024-01-04 01:57:25.925983','39','Usermeal object (39)',3,'',9,1),(30,'2024-01-04 01:57:25.935708','38','Usermeal object (38)',3,'',9,1),(31,'2024-01-04 01:57:25.942788','37','Usermeal object (37)',3,'',9,1),(32,'2024-01-04 01:57:25.952822','36','Usermeal object (36)',3,'',9,1),(33,'2024-01-04 01:57:25.962166','35','Usermeal object (35)',3,'',9,1),(34,'2024-01-04 01:57:25.969251','34','Usermeal object (34)',3,'',9,1),(35,'2024-01-04 01:57:25.975501','33','Usermeal object (33)',3,'',9,1),(36,'2024-01-04 01:57:25.983003','32','Usermeal object (32)',3,'',9,1),(37,'2024-01-04 01:57:25.992139','31','Usermeal object (31)',3,'',9,1),(38,'2024-01-04 01:57:25.999943','30','Usermeal object (30)',3,'',9,1),(39,'2024-01-04 01:57:26.008237','29','Usermeal object (29)',3,'',9,1),(40,'2024-01-04 01:57:26.015380','28','Usermeal object (28)',3,'',9,1),(41,'2024-01-04 01:57:26.022791','27','Usermeal object (27)',3,'',9,1),(42,'2024-01-04 01:57:26.029933','26','Usermeal object (26)',3,'',9,1),(43,'2024-01-04 01:57:26.038429','25','Usermeal object (25)',3,'',9,1),(44,'2024-01-04 02:09:15.874936','53','Usermeal object (53)',3,'',9,1),(45,'2024-01-04 02:09:15.896841','52','Usermeal object (52)',3,'',9,1),(46,'2024-01-04 02:09:15.904107','51','Usermeal object (51)',3,'',9,1),(47,'2024-01-04 02:09:15.909102','50','Usermeal object (50)',3,'',9,1),(48,'2024-01-04 02:09:15.916617','49','Usermeal object (49)',3,'',9,1),(49,'2024-01-04 02:09:15.923078','48','Usermeal object (48)',3,'',9,1),(50,'2024-01-04 02:09:15.929018','47','Usermeal object (47)',3,'',9,1),(51,'2024-01-04 02:09:15.936548','46','Usermeal object (46)',3,'',9,1),(52,'2024-01-04 02:09:15.946057','45','Usermeal object (45)',3,'',9,1),(53,'2024-01-04 02:09:15.952847','44','Usermeal object (44)',3,'',9,1),(54,'2024-01-04 02:09:15.959882','43','Usermeal object (43)',3,'',9,1),(55,'2024-01-04 02:09:15.968030','42','Usermeal object (42)',3,'',9,1),(56,'2024-01-04 02:09:15.974729','41','Usermeal object (41)',3,'',9,1),(57,'2024-01-04 02:09:15.980636','40','Usermeal object (40)',3,'',9,1),(58,'2024-01-04 02:28:13.462685','60','Usermeal object (60)',3,'',9,1),(59,'2024-01-04 02:28:13.470406','59','Usermeal object (59)',3,'',9,1),(60,'2024-01-04 02:28:13.476920','58','Usermeal object (58)',3,'',9,1),(61,'2024-01-04 02:28:13.483639','57','Usermeal object (57)',3,'',9,1),(62,'2024-01-04 02:28:13.489895','56','Usermeal object (56)',3,'',9,1),(63,'2024-01-04 02:28:13.494953','55','Usermeal object (55)',3,'',9,1),(64,'2024-01-04 02:28:13.501165','54','Usermeal object (54)',3,'',9,1),(65,'2024-01-04 03:42:44.923964','3','Usermealevaluation object (3)',3,'',8,1),(66,'2024-01-04 03:44:10.914542','4','Usermealevaluation object (4)',3,'',8,1),(67,'2024-01-04 03:45:35.690725','5','Usermealevaluation object (5)',2,'[{\"changed\": {\"fields\": [\"Sum kcal\"]}}]',8,1);
-/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `django_content_type`
---
-
-DROP TABLE IF EXISTS `django_content_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `django_content_type` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `app_label` varchar(100) NOT NULL,
-  `model` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `django_content_type`
---
-
-LOCK TABLES `django_content_type` WRITE;
-/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(7,'Meal_Date','nutrient'),(9,'Meal_Date','usermeal'),(8,'Meal_Date','usermealevaluation'),(6,'sessions','session');
-/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `django_migrations`
---
-
-DROP TABLE IF EXISTS `django_migrations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `django_migrations` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `app` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `applied` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `django_migrations`
---
-
-LOCK TABLES `django_migrations` WRITE;
-/*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'Meal_Date','0001_initial','2024-01-03 00:43:40.903916'),(2,'contenttypes','0001_initial','2024-01-03 00:43:41.032028'),(3,'auth','0001_initial','2024-01-03 00:43:42.812572'),(4,'admin','0001_initial','2024-01-03 00:43:43.519294'),(5,'admin','0002_logentry_remove_auto_add','2024-01-03 00:43:43.535380'),(6,'admin','0003_logentry_add_action_flag_choices','2024-01-03 00:43:43.551014'),(7,'contenttypes','0002_remove_content_type_name','2024-01-03 00:43:43.898194'),(8,'auth','0002_alter_permission_name_max_length','2024-01-03 00:43:44.138280'),(9,'auth','0003_alter_user_email_max_length','2024-01-03 00:43:44.179623'),(10,'auth','0004_alter_user_username_opts','2024-01-03 00:43:44.195901'),(11,'auth','0005_alter_user_last_login_null','2024-01-03 00:43:44.310580'),(12,'auth','0006_require_contenttypes_0002','2024-01-03 00:43:44.319269'),(13,'auth','0007_alter_validators_add_error_messages','2024-01-03 00:43:44.333643'),(14,'auth','0008_alter_user_username_max_length','2024-01-03 00:43:44.490474'),(15,'auth','0009_alter_user_last_name_max_length','2024-01-03 00:43:44.676016'),(16,'auth','0010_alter_group_name_max_length','2024-01-03 00:43:44.719580'),(17,'auth','0011_update_proxy_permissions','2024-01-03 00:43:44.737585'),(18,'auth','0012_alter_user_first_name_max_length','2024-01-03 00:43:45.175456'),(19,'sessions','0001_initial','2024-01-03 00:43:45.297710'),(20,'Meal_Date','0002_nutrient_food_id_alter_usermeal_id_and_more','2024-01-03 00:48:54.832613'),(21,'Meal_Date','0003_alter_usermeal_user_id','2024-01-03 01:24:46.119763'),(22,'Meal_Date','0004_alter_usermeal_user_id_and_more','2024-01-03 01:26:18.583996'),(23,'Meal_Date','0005_alter_usermeal_id','2024-01-03 01:27:48.295857'),(24,'Meal_Date','0006_alter_usermeal_id_alter_usermealevaluation_id','2024-01-03 01:54:05.466069'),(25,'Meal_Date','0007_alter_usermeal_id_alter_usermealevaluation_id','2024-01-03 02:27:30.944620'),(26,'Meal_Date','0008_remove_nutrient_food_id_alter_usermeal_id_and_more','2024-01-03 05:14:51.679617'),(27,'Meal_Date','0009_delete_customuser','2024-01-03 05:14:51.799338'),(28,'Meal_Date','0010_remove_usermealevaluation_sys_config','2024-01-03 06:44:17.244110'),(29,'Meal_Date','0011_rename_sun_fat_usermealevaluation_sum_fat_and_more','2024-01-04 03:38:52.377610'),(30,'Meal_Date','0012_alter_usermeal_image_link','2024-01-04 04:06:22.913285'),(31,'Meal_Date','0013_usermealevaluation_sum_col_and_more','2024-01-04 06:19:30.806602'),(32,'Meal_Date','0014_rename_image_link_usermeal_imagelink_and_more','2024-01-04 15:06:41.924647');
-/*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `django_session`
---
-
-DROP TABLE IF EXISTS `django_session`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `django_session` (
-  `session_key` varchar(40) NOT NULL,
-  `session_data` longtext NOT NULL,
-  `expire_date` datetime(6) NOT NULL,
-  PRIMARY KEY (`session_key`),
-  KEY `django_session_expire_date_a5c62663` (`expire_date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `django_session`
---
-
-LOCK TABLES `django_session` WRITE;
-/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('6fpzmyy52spxa2f3in57s9tyhs8o5ze6','.eJxVjDsOwjAQBe_iGll2_Kek5wzWrneNAyiR4qRC3B0ipYD2zcx7iQzb2vLWeckjibPQ4vS7IZQHTzugO0y3WZZ5WpcR5a7Ig3Z5nYmfl8P9O2jQ27dmQ56jsRh8IqfYQqwuGFVDGLSzqHQyniJBQvJRh1LZesSBoFI0Xov3B9mUN-U:1rKwf1:UJMRoZ2ZEFlEWLK8eYbXRAmVCqii28NeHv2d8Ew_Ufg','2024-01-17 08:31:35.028556'),('it05anq564b12317001tbkj5vjc9lqcr','.eJxVjDsOwjAQBe_iGll2_Kek5wzWrneNAyiR4qRC3B0ipYD2zcx7iQzb2vLWeckjibPQ4vS7IZQHTzugO0y3WZZ5WpcR5a7Ig3Z5nYmfl8P9O2jQ27dmQ56jsRh8IqfYQqwuGFVDGLSzqHQyniJBQvJRh1LZesSBoFI0Xov3B9mUN-U:1rL49e:RlOBpYpolZMA5_S09jfM1G4Eq_OM1YMgOztEAXEwEzw','2024-01-17 16:31:42.582283'),('o1z3xkpow2zjfd0unvxtshmxjyomkz8a','.eJxVjDsOwjAQBe_iGll2_Kek5wzWrneNAyiR4qRC3B0ipYD2zcx7iQzb2vLWeckjibPQ4vS7IZQHTzugO0y3WZZ5WpcR5a7Ig3Z5nYmfl8P9O2jQ27dmQ56jsRh8IqfYQqwuGFVDGLSzqHQyniJBQvJRh1LZesSBoFI0Xov3B9mUN-U:1rKqjo:b41DZqhnhBTE2zSEiATrAV3NeqLiOKCxA0TUbi9oH0A','2024-01-17 02:12:08.762667');
-/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `nutrient`
---
-
-DROP TABLE IF EXISTS `nutrient`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `nutrient` (
-  `Food_Name` varchar(45) NOT NULL,
-  `weight_g` double DEFAULT NULL,
-  `Energy_kcal` double DEFAULT NULL,
-  `carbs_g` double DEFAULT NULL,
-  `sugar_g` double DEFAULT NULL,
-  `fat_g` double DEFAULT NULL,
-  `protein_g` double DEFAULT NULL,
-  `nat_mg` double DEFAULT NULL,
-  `col_mg` double DEFAULT NULL,
-  PRIMARY KEY (`Food_Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `nutrient`
---
-
-LOCK TABLES `nutrient` WRITE;
-/*!40000 ALTER TABLE `nutrient` DISABLE KEYS */;
-INSERT INTO `nutrient` VALUES ('(검은)콩조림',20,56.83,6.98,2.92,2.09,3.85,102.85,0),('가래떡',100,205.03999999999996,45.05,0,0.33,3.52,254.68,0),('가자미전',150,220.46,6.68,0,7.12,29.97,814.3700000000001,226.88000000000002),('가자미조림',300,301.29,20.339999999999996,5.99,6.9,40.7,1621.2299999999998,165),('가지나물',50,21.87,3.03,0,1.27,0.73,159.17,0),('간자장',650,807.7400000000001,121.75,6.79,26.38,29.279999999999998,2347.77,19.43),('간장게장',250,292.7,13.88,0.17,2.09,32.66,3075.53,223.11999999999998),('갈비삼각김밥',100,183.18,32.75,0,2.59,6.86,398.11999999999995,12.42),('갈비탕',600,240.39999999999998,8.21,0,14.33,18.67,1688.43,189.84),('갈치조림',100,99.39,5.49,0.5,3.92,10.68,463.82000000000005,42),('감자국',700,220.07,37.01,0,2.16,17,1734.15,87.78),('감자밥',200,308,68.64,0,0.08,5.68,5.2,0),('감자볶음',50,57.79999999999999,8.23,0.5,2.53,1.34,219.93999999999997,0),('감자전',200,366.16,53.81,0,13.61,9.67,456.53,0),('감자조림',50,39.01,8.4,0.79,0.2,1.55,265.92,0),('감자탕',900,963.71,49.64,0.9,58.28,60.55,2439.38,143.69),('감자튀김',150,462.11,50.099999999999994,0,25.76,6.24,374.22,0),('갓김치',50,27.64,5.21,0.42000000000000004,0.7,1.98,447.77,3.51),('건새우볶음',20,69.19,4.81,2.7,2.3,7.22,193.09,74.4),('게살죽',800,554.24,103.59,0,7.63,18.15,1533.96,40.87),('경단',100,303.79,67.04,0,0.54,6.58,186.36,0),('고구마맛탕',200,490.93,90.19,1.43,13.53,3.3,213.33,0),('고구마줄기나물',50,30.44,2.97,0,2.24,0.63,255.71,0),('고구마튀김',100,241.56999999999996,34.1,0,10.8,3.21,150.64,19),('고기만두',250,454.39,55.32999999999999,0,18.24,18.66,888.8,21),('고들빼기',50,55.38999999999999,11.99,0,0.56,2.21,733.75,0.55),('고등어조림',250,459.33000000000004,10.96,1.46,25.35,45.37,1177.95,170.15),('고등어찌개',600,605.31,32.03,0,28.2,59.16,2599.71,206.64),('고사리나물',50,43.51,3.8,0,3.26,1.97,251.52999999999997,0),('고추잡채',200,264.22,22.11,8.45,12.71,12.86,850.31,50.8),('고추장아찌',30,22.359999999999996,4.18,3,0.09,0.8,787.3,0),('고추장찌개',500,263.44,20.08,0,12.349999999999998,25.62,935.15,48.14999999999999),('고추전',150,261.44,17.78,0.75,14.86,13.94,359.88,160.65),('고추조림',100,105.88,14.83,2.99,4.18,2.86,802.4599999999999,0),('고추튀김',100,198.35,12.74,0,13.62,6.48,260.65,190),('곤드레밥',350,506.80000000000007,108.05,0,8.37,14.14,88.75,0),('골뱅이국수무침',230,256.42,39.63,0,7.01,10.52,911.74,39.98),('골뱅이무침',100,107.35,15.56,6.06,2.3,7.91,515.92,45.56),('곰탕',300,181.42,15.5,0,5.44,16.59,713.64,33.66),('곱창전골',600,532.65,26.89,0,34.73,38.35,1750.42,230.7),('광어초밥',300,471.6600000000001,72.53,5.23,3.21,33.74,951.2800000000001,126.49999999999999),('광어회 ',100,116.19999999999999,9.34,5.46,1.36,17.2,754.4,74.96),('국수전골',400,643.16,66.93,4,22.389999999999997,45.29,1524.63,81.6),('군만두',250,684.42,76.17,0,31.169999999999998,19.77,983.6999999999999,36),('굴국',450,194.42,11.44,0,8.65,22.8,1775.97,45),('굴전',100,192.80999999999997,13.919999999999998,0,9.07,12.56,331.02,123),('굴짬뽕',900,640.77,115.82,2,7.76,37.39,2385.35,178.2),('근대된장국',450,109.26,8.14,0,3.21,15.31,1453.19,112.86),('기스면',1000,645.61,98.3,0,11,43.52,2279.52,341.1),('기타잡곡밥',200,302.36,65.52,0,0.75,6.71,3.39,0),('김말이튀김',100,240.56000000000003,32.49,0,12.379999999999999,2.25,393.02,0),('김무침',30,81.01,12.189999999999998,6.93,4.12,4.71,498.63,0),('김치국',450,86,13.01,0,3.38,6.03,1646.15,0),('김치김밥',250,377.26,71.8,0,4.62,11.45,967.79,99.6),('김치라면',650,512.26,80.56999999999998,2.27,20.339999999999996,12.97,2628.29,15.4),('김치만두',250,424.63999999999993,60.79,0,13.1,18.43,961.97,20.28),('김치말이국수',600,310.38,60.76,3,2.47,10.42,2335.45,22.229999999999997),('김치볶음',200,189.97,21.83,8.96,12.13,5.29,1513.41,0),('김치볶음밥',500,656.98,79.29,4,5.06,8.74,1094.91,76),('김치우동',800,512.71,99.06,0,4.74,16.74,3003.05,33.44),('김치전',150,285.73,32.07,0,12.48,13.17,785.6,136),('김치찌개',400,243.03,11.93,3.02,15,15.07,1962.14,25.18),('깍두기',50,17.99,3.94,0.05,0.23000000000000004,1,338.88,4.07),('깐풍기',200,585.08,43.36,13.94,33.34,27.8,629.27,173),('깨강정',30,150.3,13.62,0,9.87,4.5,24.3,0),('깨죽',800,505.68,71.13,0,18.94,13.43,1212.27,0),('깻잎김치',150,124.49,23.27,2.99,3.16,6.1,1907.6399999999999,29.66),('깻잎나물볶음',200,212.39,17.33,0.2,16.37,8.03,1046.43,5.2),('깻잎장아찌',30,33.64,7.87,2.78,0.36,2.11,568.75,0.63),('깻잎전',150,357.62,16.65,0.75,24.64,18.3,464.94,171.38),('꼬리곰탕',700,750.69,10.93,0,52.79999999999999,54.87,764.73,361.23),('꽁치조림',150,280.09,8.36,1.39,16.67,22.59,679.42,67.2),('꽁치찌개',300,356.63,14.479999999999999,0.72,20.689999999999998,29.51,1296.33,84.48),('꽃게탕',600,240.64999999999998,20.77,0,5.49,31.7,2268.86,207.9),('꿀떡',100,225.92,50.35999999999999,9.58,0.76,3.24,251.33999999999997,0),('나박김치',100,14.75,2.25,0.01,0.42000000000000004,0.63,509.47,0),('낙지볶음',200,180.59,23.509999999999998,6.7,3,17.87,868.88,135.2),('낙지탕',600,186.1,11.77,0,2.73,29.21,1711.1200000000001,249.6),('내장탕',700,549.81,13.7,0,31.51,56.97,2383.07,467.03999999999996),('노각무침',150,81.35,16.43,5.09,2.07,3.09,822.1,0),('녹두빈대떡',100,200.70999999999998,18.64,0,8.32,9.96,246.03,13.75),('농어초밥',250,414.78000000000003,74.14,6.97,2.37,19.93,1385.46,43.46999999999999),('느타리버섯볶음',150,133.32,14.22,0.15,8.93,4.41,625.25,0),('다식',30,105.17,20.81,6.46,1.73,3.55,3.85,0),('단감',100,27,4.74,2.14,0.94,0.92,1671,0),('단무지',30,3.9,0.66,0.23000000000000004,0.16,0.11000000000000001,173.55,0),('단무지무침',50,19.19,3.22,0.97,0.9099999999999999,0.4699999999999999,447.86,0),('달걀국',450,193.04,5.35,0,11.11,16.19,1263.96,641.25),('달걀말이',100,172.24,4.67,0,11.23,12.04,323.32,475),('달걀장조림',100,133.72,10.03,3.17,6.39,8.75,636.61,308.75),('달걀찜',250,190,4.81,0,10.91,16.2,860.32,634.57),('달래나물무침',150,132.69,25.26,13.54,3.3,4.77,852.99,0),('닭갈비',300,562.1,24.539999999999996,3.51,28.89,52.3,975.55,224.10000000000002),('닭강정',100,323.25,24.21,1.74,15.56,18.34,413.14000000000004,107.5),('닭개장',700,317.07,19.18,0,14.95,33.74,1786.03,96.9),('닭곰탕',650,527.7,15.39,0,24.14,58.879999999999995,1005.19,230.48999999999998),('닭꼬치',70,177.51,12.9,8.58,7.9,12.349999999999998,287.26,47.599999999999994),('닭볶음탕',300,371.81,19.17,2.02,17.32,33.85,1030.45,119.24999999999999),('닭죽',1000,1181.71,92.53,0,48.17999999999999,75.93,789.79,271.44),('닭칼국수',900,643.1,70.24,0,19.59,39.86,2492.77,113.77),('닭튀김',300,909.8099999999998,45.92,0,52.339999999999996,54.55,1150.13,380.62),('대구찜',500,372.68,26.42,0,8.43,54.07999999999999,1888.04,196.35),('더덕구이',100,183.74,31.779999999999998,10.85,5.62,5.8,745.78,0),('더덕무침',150,220.89,48.43999999999999,31.54,2.74,4.89,1203.58,0),('도가니탕',800,563.65,5.58,0,34.77,54.6,599.27,192.64),('도라지나물',50,54.67,5.33,0,3.82,0.67,256.67,0),('도라지생채',150,165.21999999999997,38.59,3,1.71,4.15,789.08,0),('도미찜',100,126.31000000000002,0.76,0,3.68,21.009999999999998,882.04,191.25),('도토리묵',100,43.05,9.87,1.4,0.35,0.4,116.47000000000001,0),('돈가스',200,620.64,36.56,0,39.12,27.78,557.09,138.34),('돌솥밥',350,528.86,101.85,0,8.35,10.19,618.31,2.37),('동그랑땡',150,312.41,14.71,0,18.72,19.67,579.81,184.28),('동치미',400,57.69,14.26,0,0.64,2.7,2313.58,0),('동태전',150,265.25,11.48,0,16.14,19.87,672.98,134.56),('동태조림',250,270.61,16.77,5,4.09,39.03,1440.17,211.05),('동태찌개',800,369.69,18.94,1.38,7.8,59.57,2487.54,292.66),('돼지갈비',100,248.52000000000004,7.6,5.01,14.7,19.95,344.89,72.04),('돼지갈비찜',170.09999999999997,249.7,8.82,1.76,14.42,20.56,946.68,70.38),('돼지고기김치찌개',400,246.29,9.33,0,18.26,15.5,1961.48,25.3),('돼지고기메추리알장조림',50,62.97,3.14,0.8400000000000001,2.11,7.62,555.78,77.3),('돼지고기볶음',200,353.13,15.329999999999998,4.75,20.94,25.75,1060.33,84),('돼지고기수육',300,1218.19,8.69,0,99.52,61.47,389.53,191.4),('돼지국밥',1200,811.4399999999999,78.28,3.3,36.45,56.75,1257.67,734.5),('돼지껍데기볶음',150,346.14,22.73,15.84,19.23,22.389999999999997,759.29,95.4),('된장찌개',400,147.06,15.98,0,5.27,11.71,2021.7800000000002,0),('두부고추장조림',50,67.14,4.03,1.89,4,5.14,199.23,0),('두부구이',100,90.67,1.53,0,6.27,9.41,164.39,0),('두부김치',250,292.42,13.839999999999998,0,21.32,19.15,1033.85,30),('두부부침',100,134.88,4.29,0,8.76,9.92,199.83,0),('두부전',150,253.89,8.08,0,18.02,18.66,500.53000000000003,66.5),('두부전골',500,315.11,16.2,0.86,19.15,29.14,1651.53,0),('들깨칼국수',600,442.31999999999994,76.67,2.4,6.78,17.48,1695.77,16.72),('땅콩조림',20,80.42,6.54,3.27,5.11,2.91,154.25,0),('떡갈비',250,762.99,26.61,12.49,51.57999999999999,43.09,838.84,157.5),('떡국',800,714.99,144.02999999999997,0,5.39,21.86,2019.2800000000002,90.8),('떡라면',700,672.18,121.07999999999998,0,17.58,15.45,2214.36,2.34),('떡만둣국',700,625.35,113.96,0,9.4,22.72,1999.1199999999997,298.81),('떡볶이',200,300.76,58.849999999999994,5.7,2.96,8.72,862.2300000000001,6),('라면',550,509.33000000000004,83.17,0,17.75,14.079999999999998,1695.5,2.34),('라볶이',200,266.03,41.13,6.36,9.59,7.96,836.2400000000001,6.9),('마늘장아찌',30,16.06,3.07,0.3,0.02,0.79,481.75,0),('마늘쫑무침',30,38.12,9.35,3.28,0.28,0.9800000000000001,423.4599999999999,0),('마늘쫑장아찌',50,28.27,6.19,2.35,0.13,1.04,778.6,0),('마파두부',200,226.91999999999996,10.99,0.57,12.01,16.85,647.45,19.15),('막국수',550,566.89,111.3,11.019999999999998,5.09,26.95,1828.02,37.1),('만둣국',700,432.62,53.28,0,14.92,19.24,2356.67,94.22),('매운탕',600,402.78999999999996,18.83,1.55,21.559999999999995,37.16,2130.95,148.77),('매작과',30,121.48,19.06,0,3.57,2.55,31.05,0),('머위나물볶음',150,102.99000000000001,7.71,0,7.95,4.3,696.91,0),('메밀국수',600,588.68,120.09,10.16,4.53,25.26,1962.46,35.98),('메밀전병',100,166.13999999999996,24.82,0,5.5,5.79,340.66,0),('메추리알장조림',100,205.08,7.36,2.45,13.69,12.109999999999998,758.9,530.64),('멸치볶음',20,69.22,5.69,3.43,2.04,6.97,274.1,83.55),('명란젓',10,12,0.27,0,0.3,2.05,353.1,35),('모래집튀김',150,457.3399999999999,31.86,0,25.89,22.29,297.01,137.65),('무나물',50,34.58,3.04,0,2.56,0.58,293.52,0),('무말랭이',30,39.89,9.63,1.03,0.34,1.36,378.78,0.04),('무생채',150,73.68,16,4.5,1.28,2.63,832.1900000000002,1.68),('무장아찌',30,27.34,5.31,3.3,0.26,0.57,933.2799999999999,0),('무지개떡',100,218.18,48.7,6.99,0.86,4,277.71,0),('무피클',50,17,4.19,1.99,0.05,0.4,6.6,0),('문어숙회',80,67.49,0.18,0,0.73,14.14,222.82999999999998,116.74),('문어초밥',250,377.97,71.83,4.98,1.03,16.9,1420.92,96),('물냉면',800,579.71,96.4,1.2,9.78,28.78,2586.16,178.22),('물만두',120,158.04999999999998,20.48,0,5.84,5.86,269.52,7.59),('미꾸라지튀김',100,382.13,30.57,0,22.54,12.69,323.26,121.30000000000001),('미나리나물',50,28.34,2.56,0,2.14,0.99,165.51999999999998,0),('미나리전',150,215.86000000000004,30.1,0,8.63,6.09,235.65,28.5),('미소된장국',150,37.97,1.69,0,1.75,4.14,511.9800000000001,15.67),('미역국',500,50.16,4.69,0,4.35,2.7,1527.55,0),('미역오이냉국',450,77.35,19.74,8.99,1.35,5.61,1483.6,0),('미역초무침',50,24.94,5.7,4,0.54,1.07,285.8,0),('바지락조개국',550,159.25,8.51,0,1.84,25.83,1650.85,145.2),('배추겉절이',50,21.239999999999995,4.48,1,0.5,0.9399999999999998,325.41,1.34),('배추김치',50,18.43,4.15,0.5,0.3,1.15,309.53,3.41),('배추된장국',700,121.53,11.04,0,3.63,13.96,2321.48,25.97),('배추전',150,241.01,32.51,0,10.489999999999998,6.41,355.98,30.4),('백김치',50,19.8,4.38,0,0.26,0.8,211.72,0.04),('백설기',100,218.82000000000002,48.2,11.99,0.79,4.04,296.95,0),('버섯전',150,239.68000000000004,18.61,0.75,12.93,11.93,307.92,126.08),('버섯찌개',400,171.86,15.26,0,7.52,16.64,1267.81,0),('보리밥',200,316.1,70.57,0,0.14,5.55,4.5,0),('볶음밥',400,687.74,100.33000000000001,0,19.29,24.46,1441.42,309),('볶음우동',300,377.92,62.26,0.9099999999999999,10.809999999999999,9.58,1461.31,0),('부대찌개',600,525.98,46.81,0,28.479999999999997,27.709999999999997,2689.19,42.96),('부추김치',50,32.91,6.29,3.49,0.57,1.88,399.38,0),('부추전',150,241.18,32.01,0,9.5,7.14,255.16,7.12),('북어조림',100,184.58,15.66,2.91,3.04,23.88,761.39,103.95),('북어채무침',150,332.05,31.33,18.02,5.8,37.37,1048.53,108.57),('불고기',150,386.79,13.05,1.1,21.779999999999998,32.9,632.54,106.22),('불고기덮밥',500,699.96,92.08999999999999,5.99,21.399999999999995,29.31,1182.88,72),('비빔국수',550,577.17,114.47,11.01,9.55,16.71,1628.3,0),('비빔냉면',550,594.31,91.49,2,9.13,23.7,1530.57,31.73),('뼈다귀해장국 ',1000,715.98,29.71,0,45.37,53.63,3093.6,216.23999999999998),('뼈해장국',1000,692.93,25.42,0,37.16,67.92,3192.46,634.2),('산자',30,121.7,24.699999999999996,10.63,1.2,0.9099999999999999,8.01,0),('산채비빔밥 ',400,495.89,89.66,0.52,10.99,10.66,1060.78,0),('삼계탕',1000,881.32,44.07999999999999,0,40.57,76.65,1211.32,285),('삼선볶음밥',400,683.62,113.43,5.09,16.84,19.26,1155.81,119.13),('삼선우동',1000,692.26,89.19,2,10.53,56.17,2351.43,640.67),('삼선자장면',700,787.84,111.57,2,24.68,38.33,2791.11,162.24),('삼선짬뽕',900,629.1,89.31,3,13.45,39.17,2825.66,249.30000000000004),('삼치구이',200,355.71,8.48,0,18.01,37.83,797.71,156.87),('상추겉절이',200,130.62,17.99,2,6.25,5.65,952.32,5.36),('새우볶음밥',400,634.52,91.62,0,17.91,24.11,1124.63,127.2),('새우초밥',250,395.54,69.54,2.99,1.21,22.74,1396.75,138.33),('새우튀김',100,311.26,21.83,0,19.64,11.83,553.89,165.9),('새우튀김롤',300,572.02,81.5,4,18.9,21.109999999999996,1512.5,96.53999999999999),('샐러드김밥',250,422.43000000000006,75.84,0,7.51,12.76,906.6799999999998,100.53),('생선가스',200,646.21,57.38,0,37.09,24.5,817.2699999999999,176.3),('생선물회',800,575.01,81.44999999999999,29.37,14.13,36.77,2986.23,0.76),('생연어',100,110.28999999999999,1,0,1.94,20.91,213.05999999999997,60),('선지(해장)국',1000,314.42,22.29,0,5.03,48.1,3053.19,149.6),('설렁탕',600,422.76,10.939999999999998,0,18.2,52.71,725.16,219.35999999999999),('소갈비찜',250,500.45,11.31,0,29.16,42.55,768.42,141.82),('소고기국밥',700,331.71,54.93,0,4.74,16.04,1613.21,25.499999999999996),('소고기김밥',250,425.67,76.07,0,6.64,14.67,1477.98,99.87),('소고기메추리알장조림',50,61.22,3.45,1,2.21,6.67,608.29,70.17),('소고기무국',400,125.22,8.14,0,4.72,13.51,1095.18,28.56),('소고기미역국',650,154.93,6.91,0,6.83,20.23,2006.8699999999997,41.34),('소고기버섯죽',800,573.24,102.93,0,6.46,20.52,1263.62,29.31),('소고기전골',300,203.22,16.55,0,7.54,19.47,1090.15,31.8),('소곱창구이',150,639.11,6.51,0,51.71,35.62,332.72,652.5),('소머리국밥',1100,891.43,77.06,0,40.76,48.94,970.89,477.09999999999997),('소불고기',200,174.73,19.63,9.49,4.68,14.22,828.15,27.93),('소세지볶음',200,476.0400000000001,28.81,5.83,33.24,17.04,1409.05,56.25999999999999),('소양념갈비구이',300,986.92,27.74,14.31,66.48,61.97,1272.34,220.96),('송이덮밥',600,600.42,103.56999999999998,0,14.449999999999998,16.28,1578.85,9.54),('송편',100,234.9,46.82,1.52,2.7,4.17,236.53999999999996,0),('수수부꾸미',100,258.99,46.15,3,5.67,5.5,270.04,0),('수수팥떡',100,212.73,45.17,1,0.68,5.98,236.38,0),('수제비',800,622.15,99.22,0,6.54,38.53,1669.32,209),('숙주나물',50,19.51,1.56,0,1.35,1.31,186.73,0),('순대국',800,550.66,22.82,0,32.94,41.22,1532.59,774.77),('순대국밥',900,690.35,34.23,0,16.48,17.34,3418.2,1480.97),('순대볶음',400,579.56,70.96,14.289999999999997,25.61,17.58,1379.55,189.91999999999996),('순두부찌개',400,198.47,8.78,0,14.03,14.719999999999999,1331.31,6.6),('시금치나물',50,37.51,3.81,0,2.37,2.07,217.26000000000002,0),('시금치된장국',400,121.45000000000002,9.9,0,3.39,16.69,1381.25,117.04),('시래기된장국',450,99.12,10.68,0,2.54,10.02,1535.63,37.62),('시루떡',100,223.62,49.03,5.99,0.28,5.5,278.95,0),('쌀국수',600,321.34,46.2,2.2,5.81,21.85,2032.16,123.03),('쌀밥',210,334.8,73.71,0,0.45,5.76,59.39999999999999,0),('쑥갓나물무침',150,94.86,8.78,0,6.51,5.49,700.12,0),('쑥된장국',450,117.31,17.17,0,2.55,13.21,1799.6,68.97),('쑥떡',100,238.05999999999997,54.64,9.99,0.45,4.53,256.15,0),('아귀찜',400,310.7,17.59,0,6.68,48.849999999999994,1463.31,187.42),('아욱된장국',450,103.53000000000002,9.96,0,2.94,12,1462.13,37.62),('알감자조림',50,56.22999999999999,10.48,1.57,1.26,1.38,241.73,0),('알밥',400,606.54,92.1,0,3.45,15.16,1647.87,39),('알탕',700,424.12,49.519999999999996,14.849999999999998,6.98,49.21,2393.29,610.8),('야채전',100,194.94,24.97,0,8.78,4.95,322.92,23.75),('약과',30,113.84999999999998,22.18,2.15,1.24,2.57,16.46,0),('약식',100,232.21000000000004,48.879999999999995,7.99,2.27,3.83,290.64,0.16),('양념게장',200,275.55,46.33,26.52,2.06,20.41,1747.84,134.4),('양념왕갈비',150,485.51,15.04,8.35,33.71,29.33,533.19,103.49999999999999),('양념치킨',200,567.58,38.84,12.36,31.15,30.469999999999995,777.86,259),('양배추구이',100,60.93,7.62,0.8400000000000001,2.65,2.71,242.34,5.5),('양송이버섯볶음',150,132.42,10.55,0,9.79,5.46,520.11,0),('양파장아찌',50,19.71,3.54,1.5,0.05,0.58,423.61,0),('어묵국',600,252.09,37.16,0,4.21,22.85,2022.7400000000002,100.37),('어묵볶음',150,281.54,36.28,4.47,8.08,18.04,1283.83,18.9),('어죽',800,559.27,90.47,0,6.08,15.53,1621.29,75.77),('연근조림',50,87.19,14.71,1.39,2.55,1.34,330.58,0),('연어롤 ',300,518.58,76.11,0,14.719999999999999,20.72,1243.82,51.73),('연어초밥',250,451.03,70.87,3.96,5.76,24.94,995.0300000000001,54.6),('연포탕',1000,541.19,21.64,0,9.2,91.65,2307.07,844),('열무김치',50,16.29,3.16,1.2,0.35,1.34,308.35,0),('열무김치국수',800,488.31999999999994,81.61,0,8.22,21.939999999999998,2587.7,45.14),('열무비빔밥',400,445.65999999999997,90.03,1.72,3.16,12.989999999999998,718.39,12.8),('열무얼갈이김치',50,16.57,3.03,0,0.4,1.27,344.2,4.2),('오리불고기',250,559.93,24.47,4.07,34.25,38.16,854.07,124.82),('오리탕',600,480.82000000000005,24.16,1.03,21.64,43.209999999999994,1849.93,161.7),('오므라이스',450,684.99,101.62,0,19.75,23.15,1123.24,605.62),('오삼불고기',200,356.94,21.459999999999997,7.42,20.24,23.349999999999998,870.4000000000001,164.29999999999998),('오이생채',50,23.36,4.63,1.52,0.5,0.89,269.31,0),('오이소박이',50,16.67,2.96,1.2,0.53,0.9399999999999998,276.19,1.45),('오이지',50,11.44,2.39,0,0.31,1.14,926,0),('오이피클',50,54,14.639999999999999,1.99,0.15,0.3,333.6,0),('오일소스스파게티',400,626.58,99.24,0,16.59,14.68,968.7000000000002,0),('오징어국',500,169.02999999999997,10.6,0,2.35,27.74,1573.42,296.4),('오징어덮밥',500,693.98,83.42999999999999,2.69,20.92,40.59,1497.37,387.6),('오징어무침',200,249.52999999999997,13.549999999999999,0,4.19,38.67,682.39,430.9200000000001),('오징어볶음',200,243.7,27.419999999999998,9.28,6.84,20.43,1025.86,198),('오징어젓갈',10,6.83,0.29,0,0.1,1.24,179.11,13.679999999999998),('오징어채볶음',20,55.709999999999994,7,1.35,0.69,5.39,240.96,50.05),('오징어튀김',100,308.43,26.02,0,16.5,13.46,361.57,133),('우거지나물무침',150,126.10999999999999,10.28,1.5,8.66,5.08,774.55,0),('우거지된장국',450,85.97,13.72,0,1.81,6.44,1593.99,0),('우거지해장국',600,158.5,14.86,0,5.73,14.19,1972.09,13.26),('우렁된장국',500,245.27999999999997,21.19,0,7.05,24.72,2150.43,22.95),('우엉조림',30,68.5,15.51,7.61,0.33,1.1,242.28,0),('유과',30,129.06,24.14,1.12,3.5,0.36,7.06,0),('유부초밥',250,463.2099999999999,78.47,6.76,11.23,12.37,929.07,0),('육개장',440,137.86,11.62,0,5.87,13.439999999999998,1112.78,24.219999999999995),('육사시미',150,203.55000000000004,6.96,4.09,6.07,29.279999999999998,888.03,63.45),('육전',100,197.1,6.72,0.3,9.51,19.58,248.68,91.5),('육회',150,236.56,15.95,7.04,8.05,25.03,433.42,57.75),('육회비빔밥',450,661.41,91.74,2.58,17.54,32,1126.6,241.65),('인절미',100,214.46,42.55,0,1.76,6.4,337.74,0),('일반김밥',200,348.87,63.64,0,5.42,10.28,951.3200000000002,69.12),('일반비빔밥',500,703,95.68,3.44,25.28,22.6,1234.09,40.2),('일식우동',700,420.79,81.23,0.5,1.74,16.93,1873.54,16.2),('자장면',650,760.88,134.29,7.99,23.159999999999997,15.74,2447,3.08),('자장밥',500,729.62,98.08,4,24.95,25.76,1521.85,36),('잔치국수',700,564.23,104.66,0.44000000000000006,6.23,20.26,1792.23,167.41),('잡채',150,198.82,37.47,2.99,4.7,2.59,664.75,14.25),('잡채밥',650,851.54,125.70000000000002,4,28.609999999999996,21.139999999999997,2251.34,36),('잡탕밥',750,737.23,100.55000000000001,0,22.48,29.02,1922.1400000000003,188.04999999999998),('잣죽',700,872.61,153.78999999999996,0,20.29,15.79,850.63,0),('장어덮밥',400,671.72,103.03999999999999,0,19.24,26.139999999999997,893.22,156.96),('장어초밥',400,486.35,74.84,2.06,12.73,16.33,1291.81,130.43),('전복죽',800,587.29,105.04,0,11.45,14.57,1423.9300000000003,45.15),('전주비빔밥',450,662.19,92.99,3.44,13.03,15.84,1281.3,286.94),('전주콩나물국밥',900,432.38000000000005,88.73,0,3.52,12.5,1753.26,2.77),('절편',100,197.80999999999997,44.07,5,0.35,3.06,266.77,0),('제육덮밥',500,796.94,95.8,5.4,27.519999999999996,37.8,1375.69,108),('조기조림',300,378.26,14.239999999999998,1.45,16.26,41.43,1682.9,176.61),('조기찜',100,185.25,1.81,0.34,9.2,22.27,631.89,105.74),('족발',150,381.57,32.3,0,16.62,26.02,839.1399999999999,98),('주꾸미볶음',200,211.81,21.69,6.7,6.11,20.16,969.88,385.6),('주먹밥',150,209.56,36.18,0,3.46,6.7,329.69,50.129999999999995),('쥐치채',20,53.39,10.18,6.6,0.2,2.77,289.45,5.93),('쥐포튀김',100,353.33,37.99,0,16.54,11.209999999999999,423.80000000000007,75.64),('증편',100,198.69,44.22,15.98,0.34,2.54,259.04,0),('지리탕',600,260.59,10.52,0,8.36,38.34,1685.1599999999999,154.15),('짜장라면',250,409.38,63.77,0,14.849999999999998,12.01,1276.38,1.5),('짬뽕',1000,650.31,118.54,0,13.519999999999998,25.52,3451.37,105.22),('짬뽕라면',750,633.34,88.79,0,24.63,31.41,2380.93,85.28),('짬뽕밥',900,696.69,93.42,0,22.419999999999998,41.8,2869.54,304.3),('쫄면',450,622.42,110.85000000000001,22.13,6.93,12.36,1271.55,0),('찜닭',1500,1358.38,140.64,57.52,36.54,114.9,5290.09,341.64),('찰떡',100,216.19000000000003,44.88,5.5,1.24,5.81,236.82,0),('참꼬막',80,89.77,4.92,1.6,2.17,12.98,400.23,46.989999999999995),('참치김밥',250,401.21999999999997,47.55,0,14.59,19.82,925.73,143.67),('참치김치찌개',400,193.58,13.33,0,10.889999999999999,16.86,2604.45,35.44),('참치마요삼각김밥',100,189.58,31.93,0,2.89,8.11,189.1,16.63),('참치죽',800,658.46,105.93999999999998,0,13.85,26.079999999999995,1264.15,40.75),('찹쌀떡',100,264.74,62.08,13.99,0.23000000000000004,3.41,226.37999999999997,0),('채소죽',800,514.83,100.8,0,5.13,11.89,1211.63,24.29),('채소튀김',100,311.99,36.35,0,18.53,3.01,277.28,0),('청국장찌개',400,275.46,14.97,0,14.43,25.84,1839.75,36),('청포묵무침',250,157.61,19.68,13.74,4.22,2.96,756.74,2.35),('총각김치',50,17.56,3.44,0,0.37,1.03,347.17,4.43),('추어탕',700,338.67,24.42,1.81,11.51,37.37,2077.15,298.48),('취나물',50,72.94,3.46,0,6.71,1.6,288.65,0),('치즈김밥 ',250,462.23,77.12,0,8.84,17.12,919.97,83.02),('치즈돈가스',250,758.5,45.48,0,46.15,36.02,855.05,146.4),('치즈라면',600,598.67,83.53,0,23.28,23.349999999999998,2425.97,302.2),('치킨가스',200,582.01,51.28,0,28.639999999999997,31.03,748.73,113.3),('치킨데리야끼',340,692.52,50.73,3.64,32.19,47.339999999999996,865.98,171.25),('치킨윙',100,219.42,9.96,2.45,14.23,11.4,351.39,66),('카레라이스',500,653.24,92.57999999999998,0,10.67,13.4,1108.55,13.75),('캘리포니아롤',300,468.16,81.22,0,9.73,12.8,1351.96,28.34),('코다리조림',100,146.67,4.57,0.5,5.62,18.46,433.18,77.6),('콘스프',400,280.48,35.37,0,14.02,5.82,1319.46,40.709999999999994),('콩국수',800,623.5,67.12,1,20.43,47.79999999999999,875.84,0),('콩나물',50,24.13,1.14,0,1.98,1.64,203.5,0),('콩나물국',400,22.53,1.26,0,1.42,1.82,752.42,7.41),('콩밥',200,322.9,65.85,0,1.67,8.43,4.1,0),('콩비지찌개',400,248.66000000000003,24.52,0,12.81,15.96,1206.33,27.06),('콩조림',20,59.22,7.75,2.92,1.94,3.57,234.7,0),('크림소스스파게티',400,825.0599999999998,85.88,0,45.4,19.44,1025.21,140.15),('탕국',250,94.24,2.58,0,4.32,12.08,663.05,35.48),('탕수육',200,454.43999999999994,56.49,1.9,16.59,17.06,403.25999999999993,76.47),('탕평채',100,101.19,10.2,6.99,3.11,3.53,247.41999999999996,4.95),('토란국',250,462.9700000000001,85.16,0,7.07,23.89,700.67,37.72),('토마토소스스파게티',500,642.18,102.07,0,17.37,20.22,1404.81,12.65),('토마토스프',400,382.40999999999997,12.42,0,25.4,18.2,1544.31,70.8),('파김치',50,28.01,5.47,1,0.7,1.55,395.86,4.69),('파래무침',30,31.589999999999996,5.43,0.9,0.69,2.34,252.05,0),('파무침',150,124.29999999999998,19.47,8.37,5.41,3.82,693.83,10.05),('파전',150,280.55,37.45,0,12.04,7.73,338,57),('팥죽',600,482.6499999999999,100.73999999999998,4.79,0.56,20.59,1026.11,0),('표고버섯볶음',150,143.59,14.28,1.49,7.36,4.01,563.59,0),('하이라이스',360,477.59999999999997,84.58999999999999,0,9.67,7.92,991.6800000000001,8.57),('한치초밥',250,389.96,77.31,1.74,1.2,13.54,1153.49,0.75),('해물덮밥',700,837.9799999999999,100.11000000000001,0,29,51.77,2117.83,293.87),('해물볶음',400,420.5299999999999,36.53,7.66,15.32,37.48,1647.02,376.2),('해물볶음밥',400,659.23,85.19,0,23.71,22.679999999999996,951.0299999999999,362.4),('해물찜',500,397.37,36.02,0,8.94,50.28,2213.44,323.98),('해물칼국수',900,621.2,124.21,0,4.01,24.87,2195.05,156.77),('해물탕',600,272.26,19.58,1.55,3.38,41.74,2071.99,350.22),('해물파전',150,267.23,27.679999999999996,0,12.57,12.94,356.43,96.84),('해파리냉채',150,87.28,13.83,7.49,1.55,6.63,490.13,17.62),('햄김치찌개',300,190.47,15.44,0,10.68,11.63,1527.82,23.37),('햄버거스테이크',200,436.74999999999994,21.35,0,28.05,24.919999999999998,920.26,75.78),('햄부침',100,232.6,9.73,0,15.48,13.069999999999999,774.68,52.15),('현미밥',230,351.35,77.88,0,1.1,6.66,42.08,0),('호박볶음',50,29.19,3.09,0,2.01,0.77,223.28,0.07),('호박부침개',100,130.72,8.67,0,9.23,3.37,172.03,61.75),('호박전',150,215.28,16.56,0,14.42,6.59,274.63,106.88),('호박죽',600,430.33,111.40999999999998,25.78,0.72,8.11,911.72,0),('호박찌개',300,98.3,12.74,2.06,2.34,7.78,1028.14,59.28),('홍어무침',200,193.14,24.9,9.43,2.27,21.64,817.4199999999998,79.2),('홍합미역국',650,168.87999999999997,14.13,0,6.43,19.99,2066.27,79.62),('황태해장국',600,184.22,6.39,0,7.22,25.209999999999997,1526.82,91.61),('회냉면',550,638.9,131.9,22.73,8.78,20.22,1524.28,92.89),('회덮밥',500,698,101.75,18.41,11.4,42.99,777.63,125.59),('회무침',300,311.59,42.88,26.41,4.26,27.18,1253.25,61.379999999999995),('훈제연어',100,169,9.34,5.46,6.16,19.28,1260.8,141.6),('훈제오리',250,789.96,11.83,6.25,64.65,38.16,1216.98,200.25),('흑미밥',200,318,70.29,0,0.39,5.44,4.5,0);
-/*!40000 ALTER TABLE `nutrient` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `usermeal`
---
-
-DROP TABLE IF EXISTS `usermeal`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `usermeal` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_uuid` char(32) NOT NULL,
-  `meal_type` longtext,
-  `meal_date` date DEFAULT NULL,
-  `imagelink` varchar(100) NOT NULL,
-  `food_name_id` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `usermeal_food_name_id_fc3239e6_fk_nutrient_Food_Name` (`food_name_id`),
-  CONSTRAINT `usermeal_food_name_id_fc3239e6_fk_nutrient_Food_Name` FOREIGN KEY (`food_name_id`) REFERENCES `nutrient` (`Food_Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `usermeal`
---
-
-LOCK TABLES `usermeal` WRITE;
-/*!40000 ALTER TABLE `usermeal` DISABLE KEYS */;
-INSERT INTO `usermeal` VALUES (1,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-03','a','가래떡'),(2,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-02','ㅇㅇㅇ','가래떡'),(3,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-01','ㄴㄴㄴ','가래떡'),(4,'950cfbad7a9e43c0a11af905fe67dafb','아침','2023-12-31','ㅇㅇ','가래떡'),(5,'950cfbad7a9e43c0a11af905fe67dafb','저녁','2023-12-30','ㅇㅇㄴㄴ','가래떡'),(6,'950cfbad7a9e43c0a11af905fe67dafb','저녁','2023-12-28','ㅇㅇㅇㄴ','가래떡'),(7,'950cfbad7a9e43c0a11af905fe67dafb','저녁','2023-12-26','ㅇㅇㅇ','가자미전'),(8,'950cfbad7a9e43c0a11af905fe67dafb','아침','2023-12-25','ㅇㄴㅁ','간장게장'),(61,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','연근조림'),(62,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','단감'),(63,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','홍어무침'),(64,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','약식'),(65,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','파김치'),(66,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','코다리조림'),(67,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','김치찌개'),(68,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','참치김밥'),(69,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','a','참치김밥'),(70,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','images/asd.png','(검은)콩조림'),(71,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','images/asd_5e8o8r6.png','(검은)콩조림'),(72,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','images/asd_00IeDUV.png','(검은)콩조림'),(73,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','[<InMemoryUploadedFile: asd.png (image/png)>]','연근조림'),(74,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','[<InMemoryUploadedFile: asd.png (image/png)>]','단감'),(75,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','[<InMemoryUploadedFile: asd.png (image/png)>]','홍어무침'),(76,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','[<InMemoryUploadedFile: asd.png (image/png)>]','약식'),(77,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','[<InMemoryUploadedFile: asd.png (image/png)>]','파김치'),(78,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','[<InMemoryUploadedFile: asd.png (image/png)>]','코다리조림'),(79,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','[<InMemoryUploadedFile: asd.png (image/png)>]','김치찌개'),(80,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-01','images/asd_XUSTvHs.png','연근조림'),(81,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-01','images/asd_aVIYnJU.png','연근조림'),(82,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','<실제 이미지를 넣어주세요>','연근조림'),(83,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','<실제 이미지를 넣어주세요>','단감'),(84,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','<실제 이미지를 넣어주세요>','홍어무침'),(85,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','<실제 이미지를 넣어주세요>','약식'),(86,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','<실제 이미지를 넣어주세요>','파김치'),(87,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','<실제 이미지를 넣어주세요>','코다리조림'),(88,'950cfbad7a9e43c0a11af905fe67dafb','아침','2024-01-04','<실제 이미지를 넣어주세요>','김치찌개'),(89,'1223cb0d0d844aa6ae51cc4f679e3a0a','아침','2024-01-04','','쌀밥'),(90,'1223cb0d0d844aa6ae51cc4f679e3a0a','아침','2024-01-04','','곰탕'),(91,'1223cb0d0d844aa6ae51cc4f679e3a0a','아침','2024-01-04','','김치전'),(92,'1223cb0d0d844aa6ae51cc4f679e3a0a','점심','2024-01-04','<실제 이미지를 넣어주세요>','쌀밥'),(93,'1223cb0d0d844aa6ae51cc4f679e3a0a','점심','2024-01-04','<실제 이미지를 넣어주세요>','곰탕'),(94,'1223cb0d0d844aa6ae51cc4f679e3a0a','점심','2024-01-04','<실제 이미지를 넣어주세요>','김치전'),(95,'1223cb0d0d844aa6ae51cc4f679e3a0a','저녁','2024-01-04','<실제 이미지를 넣어주세요>','쌀밥'),(96,'1223cb0d0d844aa6ae51cc4f679e3a0a','저녁','2024-01-04','<실제 이미지를 넣어주세요>','곰탕'),(97,'1223cb0d0d844aa6ae51cc4f679e3a0a','저녁','2024-01-04','<실제 이미지를 넣어주세요>','김치전');
-/*!40000 ALTER TABLE `usermeal` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `usermealevaluation`
---
-
-DROP TABLE IF EXISTS `usermealevaluation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `usermealevaluation` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `user_uuid` char(32) NOT NULL,
-  `meal_date` date DEFAULT NULL,
-  `sum_carb` double DEFAULT NULL,
-  `sum_sugar` double DEFAULT NULL,
-  `sum_protein` double DEFAULT NULL,
-  `sum_fat` double DEFAULT NULL,
-  `meal_evaluation` longtext,
-  `sum_kcal` double DEFAULT NULL,
-  `sum_col` double DEFAULT NULL,
-  `sum_nat` double DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `usermealevaluation`
---
-
-LOCK TABLES `usermealevaluation` WRITE;
-/*!40000 ALTER TABLE `usermealevaluation` DISABLE KEYS */;
-INSERT INTO `usermealevaluation` VALUES (10,'950cfbad7a9e43c0a11af905fe67dafb','2023-12-29',0,0,0,0,'bad',0,NULL,NULL),(13,'950cfbad7a9e43c0a11af905fe67dafb','2024-01-03',45.05,0,3.52,0.33,'bad',205.03999999999996,0,254.68),(14,'1223cb0d0d844aa6ae51cc4f679e3a0a','2024-01-04',363.84,0,106.56000000000002,55.11,'bad',2405.85,508.98,4675.92),(15,'1223cb0d0d844aa6ae51cc4f679e3a0a','2024-01-03',500,0,300,50,'perfect',1000,10,300),(16,'1223cb0d0d844aa6ae51cc4f679e3a0a','2024-01-02',500,0,300,50,'not bad',1000,10,300),(17,'1223cb0d0d844aa6ae51cc4f679e3a0a','2024-01-01',500,0,300,50,'very good',1000,10,300),(18,'1223cb0d0d844aa6ae51cc4f679e3a0a','2023-12-31',500,0,300,50,'good',1000,10,300),(19,'1223cb0d0d844aa6ae51cc4f679e3a0a','2023-12-30',500,0,300,50,'bad',1000,10,300),(20,'1223cb0d0d844aa6ae51cc4f679e3a0a','2023-12-29',500,0,300,50,'perfect',1000,10,300),(21,'1223cb0d0d844aa6ae51cc4f679e3a0a','2023-12-28',500,0,300,50,'good',1000,10,300);
-/*!40000 ALTER TABLE `usermealevaluation` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2024-01-05  0:07:29
+INSERT INTO nutrient VALUES('쌀밥',210.0,334.8000000000000309,73.709999999999995523,0.0,0.45,5.7599999999999997868,59.399999999999995026,0.0,1);
+INSERT INTO nutrient VALUES('기타잡곡밥',200.0,302.36000000000000653,65.51999999999999602,0.0,0.75,6.7099999999999999644,3.3900000000000001243,0.0,2);
+INSERT INTO nutrient VALUES('콩밥',200.0,322.89999999999996482,65.849999999999990762,0.0,1.6699999999999999289,8.4299999999999997157,4.0999999999999996447,0.0,3);
+INSERT INTO nutrient VALUES('보리밥',200.0,316.10000000000000319,70.569999999999994955,0.0,0.14000000000000001776,5.5499999999999998223,4.5,0.0,4);
+INSERT INTO nutrient VALUES('돌솥밥',350.0,528.85999999999997456,101.84999999999999609,0.0,8.3499999999999996447,10.189999999999999058,618.30999999999995964,2.3700000000000001065,5);
+INSERT INTO nutrient VALUES('현미밥',230.0,351.35000000000000675,77.879999999999993676,0.0,1.1000000000000000888,6.6600000000000001421,42.080000000000001847,0.0,6);
+INSERT INTO nutrient VALUES('흑미밥',200.0,318.0,70.290000000000008029,0.0,0.39000000000000003552,5.4400000000000003907,4.5,0.0,7);
+INSERT INTO nutrient VALUES('감자밥',200.0,308.0,68.639999999999998792,0.0,0.08,5.6799999999999997157,5.2000000000000001776,0.0,8);
+INSERT INTO nutrient VALUES('곤드레밥',350.0,506.80000000000005044,108.05000000000000071,0.0,8.3699999999999992184,14.140000000000001456,88.75,0.0,9);
+INSERT INTO nutrient VALUES('김치볶음밥',500.0,656.97999999999998621,79.2900000000000027,4.0,5.0599999999999996092,8.7400000000000002131,1094.9100000000000498,76.0,10);
+INSERT INTO nutrient VALUES('주먹밥',150.0,209.56000000000001293,36.179999999999998827,0.0,3.4599999999999999644,6.7000000000000001776,329.68999999999999417,50.129999999999999005,11);
+INSERT INTO nutrient VALUES('볶음밥',400.0,687.73999999999997356,100.33000000000000806,0.0,19.289999999999999147,24.46000000000000174,1441.4200000000001011,309.0,12);
+INSERT INTO nutrient VALUES('일반비빔밥',500.0,703.0,95.680000000000013926,3.4399999999999999467,25.280000000000000248,22.600000000000002309,1234.0899999999999092,40.200000000000004618,13);
+INSERT INTO nutrient VALUES('전주비빔밥',450.0,662.19000000000001193,92.989999999999994884,3.4399999999999999467,13.02999999999999936,15.840000000000000746,1281.2999999999998834,286.94000000000002614,14);
+INSERT INTO nutrient VALUES('삼선볶음밥',400.0,683.61999999999998323,113.43000000000000859,5.0899999999999998578,16.839999999999999857,19.260000000000001563,1155.810000000000004,119.13000000000000255,15);
+INSERT INTO nutrient VALUES('새우볶음밥',400.0,634.52000000000001733,91.6200000000000081,0.0,17.909999999999999253,24.110000000000000319,1124.6300000000000185,127.20000000000000195,16);
+INSERT INTO nutrient VALUES('알밥',400.0,606.53999999999994585,92.099999999999990762,0.0,3.4500000000000001776,15.160000000000000142,1647.8699999999999903,39.0,17);
+INSERT INTO nutrient VALUES('산채비빔밥 ',400.0,495.88999999999998635,89.659999999999993036,0.52000000000000001776,10.989999999999999857,10.660000000000000586,1060.7800000000000562,0.0,18);
+INSERT INTO nutrient VALUES('오므라이스',450.0,684.98999999999998777,101.61999999999999921,0.0,19.75,23.149999999999999467,1123.2400000000000162,605.62000000000004718,19);
+INSERT INTO nutrient VALUES('육회비빔밥',450.0,661.40999999999996461,91.739999999999994884,2.580000000000000071,17.540000000000000035,32.0,1126.5999999999998237,241.65000000000000923,20);
+INSERT INTO nutrient VALUES('해물볶음밥',400.0,659.22999999999998266,85.190000000000001278,0.0,23.709999999999999964,22.679999999999997939,951.02999999999990876,362.3999999999999666,21);
+INSERT INTO nutrient VALUES('열무비빔밥',400.0,445.65999999999998948,90.030000000000001136,1.7199999999999999289,3.1600000000000001421,12.989999999999999324,718.38999999999995083,12.800000000000000355,22);
+INSERT INTO nutrient VALUES('불고기덮밥',500.0,699.9600000000000044,92.089999999999996305,5.9900000000000002131,21.399999999999996802,29.310000000000000497,1182.8800000000001446,72.0,23);
+INSERT INTO nutrient VALUES('소고기국밥',700.0,331.70999999999999374,54.930000000000003268,0.0,4.7400000000000002131,16.039999999999999147,1613.2100000000000328,25.499999999999998223,24);
+INSERT INTO nutrient VALUES('송이덮밥',600.0,600.41999999999999815,103.56999999999998429,0.0,14.449999999999998401,16.280000000000001136,1578.849999999999909,9.5399999999999991473,25);
+INSERT INTO nutrient VALUES('오징어덮밥',500.0,693.97999999999999687,83.429999999999999715,2.6899999999999999467,20.920000000000000817,40.590000000000001634,1497.3699999999999121,387.60000000000003339,26);
+INSERT INTO nutrient VALUES('자장밥',500.0,729.61999999999997967,98.079999999999998294,4.0,24.950000000000001065,25.760000000000000675,1521.8499999999998806,36.0,27);
+INSERT INTO nutrient VALUES('잡채밥',650.0,851.53999999999996362,125.70000000000001172,4.0,28.609999999999997655,21.139999999999998792,2251.3400000000003409,36.0,28);
+INSERT INTO nutrient VALUES('잡탕밥',750.0,737.23000000000000753,100.55000000000000603,0.0,22.480000000000002202,29.02000000000000135,1922.1400000000002705,188.04999999999999715,29);
+INSERT INTO nutrient VALUES('장어덮밥',400.0,671.72000000000000596,103.03999999999999825,0.0,19.239999999999998436,26.139999999999998792,893.21999999999999175,156.96000000000001506,30);
+INSERT INTO nutrient VALUES('제육덮밥',500.0,796.94000000000002614,95.80000000000000071,5.4000000000000003552,27.519999999999997797,37.799999999999998046,1375.6900000000000794,108.0,31);
+INSERT INTO nutrient VALUES('짬뽕밥',900.0,696.69000000000007588,93.420000000000005258,0.0,22.419999999999999928,41.799999999999997157,2869.5399999999997575,304.30000000000001492,32);
+INSERT INTO nutrient VALUES('순대국밥',900.0,690.35000000000001918,34.229999999999995985,0.0,16.480000000000001314,17.339999999999999857,3418.199999999999683,1480.9700000000001196,33);
+INSERT INTO nutrient VALUES('카레라이스',500.0,653.23999999999999843,92.579999999999991189,0.0,10.669999999999999484,13.400000000000000799,1108.5499999999999243,13.75,34);
+INSERT INTO nutrient VALUES('전주콩나물국밥',900.0,432.38000000000003097,88.730000000000011084,0.0,3.5200000000000000177,12.5,1753.2600000000000406,2.7700000000000000177,35);
+INSERT INTO nutrient VALUES('해물덮밥',700.0,837.97999999999994713,100.11000000000001008,0.0,29.0,51.770000000000004902,2117.8300000000001013,293.86999999999998678,36);
+INSERT INTO nutrient VALUES('회덮밥',500.0,698.0,101.7500000000000071,18.410000000000000142,11.400000000000001243,42.990000000000003765,777.629999999999999,125.59000000000000163,37);
+INSERT INTO nutrient VALUES('소머리국밥',1100.0,891.42999999999990023,77.06000000000000405,0.0,40.759999999999996234,48.940000000000001278,970.88999999999998635,477.09999999999999076,38);
+INSERT INTO nutrient VALUES('돼지국밥',1200.0,811.43999999999998351,78.280000000000002913,3.2999999999999998223,36.450000000000004618,56.749999999999998223,1257.6700000000000656,734.49999999999997513,39);
+INSERT INTO nutrient VALUES('하이라이스',360.0,477.5999999999999801,84.589999999999996305,0.0,9.6699999999999999289,7.9199999999999999289,991.68000000000002813,8.5700000000000002842,40);
+INSERT INTO nutrient VALUES('김치김밥',250.0,377.25999999999997314,71.799999999999997157,0.0,4.6200000000000001065,11.450000000000000177,967.78999999999992809,99.599999999999990762,41);
+INSERT INTO nutrient VALUES('농어초밥',250.0,414.78000000000001534,74.139999999999997015,6.9699999999999997513,2.3700000000000001065,19.929999999999999715,1385.4600000000001358,43.46999999999999531,42);
+INSERT INTO nutrient VALUES('문어초밥',250.0,377.97000000000000596,71.829999999999998294,4.9800000000000004263,1.0300000000000000266,16.899999999999999467,1420.9200000000001828,96.0,43);
+INSERT INTO nutrient VALUES('새우초밥',250.0,395.5400000000000027,69.540000000000006252,2.9900000000000002131,1.2099999999999999644,22.740000000000000213,1396.749999999999936,138.33000000000001961,44);
+INSERT INTO nutrient VALUES('새우튀김롤',300.0,572.02000000000001733,81.500000000000003552,4.0,18.899999999999998578,21.109999999999997655,1512.5,96.539999999999999147,45);
+INSERT INTO nutrient VALUES('샐러드김밥',250.0,422.43000000000003879,75.840000000000005186,0.0,7.5099999999999997868,12.76000000000000023,906.67999999999988602,100.53000000000000824,46);
+INSERT INTO nutrient VALUES('광어초밥',300.0,471.66000000000005698,72.530000000000001136,5.2300000000000004263,3.2099999999999999644,33.740000000000001101,951.28000000000003666,126.49999999999999023,47);
+INSERT INTO nutrient VALUES('소고기김밥',250.0,425.67000000000003723,76.069999999999993178,0.0,6.6399999999999996802,14.670000000000000817,1477.9800000000000714,99.870000000000000994,48);
+INSERT INTO nutrient VALUES('갈비삼각김밥',100.0,183.18000000000001392,32.749999999999999111,0.0,2.5899999999999998578,6.8600000000000003197,398.11999999999997612,12.419999999999999928,49);
+INSERT INTO nutrient VALUES('연어롤 ',300.0,518.58000000000004092,76.109999999999997655,0.0,14.719999999999999751,20.720000000000000639,1243.8199999999999256,51.730000000000000426,50);
+INSERT INTO nutrient VALUES('연어초밥',250.0,451.02999999999999758,70.870000000000006323,3.9599999999999999644,5.7599999999999997868,24.940000000000002167,995.03000000000003666,54.599999999999999644,51);
+INSERT INTO nutrient VALUES('유부초밥',250.0,463.209999999999944,78.46999999999999531,6.7599999999999997868,11.229999999999999982,12.369999999999998774,929.07000000000010686,0.0,52);
+INSERT INTO nutrient VALUES('장어초밥',400.0,486.35000000000001563,74.839999999999999857,2.0600000000000000532,12.730000000000001314,16.329999999999998294,1291.8099999999999027,130.43000000000000149,53);
+INSERT INTO nutrient VALUES('참치김밥',250.0,401.21999999999999886,47.549999999999998934,0.0,14.590000000000000746,19.820000000000000284,925.73000000000007503,143.66999999999999104,54);
+INSERT INTO nutrient VALUES('참치마요삼각김밥',100.0,189.58000000000001961,31.930000000000000603,0.0,2.8900000000000002131,8.1099999999999994315,189.10000000000000142,16.629999999999998117,55);
+INSERT INTO nutrient VALUES('치즈김밥 ',250.0,462.23000000000000753,77.120000000000006323,0.0,8.8399999999999998578,17.120000000000001882,919.96999999999999886,83.01999999999999602,56);
+INSERT INTO nutrient VALUES('캘리포니아롤',300.0,468.16000000000004277,81.219999999999998863,0.0,9.7300000000000004263,12.800000000000000355,1351.9600000000000505,28.339999999999999857,57);
+INSERT INTO nutrient VALUES('한치초밥',250.0,389.95999999999998664,77.309999999999998721,1.7400000000000000355,1.1999999999999999644,13.539999999999998703,1153.4899999999999042,0.75,58);
+INSERT INTO nutrient VALUES('일반김밥',200.0,348.87000000000001342,63.639999999999998792,0.0,5.4199999999999999289,10.280000000000000248,951.32000000000012107,69.1200000000000081,59);
+INSERT INTO nutrient VALUES('간자장',650.0,807.74000000000008014,121.75000000000000266,6.7900000000000000355,26.379999999999999005,29.27999999999999936,2347.7700000000001345,19.429999999999999715,60);
+INSERT INTO nutrient VALUES('굴짬뽕',900.0,640.77000000000001733,115.81999999999998962,2.0,7.7599999999999997868,37.389999999999998792,2385.3499999999998593,178.19999999999998507,61);
+INSERT INTO nutrient VALUES('기스면',1000.0,645.61000000000001719,98.30000000000000071,0.0,11.0,43.520000000000003126,2279.5199999999997686,341.10000000000000319,62);
+INSERT INTO nutrient VALUES('김치라면',650.0,512.26000000000002643,80.569999999999986073,2.2700000000000000177,20.339999999999998081,12.970000000000001527,2628.289999999999793,15.400000000000000355,63);
+INSERT INTO nutrient VALUES('김치우동',800.0,512.71000000000004348,99.060000000000005826,0.0,4.7400000000000002131,16.739999999999999324,3003.0499999999999971,33.439999999999998614,64);
+INSERT INTO nutrient VALUES('김치말이국수',600.0,310.38000000000001143,60.759999999999996234,3.0,2.4700000000000001953,10.420000000000000373,2335.4499999999998038,22.229999999999998649,65);
+INSERT INTO nutrient VALUES('닭칼국수',900.0,643.10000000000000497,70.239999999999991331,0.0,19.589999999999999857,39.859999999999997655,2492.7700000000001523,113.76999999999999335,66);
+INSERT INTO nutrient VALUES('들깨칼국수',600.0,442.31999999999995765,76.669999999999998152,2.3999999999999999111,6.7800000000000002486,17.480000000000000426,1695.7699999999999995,16.719999999999998863,67);
+INSERT INTO nutrient VALUES('떡라면',700.0,672.17999999999991089,121.07999999999998763,0.0,17.579999999999998294,15.449999999999999289,2214.360000000000106,2.3399999999999998578,68);
+INSERT INTO nutrient VALUES('라면',550.0,509.33000000000001605,83.170000000000001705,0.0,17.749999999999999111,14.079999999999999182,1695.5000000000000071,2.3399999999999998578,69);
+INSERT INTO nutrient VALUES('막국수',550.0,566.8899999999999828,111.29999999999999893,11.019999999999998685,5.0899999999999998578,26.949999999999998401,1828.020000000000067,37.099999999999999644,70);
+INSERT INTO nutrient VALUES('메밀국수',600.0,588.67999999999991445,120.09000000000000785,10.160000000000000142,4.5300000000000002486,25.260000000000002451,1962.4600000000000932,35.979999999999998649,71);
+INSERT INTO nutrient VALUES('물냉면',800.0,579.71000000000003637,96.400000000000005684,1.1999999999999999644,9.7799999999999993605,28.780000000000001136,2586.1600000000000143,178.22000000000000063,72);
+INSERT INTO nutrient VALUES('비빔국수',550.0,577.16999999999991644,114.47000000000000508,11.009999999999999786,9.5500000000000007105,16.710000000000000852,1628.2999999999998586,0.0,73);
+INSERT INTO nutrient VALUES('비빔냉면',550.0,594.30999999999993832,91.489999999999991331,2.0,9.1300000000000007815,23.700000000000001065,1530.569999999999986,31.730000000000000426,74);
+INSERT INTO nutrient VALUES('삼선우동',1000.0,692.26000000000000866,89.190000000000004831,2.0,10.52999999999999936,56.169999999999999928,2351.429999999999687,640.66999999999998394,75);
+INSERT INTO nutrient VALUES('삼선자장면',700.0,787.84000000000000696,111.5699999999999914,2.0,24.679999999999999715,38.329999999999998294,2791.1100000000002019,162.24000000000000198,76);
+INSERT INTO nutrient VALUES('삼선짬뽕',900.0,629.10000000000003694,89.310000000000009379,3.0,13.449999999999999733,39.170000000000001705,2825.6600000000000605,249.30000000000003268,77);
+INSERT INTO nutrient VALUES('수제비',800.0,622.14999999999998081,99.220000000000005968,0.0,6.5400000000000000355,38.530000000000001136,1669.319999999999915,209.0,78);
+INSERT INTO nutrient VALUES('쌀국수',600.0,321.339999999999959,46.200000000000001065,2.2000000000000001776,5.8099999999999996092,21.850000000000000532,2032.1600000000001884,123.02999999999999491,79);
+INSERT INTO nutrient VALUES('열무김치국수',800.0,488.31999999999995409,81.609999999999995878,0.0,8.2200000000000006394,21.939999999999999502,2587.6999999999998891,45.140000000000002344,80);
+INSERT INTO nutrient VALUES('오일소스스파게티',400.0,626.58000000000004803,99.239999999999994884,0.0,16.589999999999999857,14.679999999999999715,968.70000000000011652,0.0,81);
+INSERT INTO nutrient VALUES('일식우동',700.0,420.79000000000004177,81.230000000000011084,0.5,1.7400000000000000355,16.930000000000000603,1873.5400000000000275,16.199999999999999289,82);
+INSERT INTO nutrient VALUES('볶음우동',300.0,377.92000000000003367,62.259999999999999786,0.90999999999999996447,10.809999999999999609,9.580000000000000071,1461.3099999999999312,0.0,83);
+INSERT INTO nutrient VALUES('자장면',650.0,760.87999999999995637,134.28999999999999825,7.9900000000000002131,23.159999999999998365,15.740000000000000213,2447.0,3.080000000000000071,84);
+INSERT INTO nutrient VALUES('잔치국수',700.0,564.23000000000005371,104.65999999999999747,0.44000000000000003552,6.2300000000000004263,20.260000000000002451,1792.2299999999999897,167.40999999999999658,85);
+INSERT INTO nutrient VALUES('짬뽕',1000.0,650.30999999999998806,118.54000000000000092,0.0,13.519999999999998685,25.520000000000000461,3451.3699999999998269,105.22000000000000241,86);
+INSERT INTO nutrient VALUES('짬뽕라면',750.0,633.34000000000001406,88.790000000000013358,0.0,24.630000000000000781,31.410000000000000142,2380.9299999999997687,85.280000000000004689,87);
+INSERT INTO nutrient VALUES('쫄면',450.0,622.41999999999997328,110.85000000000000408,22.130000000000000781,6.9299999999999997157,12.359999999999999875,1271.549999999999958,0.0,88);
+INSERT INTO nutrient VALUES('치즈라면',600.0,598.66999999999999104,83.529999999999997584,0.0,23.280000000000002913,23.349999999999999644,2425.9699999999999597,302.19999999999997974,89);
+INSERT INTO nutrient VALUES('콩국수',800.0,623.50000000000003197,67.120000000000006323,1.0,20.430000000000001492,47.799999999999993605,875.8399999999999963,0.0,90);
+INSERT INTO nutrient VALUES('크림소스스파게티',400.0,825.05999999999986016,85.879999999999991899,0.0,45.400000000000000355,19.440000000000001278,1025.2099999999999546,140.1499999999999968,91);
+INSERT INTO nutrient VALUES('토마토소스스파게티',500.0,642.17999999999992866,102.06999999999999406,0.0,17.370000000000000994,20.219999999999997974,1404.8099999999998921,12.650000000000001243,92);
+INSERT INTO nutrient VALUES('해물칼국수',900.0,621.20000000000006323,124.20999999999999818,0.0,4.0099999999999997868,24.870000000000000994,2195.0500000000001676,156.77000000000001378,93);
+INSERT INTO nutrient VALUES('회냉면',550.0,638.89999999999993463,131.89999999999999502,22.730000000000001314,8.7799999999999993605,20.219999999999997974,1524.2800000000000792,92.889999999999997015,94);
+INSERT INTO nutrient VALUES('떡국',800.0,714.98999999999997001,144.02999999999998692,0.0,5.3899999999999996802,21.859999999999999431,2019.2800000000001858,90.80000000000000071,95);
+INSERT INTO nutrient VALUES('떡만둣국',700.0,625.34999999999998365,113.95999999999999463,0.0,9.4000000000000003552,22.719999999999997974,1999.1199999999997416,298.81000000000002003,96);
+INSERT INTO nutrient VALUES('짜장라면',250.0,409.37999999999998834,63.770000000000006679,0.0,14.849999999999998756,12.010000000000000675,1276.38000000000007,1.5,97);
+INSERT INTO nutrient VALUES('고기만두',250.0,454.3899999999999828,55.329999999999994741,0.0,18.239999999999998436,18.660000000000000142,888.79999999999999005,21.0,98);
+INSERT INTO nutrient VALUES('군만두',250.0,684.41999999999998394,76.169999999999999928,0.0,31.169999999999999928,19.769999999999999573,983.69999999999997442,36.0,99);
+INSERT INTO nutrient VALUES('김치만두',250.0,424.63999999999995083,60.78999999999999737,0.0,13.100000000000000532,18.429999999999999715,961.96999999999999175,20.280000000000000248,100);
+INSERT INTO nutrient VALUES('물만두',120.0,158.04999999999999715,20.480000000000000426,0.0,5.8399999999999998578,5.8600000000000003197,269.51999999999998181,7.5899999999999998578,101);
+INSERT INTO nutrient VALUES('만둣국',700.0,432.62000000000000454,53.280000000000002913,0.0,14.919999999999999928,19.239999999999998436,2356.6700000000002646,94.220000000000005968,102);
+INSERT INTO nutrient VALUES('게살죽',800.0,554.23999999999997712,103.59000000000000429,0.0,7.6299999999999998934,18.149999999999998578,1533.9599999999999901,40.869999999999997442,103);
+INSERT INTO nutrient VALUES('깨죽',800.0,505.67999999999999616,71.129999999999995452,0.0,18.940000000000001278,13.429999999999999715,1212.2699999999999587,0.0,104);
+INSERT INTO nutrient VALUES('닭죽',1000.0,1181.7100000000000292,92.530000000000001136,0.0,48.179999999999996163,75.930000000000008597,789.78999999999999204,271.43999999999999239,105);
+INSERT INTO nutrient VALUES('소고기버섯죽',800.0,573.2400000000000162,102.93000000000001037,0.0,6.4599999999999999644,20.520000000000000461,1263.6199999999999654,29.310000000000000497,106);
+INSERT INTO nutrient VALUES('어죽',800.0,559.26999999999997825,90.470000000000005968,0.0,6.080000000000000071,15.52999999999999936,1621.2899999999999423,75.769999999999999573,107);
+INSERT INTO nutrient VALUES('잣죽',700.0,872.61000000000006338,153.78999999999997783,0.0,20.289999999999999147,15.789999999999999147,850.62999999999995281,0.0,108);
+INSERT INTO nutrient VALUES('전복죽',800.0,587.28999999999995651,105.04000000000000003,0.0,11.450000000000000177,14.570000000000000284,1423.9300000000001844,45.149999999999996802,109);
+INSERT INTO nutrient VALUES('참치죽',800.0,658.46000000000000085,105.93999999999998973,0.0,13.85,26.079999999999996518,1264.1500000000001069,40.750000000000001776,110);
+INSERT INTO nutrient VALUES('채소죽',800.0,514.83000000000007645,100.80000000000000071,0.0,5.1299999999999998934,11.890000000000000568,1211.6300000000002068,24.289999999999998259,111);
+INSERT INTO nutrient VALUES('팥죽',600.0,482.64999999999993463,100.73999999999998511,4.7900000000000000355,0.56000000000000005329,20.590000000000001634,1026.1099999999998555,0.0,112);
+INSERT INTO nutrient VALUES('호박죽',600.0,430.3300000000000125,111.40999999999998681,25.780000000000002913,0.71999999999999992894,8.1099999999999994315,911.72000000000004149,0.0,113);
+INSERT INTO nutrient VALUES('콘스프',400.0,280.48000000000001818,35.369999999999999218,0.0,14.019999999999999573,5.8200000000000002842,1319.4600000000000772,40.709999999999997299,114);
+INSERT INTO nutrient VALUES('토마토스프',400.0,382.40999999999999658,12.419999999999999928,0.0,25.400000000000000355,18.199999999999999289,1544.3099999999998495,70.80000000000000071,115);
+INSERT INTO nutrient VALUES('굴국',450.0,194.4200000000000017,11.439999999999999058,0.0,8.6500000000000003552,22.800000000000002486,1775.9700000000000486,45.0,116);
+INSERT INTO nutrient VALUES('김치국',450.0,86.0,13.009999999999999342,0.0,3.3799999999999998934,6.0300000000000002486,1646.1500000000000021,0.0,117);
+INSERT INTO nutrient VALUES('달걀국',450.0,193.03999999999998493,5.3499999999999996447,0.0,11.109999999999999875,16.190000000000002167,1263.9599999999999724,641.24999999999996447,118);
+INSERT INTO nutrient VALUES('감자국',700.0,220.06999999999998784,37.009999999999996234,0.0,2.1600000000000001421,17.0,1734.1500000000000802,87.780000000000004689,119);
+INSERT INTO nutrient VALUES('미역국',500.0,50.160000000000000142,4.6900000000000003907,0.0,4.3499999999999996447,2.7000000000000001776,1527.5499999999999189,0.0,120);
+INSERT INTO nutrient VALUES('바지락조개국',550.0,159.2500000000000071,8.5099999999999997868,0.0,1.8400000000000000355,25.829999999999997406,1650.8499999999999729,145.19999999999999573,121);
+INSERT INTO nutrient VALUES('소고기무국',400.0,125.21999999999999797,8.1400000000000005684,0.0,4.7199999999999997513,13.509999999999999786,1095.1800000000000423,28.559999999999998721,122);
+INSERT INTO nutrient VALUES('소고기미역국',650.0,154.93000000000001215,6.9100000000000001421,0.0,6.830000000000000071,20.230000000000001314,2006.8699999999997096,41.34000000000000341,123);
+INSERT INTO nutrient VALUES('순대국',800.0,550.65999999999997172,22.820000000000000284,0.0,32.939999999999995949,41.219999999999998863,1532.5899999999998968,774.77000000000000312,124);
+INSERT INTO nutrient VALUES('어묵국',600.0,252.09000000000001406,37.159999999999997477,0.0,4.2099999999999999644,22.850000000000001421,2022.7400000000002044,100.37000000000000365,125);
+INSERT INTO nutrient VALUES('오징어국',500.0,169.02999999999998692,10.600000000000000532,0.0,2.3500000000000000888,27.740000000000000213,1573.4200000000000407,296.40000000000000568,126);
+INSERT INTO nutrient VALUES('토란국',250.0,462.97000000000005925,85.160000000000000142,0.0,7.0700000000000002842,23.890000000000002344,700.66999999999994841,37.719999999999997974,127);
+INSERT INTO nutrient VALUES('탕국',250.0,94.239999999999994884,2.580000000000000071,0.0,4.3200000000000002842,12.079999999999999626,663.04999999999996163,35.479999999999995985,128);
+INSERT INTO nutrient VALUES('홍합미역국',650.0,168.87999999999998124,14.130000000000000781,0.0,6.4299999999999997157,19.989999999999998436,2066.269999999999829,79.620000000000006323,129);
+INSERT INTO nutrient VALUES('황태해장국',600.0,184.22000000000000596,6.3899999999999996802,0.0,7.2199999999999997513,25.209999999999999076,1526.8199999999998439,91.609999999999995878,130);
+INSERT INTO nutrient VALUES('근대된장국',450.0,109.26000000000000156,8.1400000000000005684,0.0,3.2099999999999999644,15.310000000000001385,1453.1900000000000261,112.86000000000000476,131);
+INSERT INTO nutrient VALUES('미소된장국',150.0,37.969999999999997086,1.6899999999999999467,0.0,1.75,4.1399999999999996802,511.98000000000005726,15.669999999999999928,132);
+INSERT INTO nutrient VALUES('배추된장국',700.0,121.53000000000000468,11.039999999999998703,0.0,3.6299999999999998934,13.960000000000001207,2321.48000000000021,25.969999999999999751,133);
+INSERT INTO nutrient VALUES('뼈다귀해장국 ',1000.0,715.98000000000006082,29.710000000000000852,0.0,45.369999999999999218,53.630000000000004334,3093.5999999999999054,216.23999999999998777,134);
+INSERT INTO nutrient VALUES('선지(해장)국',1000.0,314.42000000000001058,22.290000000000000923,0.0,5.0300000000000002486,48.100000000000004973,3053.1899999999998485,149.59999999999999964,135);
+INSERT INTO nutrient VALUES('콩나물국',400.0,22.530000000000001136,1.2600000000000000088,0.0,1.4199999999999999289,1.8200000000000001065,752.41999999999995552,7.4100000000000001421,136);
+INSERT INTO nutrient VALUES('시금치된장국',400.0,121.4500000000000135,9.9000000000000003552,0.0,3.3900000000000001243,16.69000000000000039,1381.2500000000000888,117.04000000000001069,137);
+INSERT INTO nutrient VALUES('시래기된장국',450.0,99.1200000000000081,10.680000000000000603,0.0,2.5400000000000000355,10.020000000000000017,1535.6300000000000949,37.619999999999995665,138);
+INSERT INTO nutrient VALUES('쑥된장국',450.0,117.31000000000000316,17.170000000000000817,0.0,2.5499999999999998223,13.21000000000000174,1799.5999999999998664,68.970000000000002415,139);
+INSERT INTO nutrient VALUES('아욱된장국',450.0,103.5300000000000109,9.9600000000000008526,0.0,2.9399999999999998578,12.0,1462.1300000000001517,37.619999999999995665,140);
+INSERT INTO nutrient VALUES('우거지된장국',450.0,85.96999999999999531,13.720000000000001083,0.0,1.8100000000000001421,6.4400000000000003907,1593.9899999999999735,0.0,141);
+INSERT INTO nutrient VALUES('우거지해장국',600.0,158.49999999999999644,14.859999999999999431,0.0,5.7300000000000004263,14.19000000000000039,1972.0899999999998541,13.260000000000000675,142);
+INSERT INTO nutrient VALUES('우렁된장국',500.0,245.27999999999998692,21.190000000000002167,0.0,7.0499999999999998223,24.719999999999999751,2150.4299999999996195,22.949999999999999289,143);
+INSERT INTO nutrient VALUES('갈비탕',600.0,240.39999999999999147,8.2100000000000008526,0.0,14.330000000000000071,18.670000000000001705,1688.4300000000001418,189.84000000000001762,144);
+INSERT INTO nutrient VALUES('감자탕',900.0,963.71000000000002216,49.640000000000004121,0.9,58.280000000000002913,60.549999999999997157,2439.3800000000003258,143.6900000000000066,145);
+INSERT INTO nutrient VALUES('곰탕',300.0,181.41999999999997683,15.5,0.0,5.4400000000000003907,16.589999999999999857,713.64000000000000767,33.659999999999996589,146);
+INSERT INTO nutrient VALUES('매운탕',600.0,402.78999999999998138,18.829999999999998294,1.55,21.559999999999996944,37.159999999999997477,2130.9499999999998998,148.77000000000000667,147);
+INSERT INTO nutrient VALUES('꼬리곰탕',700.0,750.69000000000007943,10.929999999999999715,0.0,52.799999999999993605,54.870000000000000994,764.73000000000004305,361.23000000000002884,148);
+INSERT INTO nutrient VALUES('꽃게탕',600.0,240.64999999999998614,20.769999999999999573,0.0,5.4900000000000002131,31.699999999999999289,2268.8600000000000989,207.90000000000001811,149);
+INSERT INTO nutrient VALUES('낙지탕',600.0,186.09999999999999431,11.770000000000000461,0.0,2.7299999999999999822,29.210000000000002629,1711.1200000000000187,249.59999999999999964,150);
+INSERT INTO nutrient VALUES('내장탕',700.0,549.8099999999999099,13.699999999999998845,0.0,31.510000000000002451,56.970000000000000639,2383.0700000000000216,467.03999999999998848,151);
+INSERT INTO nutrient VALUES('닭곰탕',650.0,527.7000000000000135,15.390000000000001456,0.0,24.140000000000001456,58.879999999999999005,1005.1900000000000279,230.48999999999999488,152);
+INSERT INTO nutrient VALUES('닭볶음탕',300.0,371.81000000000001826,19.170000000000001705,2.0200000000000000177,17.320000000000000284,33.850000000000002309,1030.4500000000000881,119.24999999999998934,153);
+INSERT INTO nutrient VALUES('지리탕',600.0,260.5899999999999661,10.520000000000000461,0.0,8.3599999999999994315,38.340000000000005186,1685.1599999999999468,154.15000000000000923,154);
+INSERT INTO nutrient VALUES('도가니탕',800.0,563.64999999999998436,5.580000000000000071,0.0,34.770000000000003126,54.599999999999999644,599.27000000000001378,192.63999999999999346,155);
+INSERT INTO nutrient VALUES('삼계탕',1000.0,881.32000000000001449,44.079999999999994741,0.0,40.570000000000003836,76.650000000000009237,1211.3199999999999523,285.0,156);
+INSERT INTO nutrient VALUES('설렁탕',600.0,422.75999999999998024,10.939999999999998614,0.0,18.199999999999999289,52.709999999999999076,725.15999999999998237,219.35999999999999943,157);
+INSERT INTO nutrient VALUES('알탕',700.0,424.1200000000000081,49.519999999999999573,14.849999999999998756,6.9800000000000004263,49.210000000000002629,2393.2899999999999174,610.79999999999996518,158);
+INSERT INTO nutrient VALUES('연포탕',1000.0,541.19000000000001548,21.640000000000001456,0.0,9.1999999999999992894,91.650000000000009237,2307.069999999999954,844.0,159);
+INSERT INTO nutrient VALUES('오리탕',600.0,480.82000000000002515,24.159999999999999253,1.0300000000000000266,21.640000000000001456,43.209999999999997299,1849.9300000000001631,161.69999999999999928,160);
+INSERT INTO nutrient VALUES('추어탕',700.0,338.67000000000002657,24.420000000000001705,1.8100000000000001421,11.51000000000000023,37.369999999999996553,2077.1500000000000518,298.48000000000002529,161);
+INSERT INTO nutrient VALUES('해물탕',600.0,272.2599999999999909,19.579999999999998294,1.55,3.3799999999999998934,41.740000000000003765,2071.9899999999999984,350.22000000000002017,162);
+INSERT INTO nutrient VALUES('닭개장',700.0,317.07000000000000738,19.179999999999999715,0.0,14.949999999999999289,33.740000000000001101,1786.0300000000000508,96.900000000000012789,163);
+INSERT INTO nutrient VALUES('육개장',440.0,137.86000000000000476,11.619999999999999218,0.0,5.8700000000000001065,13.439999999999998614,1112.7799999999998803,24.219999999999997086,164);
+INSERT INTO nutrient VALUES('뼈해장국',1000.0,692.92999999999995708,25.420000000000002593,0.0,37.159999999999997477,67.919999999999998152,3192.4600000000000754,634.20000000000005258,165);
+INSERT INTO nutrient VALUES('미역오이냉국',450.0,77.349999999999994315,19.739999999999998436,8.9900000000000002131,1.3500000000000000888,5.6100000000000003197,1483.5999999999998522,0.0,166);
+INSERT INTO nutrient VALUES('고등어찌개',600.0,605.30999999999997029,32.030000000000002913,0.0,28.199999999999999289,59.159999999999994813,2599.7099999999999653,206.63999999999997925,167);
+INSERT INTO nutrient VALUES('꽁치찌개',300.0,356.63000000000000255,14.479999999999999538,0.71999999999999992894,20.689999999999999502,29.510000000000001563,1296.3299999999999911,84.480000000000003979,168);
+INSERT INTO nutrient VALUES('동태찌개',800.0,369.68999999999998529,18.940000000000001278,1.3799999999999998934,7.7999999999999998223,59.569999999999998507,2487.5400000000000844,292.6600000000000179,169);
+INSERT INTO nutrient VALUES('부대찌개',600.0,525.98000000000002529,46.810000000000000497,0.0,28.479999999999998649,27.709999999999999076,2689.1899999999999693,42.960000000000002629,170);
+INSERT INTO nutrient VALUES('된장찌개',400.0,147.06000000000001293,15.980000000000000426,0.0,5.2699999999999995736,11.710000000000000408,2021.7800000000001325,0.0,171);
+INSERT INTO nutrient VALUES('청국장찌개',400.0,275.45999999999999374,14.970000000000000639,0.0,14.430000000000000603,25.840000000000000746,1839.7500000000000852,36.0,172);
+INSERT INTO nutrient VALUES('두부전골',500.0,315.1100000000000012,16.199999999999999289,0.85999999999999996447,19.149999999999998578,29.140000000000000568,1651.5299999999999869,0.0,173);
+INSERT INTO nutrient VALUES('곱창전골',600.0,532.64999999999993463,26.890000000000000568,0.0,34.729999999999998649,38.349999999999999644,1750.4200000000000869,230.69999999999999396,174);
+INSERT INTO nutrient VALUES('소고기전골',300.0,203.22000000000000063,16.55000000000000071,0.0,7.5400000000000000355,19.469999999999998863,1090.1500000000001833,31.800000000000001598,175);
+INSERT INTO nutrient VALUES('국수전골',400.0,643.15999999999995395,66.930000000000005044,4.0,22.389999999999998792,45.289999999999999147,1524.6300000000001517,81.600000000000001421,176);
+INSERT INTO nutrient VALUES('돼지고기김치찌개',400.0,246.28999999999998671,9.330000000000000071,0.0,18.260000000000001563,15.5,1961.4800000000000679,25.300000000000002486,177);
+INSERT INTO nutrient VALUES('버섯찌개',400.0,171.86000000000001719,15.259999999999999786,0.0,7.5199999999999995736,16.640000000000001456,1267.8099999999998814,0.0,178);
+INSERT INTO nutrient VALUES('참치김치찌개',400.0,193.58000000000002316,13.329999999999999626,0.0,10.88999999999999968,16.859999999999999431,2604.4499999999999317,35.439999999999995949,179);
+INSERT INTO nutrient VALUES('순두부찌개',400.0,198.46999999999999531,8.7799999999999993605,0.0,14.030000000000000248,14.719999999999999751,1331.3099999999999933,6.5999999999999996447,180);
+INSERT INTO nutrient VALUES('콩비지찌개',400.0,248.66000000000001435,24.519999999999999573,0.0,12.810000000000001385,15.960000000000000852,1206.3299999999999023,27.059999999999999609,181);
+INSERT INTO nutrient VALUES('햄김치찌개',300.0,190.47000000000000596,15.44000000000000039,0.0,10.680000000000000603,11.630000000000000337,1527.8200000000000002,23.370000000000001882,182);
+INSERT INTO nutrient VALUES('호박찌개',300.0,98.30000000000000071,12.740000000000000213,2.0600000000000000532,2.3399999999999998578,7.7800000000000002486,1028.1400000000000538,59.27999999999999936,183);
+INSERT INTO nutrient VALUES('고추장찌개',500.0,263.43999999999998529,20.080000000000000071,0.0,12.349999999999998756,25.620000000000002771,935.14999999999997015,48.149999999999995026,184);
+INSERT INTO nutrient VALUES('대구찜',500.0,372.67999999999998905,26.420000000000003481,0.0,8.4299999999999997157,54.079999999999994741,1888.0399999999999849,196.34999999999999786,185);
+INSERT INTO nutrient VALUES('도미찜',100.0,126.31000000000001115,0.75999999999999996447,0.0,3.6800000000000001598,21.009999999999999786,882.03999999999993519,191.25,186);
+INSERT INTO nutrient VALUES('문어숙회',80.0,67.48999999999999666,0.17999999999999998223,0.0,0.72999999999999998223,14.140000000000001456,222.82999999999999474,116.73999999999999932,187);
+INSERT INTO nutrient VALUES('아귀찜',400.0,310.69999999999997619,17.589999999999998969,0.0,6.6799999999999997157,48.849999999999997868,1463.3099999999998885,187.41999999999999104,188);
+INSERT INTO nutrient VALUES('조기찜',100.0,185.25000000000000355,1.8100000000000001421,0.34000000000000003552,9.1999999999999992894,22.269999999999998685,631.89000000000001833,105.73999999999998955,189);
+INSERT INTO nutrient VALUES('참꼬막',80.0,89.770000000000003126,4.9199999999999999289,1.6000000000000000888,2.1699999999999999289,12.980000000000000426,400.22999999999999687,46.989999999999998436,190);
+INSERT INTO nutrient VALUES('해물찜',500.0,397.37000000000000099,36.020000000000003126,0.0,8.9399999999999995026,50.280000000000004689,2213.439999999999852,323.98000000000002351,191);
+INSERT INTO nutrient VALUES('소갈비찜',250.0,500.45000000000001705,11.310000000000000053,0.0,29.160000000000000142,42.549999999999998934,768.41999999999996973,141.81999999999998607,192);
+INSERT INTO nutrient VALUES('돼지갈비찜',170.0999999999999801,249.69999999999998863,8.8200000000000002842,1.7599999999999999644,14.419999999999999928,20.560000000000000497,946.67999999999992155,70.379999999999993676,193);
+INSERT INTO nutrient VALUES('돼지고기수육',300.0,1218.190000000000106,8.6899999999999995026,0.0,99.519999999999999573,61.470000000000002415,389.52999999999997626,191.40000000000000568,194);
+INSERT INTO nutrient VALUES('찜닭',1500.0,1358.3800000000001428,140.6399999999999828,57.520000000000006679,36.539999999999999147,114.90000000000000213,5290.090000000000181,341.63999999999998813,195);
+INSERT INTO nutrient VALUES('족발',150.0,381.57000000000000028,32.299999999999995381,0.0,16.620000000000000994,26.019999999999998685,839.13999999999990819,98.0,196);
+INSERT INTO nutrient VALUES('달걀찜',250.0,190.0,4.8099999999999996092,0.0,10.909999999999999786,16.199999999999999289,860.32000000000010686,634.57000000000007844,197);
+INSERT INTO nutrient VALUES('닭갈비',300.0,562.10000000000004405,24.53999999999999737,3.5099999999999997868,28.890000000000002344,52.299999999999995381,975.54999999999996163,224.1000000000000103,198);
+INSERT INTO nutrient VALUES('닭꼬치',70.0,177.50999999999999445,12.900000000000000355,8.580000000000000071,7.9000000000000003552,12.349999999999998756,287.2599999999999909,47.599999999999997868,199);
+INSERT INTO nutrient VALUES('돼지갈비',100.0,248.52000000000002977,7.5999999999999996447,5.0099999999999997868,14.699999999999999289,19.949999999999999289,344.89000000000000767,72.040000000000006252,200);
+INSERT INTO nutrient VALUES('떡갈비',250.0,762.99000000000001264,26.610000000000000319,12.490000000000001101,51.579999999999994741,43.090000000000001634,838.84000000000007446,157.5,201);
+INSERT INTO nutrient VALUES('불고기',150.0,386.79000000000002046,13.050000000000001598,1.1000000000000000888,21.77999999999999936,32.900000000000000355,632.53999999999992454,106.2200000000000033,202);
+INSERT INTO nutrient VALUES('소곱창구이',150.0,639.10999999999997811,6.5099999999999997868,0.0,51.710000000000002629,35.61999999999999833,332.72000000000003794,652.50000000000003552,203);
+INSERT INTO nutrient VALUES('소양념갈비구이',300.0,986.91999999999993065,27.740000000000000213,14.310000000000000497,66.480000000000005755,61.970000000000000639,1272.3400000000000265,220.96000000000000085,204);
+INSERT INTO nutrient VALUES('소불고기',200.0,174.72999999999998976,19.629999999999999005,9.4900000000000002131,4.6799999999999997157,14.220000000000001527,828.14999999999994173,27.930000000000001492,205);
+INSERT INTO nutrient VALUES('양념왕갈비',150.0,485.51000000000001932,15.040000000000000035,8.3499999999999996447,33.709999999999999964,29.329999999999998294,533.1900000000000972,103.499999999999992,206);
+INSERT INTO nutrient VALUES('햄버거스테이크',200.0,436.74999999999997157,21.350000000000002309,0.0,28.05000000000000071,24.919999999999999928,920.26000000000003353,75.780000000000002913,207);
+INSERT INTO nutrient VALUES('훈제오리',250.0,789.96000000000003993,11.830000000000000426,6.25,64.65000000000000746,38.159999999999998365,1216.9799999999999506,200.24999999999999467,208);
+INSERT INTO nutrient VALUES('치킨데리야끼',340.0,692.52000000000002444,50.729999999999995097,3.6400000000000001243,32.189999999999998614,47.339999999999999857,865.98000000000006082,171.24999999999999111,209);
+INSERT INTO nutrient VALUES('치킨윙',100.0,219.41999999999999282,9.9600000000000008526,2.4500000000000001776,14.230000000000000426,11.400000000000001243,351.39000000000000234,66.0,210);
+INSERT INTO nutrient VALUES('더덕구이',100.0,183.7400000000000233,31.77999999999999936,10.849999999999999644,5.6200000000000001065,5.7999999999999998223,745.77999999999997626,0.0,211);
+INSERT INTO nutrient VALUES('양배추구이',100.0,60.929999999999999715,7.6200000000000001065,0.84000000000000003552,2.6499999999999999111,2.7099999999999999644,242.33999999999999985,5.5,212);
+INSERT INTO nutrient VALUES('두부구이',100.0,90.670000000000001705,1.530000000000000071,0.0,6.2699999999999995736,9.4100000000000001421,164.38999999999999168,0.0,213);
+INSERT INTO nutrient VALUES('삼치구이',200.0,355.70999999999997065,8.4800000000000004263,0.0,18.010000000000001563,37.829999999999999182,797.71000000000000795,156.86999999999999388,214);
+INSERT INTO nutrient VALUES('가자미전',150.0,220.46000000000001151,6.6799999999999997157,0.0,7.1200000000000001065,29.969999999999998863,814.3700000000000827,226.88000000000001499,215);
+INSERT INTO nutrient VALUES('굴전',100.0,192.80999999999998806,13.91999999999999904,0.0,9.0700000000000002842,12.560000000000000053,331.02000000000000312,123.0,216);
+INSERT INTO nutrient VALUES('동태전',150.0,265.24999999999998578,11.480000000000001314,0.0,16.140000000000000568,19.870000000000000994,672.98000000000000042,134.56000000000001293,217);
+INSERT INTO nutrient VALUES('해물파전',150.0,267.23000000000003417,27.679999999999997939,0.0,12.570000000000001172,12.94000000000000039,356.43000000000002458,96.840000000000010516,218);
+INSERT INTO nutrient VALUES('동그랑땡',150.0,312.41000000000003211,14.710000000000000852,0.0,18.719999999999998863,19.670000000000001705,579.80999999999998095,184.28000000000000824,219);
+INSERT INTO nutrient VALUES('햄부침',100.0,232.60000000000000675,9.7300000000000004263,0.0,15.480000000000000426,13.069999999999999396,774.67999999999994642,52.149999999999998578,220);
+INSERT INTO nutrient VALUES('육전',100.0,197.09999999999999076,6.7199999999999997513,0.3,9.5099999999999997868,19.579999999999998294,248.68000000000001215,91.500000000000003552,221);
+INSERT INTO nutrient VALUES('감자전',200.0,366.16000000000004099,53.810000000000002273,0.0,13.609999999999999875,9.6699999999999999289,456.52999999999996916,0.0,222);
+INSERT INTO nutrient VALUES('고추전',150.0,261.43999999999998351,17.780000000000000248,0.75,14.859999999999999431,13.939999999999999147,359.87999999999997768,160.6500000000000039,223);
+INSERT INTO nutrient VALUES('김치전',150.0,285.7300000000000395,32.069999999999998507,0.0,12.479999999999999982,13.169999999999999484,785.59999999999998721,136.0,224);
+INSERT INTO nutrient VALUES('깻잎전',150.0,357.62000000000000454,16.649999999999998578,0.75,24.63999999999999968,18.30000000000000071,464.93999999999999772,171.379999999999999,225);
+INSERT INTO nutrient VALUES('녹두빈대떡',100.0,200.70999999999998841,18.640000000000000568,0.0,8.3200000000000002842,9.9600000000000008526,246.03000000000001534,13.75,226);
+INSERT INTO nutrient VALUES('미나리전',150.0,215.86000000000002962,30.100000000000002309,0.0,8.6300000000000007815,6.0899999999999998578,235.6500000000000039,28.5,227);
+INSERT INTO nutrient VALUES('배추전',150.0,241.0099999999999909,32.509999999999998898,0.0,10.489999999999999324,6.4100000000000001421,355.98000000000000753,30.400000000000000355,228);
+INSERT INTO nutrient VALUES('버섯전',150.0,239.68000000000002636,18.609999999999999431,0.75,12.92999999999999936,11.930000000000000603,307.92000000000001591,126.07999999999999207,229);
+INSERT INTO nutrient VALUES('부추전',150.0,241.17999999999999438,32.009999999999996234,0.0,9.5,7.1399999999999996802,255.16000000000000902,7.1200000000000001065,230);
+INSERT INTO nutrient VALUES('야채전',100.0,194.93999999999999772,24.969999999999998863,0.0,8.7799999999999993605,4.9500000000000001776,322.92000000000000703,23.75,231);
+INSERT INTO nutrient VALUES('파전',150.0,280.55000000000003268,37.450000000000001065,0.0,12.039999999999999591,7.7300000000000004263,338.0,57.0,232);
+INSERT INTO nutrient VALUES('호박부침개',100.0,130.71999999999999175,8.6699999999999999289,0.0,9.2300000000000004263,3.3700000000000001065,172.02999999999999403,61.749999999999998223,233);
+INSERT INTO nutrient VALUES('호박전',150.0,215.28000000000000468,16.559999999999998721,0.0,14.419999999999999928,6.5899999999999998578,274.62999999999997413,106.87999999999999722,234);
+INSERT INTO nutrient VALUES('달걀말이',100.0,172.24000000000001975,4.6699999999999999289,0.0,11.229999999999999982,12.039999999999999591,323.32000000000000738,475.0,235);
+INSERT INTO nutrient VALUES('두부부침',100.0,134.87999999999999989,4.2900000000000000355,0.0,8.7599999999999997868,9.9199999999999999289,199.83000000000002316,0.0,236);
+INSERT INTO nutrient VALUES('두부전',150.0,253.88999999999999346,8.080000000000000071,0.0,18.019999999999999573,18.660000000000000142,500.53000000000000824,66.500000000000003552,237);
+INSERT INTO nutrient VALUES('건새우볶음',20.0,69.189999999999995949,4.8099999999999996092,2.7000000000000001776,2.2999999999999998223,7.2199999999999997513,193.09000000000001051,74.400000000000003907,238);
+INSERT INTO nutrient VALUES('낙지볶음',200.0,180.59000000000001051,23.509999999999999786,6.7000000000000001776,3.0,17.870000000000000994,868.88000000000005229,135.19999999999998685,239);
+INSERT INTO nutrient VALUES('멸치볶음',20.0,69.219999999999997086,5.6900000000000003907,3.4300000000000001598,2.0400000000000000355,6.9699999999999997513,274.1000000000000103,83.550000000000004263,240);
+INSERT INTO nutrient VALUES('어묵볶음',150.0,281.54000000000003467,36.280000000000001136,4.4699999999999997513,8.080000000000000071,18.039999999999999147,1283.8300000000000267,18.899999999999998578,241);
+INSERT INTO nutrient VALUES('오징어볶음',200.0,243.6999999999999833,27.419999999999999928,9.2799999999999993605,6.8399999999999998578,20.430000000000001492,1025.8599999999999941,198.0,242);
+INSERT INTO nutrient VALUES('오징어채볶음',20.0,55.709999999999997299,7.0,1.3500000000000000888,0.6899999999999999467,5.3899999999999996802,240.96000000000001861,50.049999999999998934,243);
+INSERT INTO nutrient VALUES('주꾸미볶음',200.0,211.81000000000000937,21.69000000000000039,6.7000000000000001776,6.1100000000000003197,20.160000000000000142,969.88000000000003097,385.60000000000002273,244);
+INSERT INTO nutrient VALUES('해물볶음',400.0,420.52999999999993718,36.530000000000000248,7.6600000000000001421,15.320000000000000284,37.479999999999997761,1647.0199999999999285,376.20000000000000106,245);
+INSERT INTO nutrient VALUES('감자볶음',50.0,57.799999999999993605,8.2300000000000004263,0.5,2.5299999999999998046,1.3400000000000000799,219.93999999999997996,0.0,246);
+INSERT INTO nutrient VALUES('김치볶음',200.0,189.96999999999999886,21.829999999999998294,8.9600000000000008526,12.130000000000000781,5.2900000000000000355,1513.4100000000001884,0.0,247);
+INSERT INTO nutrient VALUES('깻잎나물볶음',200.0,212.38999999999998991,17.329999999999998294,0.2,16.370000000000000106,8.0299999999999993605,1046.4299999999999712,5.2000000000000001776,248);
+INSERT INTO nutrient VALUES('느타리버섯볶음',150.0,133.31999999999999406,14.220000000000001527,0.15,8.9299999999999997157,4.4100000000000001421,625.25000000000003907,0.0,249);
+INSERT INTO nutrient VALUES('두부김치',250.0,292.42000000000004433,13.839999999999998969,0.0,21.320000000000001172,19.149999999999998578,1033.8499999999999356,30.0,250);
+INSERT INTO nutrient VALUES('머위나물볶음',150.0,102.99000000000000376,7.7099999999999999644,0.0,7.9500000000000001776,4.2999999999999998223,696.91000000000000724,0.0,251);
+INSERT INTO nutrient VALUES('양송이버섯볶음',150.0,132.41999999999998216,10.550000000000001598,0.0,9.7899999999999991473,5.4599999999999999644,520.11000000000002785,0.0,252);
+INSERT INTO nutrient VALUES('표고버섯볶음',150.0,143.58999999999999985,14.27999999999999936,1.4900000000000000355,7.3600000000000003197,4.0099999999999997868,563.59000000000003538,0.0,253);
+INSERT INTO nutrient VALUES('고추잡채',200.0,264.22000000000003261,22.109999999999998543,8.4499999999999992894,12.710000000000001296,12.860000000000000319,850.30999999999998806,50.80000000000000071,254);
+INSERT INTO nutrient VALUES('호박볶음',50.0,29.190000000000001278,3.0899999999999998578,0.0,2.0099999999999997868,0.77000000000000001776,223.28000000000001179,0.070000000000000008881,255);
+INSERT INTO nutrient VALUES('돼지고기볶음',200.0,353.12999999999998834,15.329999999999999182,4.75,20.940000000000003055,25.750000000000001776,1060.3299999999999947,84.0,256);
+INSERT INTO nutrient VALUES('돼지껍데기볶음',150.0,346.13999999999998102,22.730000000000001314,15.840000000000000746,19.230000000000000426,22.389999999999998792,759.28999999999993164,95.400000000000009237,257);
+INSERT INTO nutrient VALUES('소세지볶음',200.0,476.04000000000006309,28.809999999999998721,5.830000000000000071,33.240000000000002877,17.039999999999999147,1409.0499999999998692,56.259999999999994457,258);
+INSERT INTO nutrient VALUES('순대볶음',400.0,579.55999999999994187,70.95999999999999197,14.289999999999998259,25.609999999999999431,17.579999999999998294,1379.550000000000054,189.91999999999997328,259);
+INSERT INTO nutrient VALUES('오리불고기',250.0,559.92999999999994997,24.470000000000000639,4.0700000000000002842,34.249999999999998223,38.159999999999998365,854.07000000000010686,124.81999999999999761,260);
+INSERT INTO nutrient VALUES('오삼불고기',200.0,356.93999999999999062,21.459999999999999076,7.4199999999999999289,20.240000000000000213,23.349999999999999644,870.40000000000006252,164.29999999999999715,261);
+INSERT INTO nutrient VALUES('떡볶이',200.0,300.76000000000000511,58.849999999999997868,5.7000000000000001776,2.9599999999999999644,8.7200000000000006394,862.23000000000009634,6.0,262);
+INSERT INTO nutrient VALUES('라볶이',200.0,266.0299999999999887,41.130000000000004334,6.3600000000000003197,9.5899999999999998578,7.9599999999999999644,836.24000000000009436,6.9000000000000003552,263);
+INSERT INTO nutrient VALUES('마파두부',200.0,226.91999999999996617,10.989999999999999857,0.56999999999999992894,12.010000000000000675,16.850000000000000532,647.450000000000081,19.149999999999998578,264);
+INSERT INTO nutrient VALUES('가자미조림',300.0,301.29000000000001335,20.339999999999998081,5.9900000000000002131,6.9000000000000003552,40.700000000000002842,1621.2299999999999045,165.0,265);
+INSERT INTO nutrient VALUES('갈치조림',100.0,99.390000000000000568,5.4900000000000002131,0.5,3.9199999999999999289,10.680000000000000603,463.82000000000003225,42.0,266);
+INSERT INTO nutrient VALUES('고등어조림',250.0,459.33000000000001605,10.960000000000000852,1.4599999999999999644,25.350000000000001421,45.369999999999999218,1177.9500000000000525,170.15000000000000568,267);
+INSERT INTO nutrient VALUES('꽁치조림',150.0,280.09000000000000341,8.3599999999999994315,1.3899999999999998934,16.670000000000002593,22.589999999999998969,679.4200000000000017,67.200000000000006394,268);
+INSERT INTO nutrient VALUES('동태조림',250.0,270.61000000000001719,16.770000000000000461,5.0,4.0899999999999998578,39.030000000000001136,1440.1700000000001722,211.05000000000000426,269);
+INSERT INTO nutrient VALUES('북어조림',100.0,184.58000000000001961,15.660000000000000142,2.9100000000000001421,3.0400000000000000355,23.879999999999999005,761.39000000000001122,103.95000000000000905,270);
+INSERT INTO nutrient VALUES('조기조림',300.0,378.25999999999999623,14.239999999999999324,1.45,16.260000000000001563,41.429999999999997939,1682.9000000000000625,176.61000000000002252,271);
+INSERT INTO nutrient VALUES('코다리조림',100.0,146.66999999999998927,4.5700000000000002842,0.5,5.6200000000000001065,18.460000000000000852,433.18000000000003169,77.599999999999997868,272);
+INSERT INTO nutrient VALUES('달걀장조림',100.0,133.71999999999999442,10.029999999999998916,3.1699999999999999289,6.3899999999999996802,8.75,636.6100000000000314,308.74999999999999111,273);
+INSERT INTO nutrient VALUES('메추리알장조림',100.0,205.08000000000001783,7.3600000000000003197,2.4500000000000001776,13.689999999999999946,12.109999999999998543,758.89999999999995239,530.64000000000000056,274);
+INSERT INTO nutrient VALUES('돼지고기메추리알장조림',50.0,62.969999999999997086,3.1400000000000001243,0.84000000000000003552,2.1099999999999998756,7.6200000000000001065,555.77999999999994074,77.299999999999995381,275);
+INSERT INTO nutrient VALUES('소고기메추리알장조림',50.0,61.219999999999998863,3.4500000000000001776,1.0,2.2099999999999999644,6.6699999999999999289,608.28999999999995296,70.170000000000003481,276);
+INSERT INTO nutrient VALUES('고추조림',100.0,105.87999999999999634,14.830000000000000959,2.9900000000000002131,4.1799999999999997157,2.8599999999999997868,802.45999999999995111,0.0,277);
+INSERT INTO nutrient VALUES('감자조림',50.0,39.00999999999999801,8.4000000000000003552,0.79000000000000003552,0.2,1.55,265.92000000000002302,0.0,278);
+INSERT INTO nutrient VALUES('우엉조림',30.0,68.499999999999996447,15.509999999999999786,7.6100000000000003197,0.33000000000000002664,1.1000000000000000888,242.28000000000000646,0.0,279);
+INSERT INTO nutrient VALUES('알감자조림',50.0,56.22999999999999332,10.480000000000000426,1.5700000000000001065,1.2600000000000000088,1.3799999999999998934,241.73000000000000042,0.0,280);
+INSERT INTO nutrient VALUES('(검은)콩조림',20.0,56.829999999999998294,6.9800000000000004263,2.9199999999999999289,2.0899999999999998578,3.85,102.84999999999999698,0.0,281);
+INSERT INTO nutrient VALUES('콩조림',20.0,59.219999999999997086,7.75,2.9199999999999999289,1.9399999999999998578,3.5699999999999998401,234.69999999999999751,0.0,282);
+INSERT INTO nutrient VALUES('두부고추장조림',50.0,67.140000000000004121,4.0300000000000002486,1.8899999999999998578,4.0,5.1399999999999996802,199.23000000000000042,0.0,283);
+INSERT INTO nutrient VALUES('땅콩조림',20.0,80.419999999999998152,6.5400000000000000355,3.2700000000000000177,5.1100000000000003197,2.9100000000000001421,154.24999999999999822,0.0,284);
+INSERT INTO nutrient VALUES('미꾸라지튀김',100.0,382.12999999999999189,30.569999999999999396,0.0,22.540000000000000035,12.689999999999999058,323.25999999999996958,121.30000000000000781,285);
+INSERT INTO nutrient VALUES('새우튀김',100.0,311.26000000000000333,21.829999999999998294,0.0,19.640000000000000568,11.830000000000000426,553.88999999999999346,165.89999999999999857,286);
+INSERT INTO nutrient VALUES('생선가스',200.0,646.21000000000003993,57.380000000000004334,0.0,37.090000000000005186,24.500000000000001776,817.26999999999989654,176.30000000000000781,287);
+INSERT INTO nutrient VALUES('쥐포튀김',100.0,353.32999999999996632,37.990000000000003765,0.0,16.539999999999999147,11.209999999999999964,423.80000000000004334,75.640000000000000568,288);
+INSERT INTO nutrient VALUES('오징어튀김',100.0,308.43000000000002636,26.019999999999998685,0.0,16.499999999999999111,13.460000000000000852,361.5699999999999914,133.0,289);
+INSERT INTO nutrient VALUES('닭강정',100.0,323.24999999999999289,24.210000000000002629,1.7400000000000000355,15.560000000000000497,18.339999999999999857,413.14000000000001833,107.49999999999999555,290);
+INSERT INTO nutrient VALUES('닭튀김',300.0,909.80999999999987437,45.920000000000005258,0.0,52.339999999999999857,54.55000000000000071,1150.1300000000000967,380.62000000000001165,291);
+INSERT INTO nutrient VALUES('돈가스',200.0,620.63999999999994727,36.560000000000001385,0.0,39.119999999999999218,27.780000000000000248,557.0899999999999963,138.3399999999999963,292);
+INSERT INTO nutrient VALUES('모래집튀김',150.0,457.33999999999994656,31.859999999999999431,0.0,25.88999999999999968,22.290000000000000923,297.01000000000000511,137.65000000000000568,293);
+INSERT INTO nutrient VALUES('양념치킨',200.0,567.58000000000006224,38.84000000000000341,12.359999999999999875,31.14999999999999769,30.469999999999997086,777.85999999999999587,259.0,294);
+INSERT INTO nutrient VALUES('치즈돈가스',250.0,758.49999999999999644,45.480000000000000426,0.0,46.150000000000002131,36.020000000000003126,855.04999999999995452,146.3999999999999968,295);
+INSERT INTO nutrient VALUES('치킨가스',200.0,582.01000000000000511,51.280000000000001136,0.0,28.639999999999998792,31.030000000000002025,748.73000000000002884,113.30000000000000071,296);
+INSERT INTO nutrient VALUES('탕수육',200.0,454.43999999999995509,56.490000000000000213,1.9,16.589999999999999857,17.059999999999999609,403.25999999999995182,76.470000000000002415,297);
+INSERT INTO nutrient VALUES('깐풍기',200.0,585.08000000000004447,43.360000000000002984,13.939999999999999147,33.340000000000005186,27.800000000000002486,629.26999999999999602,173.0,298);
+INSERT INTO nutrient VALUES('감자튀김',150.0,462.11000000000002074,50.099999999999997868,0.0,25.760000000000000675,6.2400000000000002131,374.22000000000004149,0.0,299);
+INSERT INTO nutrient VALUES('고구마맛탕',200.0,490.92999999999999971,90.190000000000001278,1.4299999999999998934,13.529999999999999804,3.2999999999999998223,213.33000000000001961,0.0,300);
+INSERT INTO nutrient VALUES('고구마튀김',100.0,241.56999999999997363,34.100000000000001421,0.0,10.80000000000000071,3.2099999999999999644,150.64000000000000056,19.0,301);
+INSERT INTO nutrient VALUES('고추튀김',100.0,198.35000000000000852,12.740000000000000213,0.0,13.619999999999998774,6.4800000000000004263,260.64999999999995949,190.0,302);
+INSERT INTO nutrient VALUES('김말이튀김',100.0,240.56000000000001826,32.490000000000001101,0.0,12.379999999999999893,2.25,393.01999999999996049,0.0,303);
+INSERT INTO nutrient VALUES('채소튀김',100.0,311.98999999999998955,36.350000000000002309,0.0,18.530000000000001136,3.0099999999999997868,277.27999999999997093,0.0,304);
+INSERT INTO nutrient VALUES('노각무침',150.0,81.349999999999997868,16.429999999999999715,5.0899999999999998578,2.0699999999999998401,3.0899999999999998578,822.10000000000000852,0.0,305);
+INSERT INTO nutrient VALUES('단무지무침',50.0,19.190000000000001278,3.2200000000000001953,0.96999999999999992894,0.90999999999999996447,0.46999999999999992894,447.86000000000001364,0.0,306);
+INSERT INTO nutrient VALUES('달래나물무침',150.0,132.68999999999999683,25.260000000000002451,13.539999999999998703,3.2999999999999998223,4.7699999999999995736,852.98999999999995935,0.0,307);
+INSERT INTO nutrient VALUES('더덕무침',150.0,220.88999999999998635,48.439999999999994173,31.539999999999999147,2.7400000000000002131,4.8899999999999996802,1203.5799999999998721,0.0,308);
+INSERT INTO nutrient VALUES('도라지생채',150.0,165.21999999999998465,38.59000000000000341,3.0,1.7099999999999999644,4.1500000000000003552,789.08000000000004803,0.0,309);
+INSERT INTO nutrient VALUES('도토리묵',100.0,43.049999999999997157,9.8699999999999992184,1.3999999999999999111,0.35,0.4,116.47000000000000685,0.0,310);
+INSERT INTO nutrient VALUES('마늘쫑무침',30.0,38.119999999999997442,9.3499999999999996447,3.2799999999999998046,0.28000000000000003552,0.98000000000000007105,423.45999999999994756,0.0,311);
+INSERT INTO nutrient VALUES('무생채',150.0,73.680000000000003268,16.0,4.5,1.2800000000000000355,2.6299999999999998934,832.19000000000011851,1.6799999999999998934,312);
+INSERT INTO nutrient VALUES('무말랭이',30.0,39.889999999999998792,9.6300000000000007815,1.0300000000000000266,0.34000000000000003552,1.3600000000000000976,378.77999999999998337,0.04,313);
+INSERT INTO nutrient VALUES('오이생채',50.0,23.359999999999998543,4.6299999999999998934,1.5200000000000000177,0.5,0.89000000000000003552,269.30999999999998273,0.0,314);
+INSERT INTO nutrient VALUES('파무침',150.0,124.29999999999998827,19.469999999999998863,8.3699999999999992184,5.4100000000000001421,3.8199999999999999289,693.83000000000008,10.050000000000001154,315);
+INSERT INTO nutrient VALUES('상추겉절이',200.0,130.62000000000000277,17.989999999999999324,2.0,6.25,5.6500000000000003552,952.32000000000009976,5.3600000000000003197,316);
+INSERT INTO nutrient VALUES('쑥갓나물무침',150.0,94.860000000000006536,8.7799999999999993605,0.0,6.5099999999999997868,5.4900000000000002131,700.11999999999998678,0.0,317);
+INSERT INTO nutrient VALUES('청포묵무침',250.0,157.61000000000001008,19.679999999999999715,13.740000000000001101,4.2199999999999997513,2.9599999999999999644,756.74000000000001264,2.3500000000000000888,318);
+INSERT INTO nutrient VALUES('해파리냉채',150.0,87.279999999999997584,13.830000000000000071,7.4900000000000002131,1.55,6.6299999999999998934,490.129999999999999,17.620000000000000106,319);
+INSERT INTO nutrient VALUES('가지나물',50.0,21.870000000000002771,3.0299999999999998046,0.0,1.2700000000000000177,0.72999999999999998223,159.16999999999998927,0.0,320);
+INSERT INTO nutrient VALUES('고사리나물',50.0,43.509999999999999786,3.7999999999999998223,0.0,3.2599999999999997868,1.9699999999999999289,251.52999999999998692,0.0,321);
+INSERT INTO nutrient VALUES('도라지나물',50.0,54.670000000000005258,5.330000000000000071,0.0,3.8199999999999999289,0.67000000000000001776,256.66999999999999815,0.0,322);
+INSERT INTO nutrient VALUES('무나물',50.0,34.579999999999997406,3.0400000000000000355,0.0,2.5600000000000000532,0.57999999999999998223,293.52000000000000312,0.0,323);
+INSERT INTO nutrient VALUES('미나리나물',50.0,28.339999999999999857,2.5600000000000000532,0.0,2.1400000000000001243,0.99000000000000003552,165.51999999999999602,0.0,324);
+INSERT INTO nutrient VALUES('숙주나물',50.0,19.510000000000001563,1.5600000000000000532,0.0,1.3500000000000000888,1.3100000000000000532,186.73000000000000042,0.0,325);
+INSERT INTO nutrient VALUES('시금치나물',50.0,37.509999999999998898,3.8100000000000001421,0.0,2.3700000000000001065,2.0699999999999998401,217.26000000000000866,0.0,326);
+INSERT INTO nutrient VALUES('취나물',50.0,72.939999999999995949,3.4599999999999999644,0.0,6.7099999999999999644,1.6000000000000000888,288.64999999999998436,0.0,327);
+INSERT INTO nutrient VALUES('콩나물',50.0,24.129999999999998117,1.1399999999999999023,0.0,1.980000000000000071,1.6399999999999998578,203.50000000000001421,0.0,328);
+INSERT INTO nutrient VALUES('고구마줄기나물',50.0,30.44000000000000039,2.9700000000000002842,0.0,2.2400000000000002131,0.62999999999999998223,255.71000000000001506,0.0,329);
+INSERT INTO nutrient VALUES('우거지나물무침',150.0,126.10999999999998877,10.280000000000000248,1.5,8.6600000000000001421,5.080000000000000071,774.54999999999998294,0.0,330);
+INSERT INTO nutrient VALUES('골뱅이무침',100.0,107.34999999999998987,15.560000000000000497,6.0599999999999996092,2.2999999999999998223,7.9100000000000001421,515.9199999999999342,45.560000000000000497,331);
+INSERT INTO nutrient VALUES('김무침',30.0,81.010000000000008668,12.189999999999998614,6.9299999999999997157,4.1200000000000001065,4.7099999999999999644,498.62999999999999545,0.0,332);
+INSERT INTO nutrient VALUES('미역초무침',50.0,24.940000000000002167,5.7000000000000001776,4.0,0.54000000000000003552,1.0700000000000000621,285.80000000000001847,0.0,333);
+INSERT INTO nutrient VALUES('북어채무침',150.0,332.05000000000000071,31.330000000000000071,18.019999999999999573,5.7999999999999998223,37.369999999999996553,1048.529999999999962,108.56999999999998962,334);
+INSERT INTO nutrient VALUES('회무침',300.0,311.58999999999998919,42.880000000000002557,26.410000000000000142,4.2599999999999997868,27.179999999999999715,1253.2499999999999751,61.379999999999999005,335);
+INSERT INTO nutrient VALUES('쥐치채',20.0,53.390000000000004121,10.180000000000000159,6.5999999999999996447,0.2,2.7700000000000000177,289.44999999999998507,5.9299999999999997157,336);
+INSERT INTO nutrient VALUES('파래무침',30.0,31.589999999999998081,5.4299999999999997157,0.9,0.6899999999999999467,2.3399999999999998578,252.05000000000001847,0.0,337);
+INSERT INTO nutrient VALUES('홍어무침',200.0,193.1399999999999828,24.89999999999999769,9.4299999999999997157,2.2700000000000000177,21.640000000000001456,817.41999999999990222,79.199999999999999289,338);
+INSERT INTO nutrient VALUES('골뱅이국수무침',230.0,256.42000000000000348,39.630000000000000781,0.0,7.0099999999999997868,10.520000000000000461,911.73999999999999488,39.979999999999996873,339);
+INSERT INTO nutrient VALUES('오징어무침',200.0,249.52999999999998514,13.549999999999999822,0.0,4.1900000000000003907,38.669999999999999928,682.39000000000000767,430.92000000000005854,340);
+INSERT INTO nutrient VALUES('잡채',150.0,198.81999999999999673,37.469999999999998863,2.9900000000000002131,4.7000000000000001776,2.5899999999999998578,664.74999999999999644,14.25,341);
+INSERT INTO nutrient VALUES('탕평채',100.0,101.19000000000000216,10.200000000000000177,6.9900000000000002131,3.1099999999999998756,3.5299999999999998046,247.41999999999997328,4.9500000000000001776,342);
+INSERT INTO nutrient VALUES('갓김치',50.0,27.640000000000002344,5.2099999999999999644,0.42000000000000001776,0.7,1.980000000000000071,447.76999999999995694,3.5099999999999997868,343);
+INSERT INTO nutrient VALUES('고들빼기',50.0,55.389999999999997015,11.990000000000000568,0.0,0.56000000000000005329,2.2099999999999999644,733.75000000000003552,0.55,344);
+INSERT INTO nutrient VALUES('깍두기',50.0,17.989999999999999324,3.9399999999999998578,0.05,0.23000000000000002664,1.0,338.87999999999998124,4.0700000000000002842,345);
+INSERT INTO nutrient VALUES('깻잎김치',150.0,124.48999999999998955,23.269999999999999573,2.9900000000000002131,3.1600000000000001421,6.0999999999999996447,1907.6399999999999579,29.660000000000001918,346);
+INSERT INTO nutrient VALUES('나박김치',100.0,14.750000000000000888,2.25,0.01,0.42000000000000001776,0.62999999999999998223,509.47000000000004504,0.0,347);
+INSERT INTO nutrient VALUES('동치미',400.0,57.690000000000001278,14.259999999999999786,0.0,0.64000000000000003552,2.7000000000000001776,2313.5799999999999698,0.0,348);
+INSERT INTO nutrient VALUES('배추겉절이',50.0,21.23999999999999666,4.4800000000000004263,1.0,0.5,0.93999999999999985789,325.41000000000002145,1.3400000000000000799,349);
+INSERT INTO nutrient VALUES('배추김치',50.0,18.429999999999999715,4.1500000000000003552,0.5,0.3,1.1499999999999999111,309.52999999999999403,3.4100000000000001421,350);
+INSERT INTO nutrient VALUES('백김치',50.0,19.80000000000000071,4.3799999999999998934,0.0,0.26000000000000000888,0.8,211.71999999999999708,0.04,351);
+INSERT INTO nutrient VALUES('부추김치',50.0,32.909999999999994813,6.2900000000000000355,3.4900000000000002131,0.56999999999999992894,1.8799999999999998934,399.37999999999998834,0.0,352);
+INSERT INTO nutrient VALUES('열무김치',50.0,16.290000000000000035,3.1600000000000001421,1.1999999999999999644,0.35,1.3400000000000000799,308.35000000000003517,0.0,353);
+INSERT INTO nutrient VALUES('열무얼갈이김치',50.0,16.570000000000000284,3.0299999999999998046,0.0,0.4,1.2700000000000000177,344.19999999999997264,4.2000000000000001776,354);
+INSERT INTO nutrient VALUES('오이소박이',50.0,16.670000000000002593,2.9599999999999999644,1.1999999999999999644,0.53000000000000007105,0.93999999999999985789,276.18999999999997996,1.45,355);
+INSERT INTO nutrient VALUES('총각김치',50.0,17.559999999999997832,3.4399999999999999467,0.0,0.37000000000000001776,1.0300000000000000266,347.17000000000002302,4.4299999999999997157,356);
+INSERT INTO nutrient VALUES('파김치',50.0,28.010000000000001563,5.4699999999999997513,1.0,0.7,1.55,395.86000000000002074,4.6900000000000003907,357);
+INSERT INTO nutrient VALUES('간장게장',250.0,292.69999999999999573,13.880000000000001136,0.17000000000000001776,2.0899999999999998578,32.659999999999995701,3075.530000000000097,223.119999999999985,358);
+INSERT INTO nutrient VALUES('마늘쫑장아찌',50.0,28.269999999999999573,6.1900000000000003907,2.3500000000000000888,0.13000000000000000444,1.0400000000000000355,778.6000000000000476,0.0,359);
+INSERT INTO nutrient VALUES('고추장아찌',30.0,22.359999999999997655,4.1799999999999997157,3.0,0.09,0.8,787.2999999999999332,0.0,360);
+INSERT INTO nutrient VALUES('깻잎장아찌',30.0,33.639999999999998792,7.8700000000000001065,2.7799999999999998046,0.35999999999999996447,2.1099999999999998756,568.75,0.62999999999999998223,361);
+INSERT INTO nutrient VALUES('마늘장아찌',30.0,16.059999999999998721,3.0699999999999998401,0.3,0.02,0.79000000000000003552,481.74999999999998934,0.0,362);
+INSERT INTO nutrient VALUES('무장아찌',30.0,27.339999999999999857,5.3099999999999996092,3.2999999999999998223,0.26000000000000000888,0.56999999999999992894,933.27999999999988745,0.0,363);
+INSERT INTO nutrient VALUES('양념게장',200.0,275.55000000000000603,46.330000000000000071,26.52000000000000135,2.0600000000000000532,20.409999999999999253,1747.8399999999998826,134.40000000000000834,364);
+INSERT INTO nutrient VALUES('양파장아찌',50.0,19.710000000000000852,3.5400000000000000355,1.5,0.05,0.57999999999999998223,423.61000000000004206,0.0,365);
+INSERT INTO nutrient VALUES('오이지',50.0,11.439999999999999058,2.3900000000000001243,0.0,0.31000000000000000888,1.1399999999999999023,926.0,0.0,366);
+INSERT INTO nutrient VALUES('무피클',50.0,17.0,4.1900000000000003907,1.9900000000000000355,0.05,0.4,6.5999999999999996447,0.0,367);
+INSERT INTO nutrient VALUES('오이피클',50.0,54.0,14.63999999999999968,1.9900000000000000355,0.15,0.3,333.60000000000002984,0.0,368);
+INSERT INTO nutrient VALUES('단무지',30.0,3.9,0.66000000000000005329,0.23000000000000002664,0.16000000000000000888,0.11000000000000000888,173.55000000000000426,0.0,369);
+INSERT INTO nutrient VALUES('오징어젓갈',10.0,6.830000000000000071,0.29,0.0,0.1,1.2399999999999999911,179.11000000000001364,13.679999999999998827,370);
+INSERT INTO nutrient VALUES('명란젓',10.0,12.0,0.27000000000000001776,0.0,0.3,2.0499999999999998223,353.10000000000001385,35.0,371);
+INSERT INTO nutrient VALUES('생연어',100.0,110.28999999999999914,1.0,0.0,1.9399999999999998578,20.910000000000001918,213.05999999999998273,60.0,372);
+INSERT INTO nutrient VALUES('생선물회',800.0,575.00999999999997669,81.449999999999995736,29.370000000000002771,14.130000000000000781,36.770000000000004902,2986.22999999999994,0.75999999999999996447,373);
+INSERT INTO nutrient VALUES('광어회 ',100.0,116.19999999999999218,9.3399999999999998578,5.4599999999999999644,1.3600000000000000976,17.199999999999999289,754.39999999999995949,74.959999999999995523,374);
+INSERT INTO nutrient VALUES('훈제연어',100.0,169.0,9.3399999999999998578,5.4599999999999999644,6.1600000000000001421,19.280000000000001136,1260.7999999999999207,141.59999999999999253,375);
+INSERT INTO nutrient VALUES('육회',150.0,236.5600000000000147,15.949999999999999289,7.0400000000000000355,8.0500000000000007105,25.030000000000001136,433.42000000000000525,57.750000000000003552,376);
+INSERT INTO nutrient VALUES('육사시미',150.0,203.5500000000000309,6.9599999999999999644,4.0899999999999998578,6.0700000000000002842,29.27999999999999936,888.03000000000000824,63.450000000000006394,377);
+INSERT INTO nutrient VALUES('가래떡',100.0,205.03999999999997783,45.049999999999998934,0.0,0.33000000000000002664,3.5200000000000000177,254.68000000000001747,0.0,378);
+INSERT INTO nutrient VALUES('경단',100.0,303.79000000000000447,67.040000000000006252,0.0,0.54000000000000003552,6.580000000000000071,186.36000000000001008,0.0,379);
+INSERT INTO nutrient VALUES('꿀떡',100.0,225.91999999999998749,50.359999999999995878,9.580000000000000071,0.75999999999999996447,3.2400000000000002131,251.33999999999998564,0.0,380);
+INSERT INTO nutrient VALUES('시루떡',100.0,223.62000000000001875,49.030000000000004689,5.9900000000000002131,0.28000000000000003552,5.5,278.94999999999998685,0.0,381);
+INSERT INTO nutrient VALUES('메밀전병',100.0,166.13999999999997214,24.82000000000000206,0.0,5.5,5.7900000000000000355,340.66000000000000724,0.0,382);
+INSERT INTO nutrient VALUES('찰떡',100.0,216.19000000000001548,44.880000000000004334,5.5,1.2399999999999999911,5.8099999999999996092,236.81999999999998607,0.0,383);
+INSERT INTO nutrient VALUES('무지개떡',100.0,218.17999999999999616,48.700000000000001065,6.9900000000000002131,0.85999999999999996447,4.0,277.70999999999999019,0.0,384);
+INSERT INTO nutrient VALUES('백설기',100.0,218.82000000000001449,48.200000000000002842,11.990000000000000568,0.79000000000000003552,4.0400000000000000355,296.95000000000000284,0.0,385);
+INSERT INTO nutrient VALUES('송편',100.0,234.90000000000001989,46.820000000000003836,1.5200000000000000177,2.7000000000000001776,4.1699999999999999289,236.5399999999999725,0.0,386);
+INSERT INTO nutrient VALUES('수수부꾸미',100.0,258.99000000000000909,46.150000000000002131,3.0,5.6699999999999999289,5.5,270.04000000000001335,0.0,387);
+INSERT INTO nutrient VALUES('수수팥떡',100.0,212.72999999999999687,45.170000000000003481,1.0,0.68000000000000007105,5.9800000000000004263,236.37999999999999012,0.0,388);
+INSERT INTO nutrient VALUES('쑥떡',100.0,238.05999999999998273,54.640000000000004121,9.9900000000000002131,0.45,4.5300000000000002486,256.1499999999999666,0.0,389);
+INSERT INTO nutrient VALUES('약식',100.0,232.21000000000002749,48.879999999999999005,7.9900000000000002131,2.2700000000000000177,3.830000000000000071,290.63999999999996504,0.16000000000000000888,390);
+INSERT INTO nutrient VALUES('인절미',100.0,214.46000000000000618,42.549999999999998934,0.0,1.7599999999999999644,6.4000000000000003552,337.74000000000001797,0.0,391);
+INSERT INTO nutrient VALUES('절편',100.0,197.80999999999998806,44.070000000000000284,5.0,0.35,3.0600000000000000532,266.76999999999999602,0.0,392);
+INSERT INTO nutrient VALUES('증편',100.0,198.68999999999999772,44.219999999999997086,15.980000000000000426,0.34000000000000003552,2.5400000000000000355,259.04000000000002579,0.0,393);
+INSERT INTO nutrient VALUES('찹쌀떡',100.0,264.74000000000001975,62.080000000000001847,13.990000000000000213,0.23000000000000002664,3.4100000000000001421,226.37999999999998124,0.0,394);
+INSERT INTO nutrient VALUES('매작과',30.0,121.48000000000001019,19.059999999999998721,0.0,3.5699999999999998401,2.5499999999999998223,31.049999999999999822,0.0,395);
+INSERT INTO nutrient VALUES('다식',30.0,105.17000000000000792,20.809999999999999609,6.4599999999999999644,1.7299999999999999822,3.5499999999999998223,3.85,0.0,396);
+INSERT INTO nutrient VALUES('약과',30.0,113.84999999999998454,22.179999999999999715,2.1499999999999999111,1.2399999999999999911,2.5699999999999998401,16.460000000000000852,0.0,397);
+INSERT INTO nutrient VALUES('유과',30.0,129.05999999999999694,24.140000000000001456,1.1200000000000001065,3.5,0.35999999999999996447,7.0599999999999996092,0.0,398);
+INSERT INTO nutrient VALUES('산자',30.0,121.70000000000000817,24.699999999999997513,10.630000000000001669,1.1999999999999999644,0.90999999999999996447,8.0099999999999997868,0.0,399);
+INSERT INTO nutrient VALUES('깨강정',30.0,150.30000000000001136,13.619999999999998774,0.0,9.8699999999999992184,4.5,24.300000000000001598,0.0,400);
+COMMIT;

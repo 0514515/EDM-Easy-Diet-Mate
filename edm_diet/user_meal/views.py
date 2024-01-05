@@ -50,6 +50,7 @@ def get_user_info(token):
     except Exception as e:
         return JsonResponse({'error': f"An error occurred: {e}"}, status=500)
 
+# 유저 식단 평가 조회
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_user_meal_evaluation(request):
@@ -97,6 +98,7 @@ class SaveUserMeal(APIView):
                 "message" : "User meal failed"
             })
 
+# 유저 식단 저장
 @api_view(['POST'])
 def save_user_meal(request):
     
