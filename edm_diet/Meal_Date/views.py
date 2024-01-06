@@ -27,7 +27,7 @@ def display_user_meal_evaluation(request):
         
         # 데이터베이스에서 해당 user_uid에 해당하는 객체 가져오기
         diet_rating = evaluate_user_meal(token, meal_date)
-        user_meal_nut = get_user_meal(uuid, meal_date, meal_type, meal_serving)
+        user_meal_nut = get_user_meal(uuid, meal_date, meal_type)
         
         template_data = {'diet_rating': diet_rating[0], 
                         'total_carbs': diet_rating[1][0], 
@@ -90,53 +90,54 @@ def get_user_info(token):
     except Exception as e:
         return JsonResponse({'error': f"An error occurred: {e}"}, status=500)
 
-def get_user_meal(uuid, meal_time, meal_type, meal_serving):
+def get_user_meal(uuid, meal_time, meal_type):
     user_uid_after = uuid.replace('-','')
     user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_time, meal_type = meal_type).values(
-        'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
+        'meal_serving', 'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
     )
 
     meal_nutrient = []
 
     for user_meal in user_meals:
+        print(user_meal, "@@@@@@@@@@@@!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@")
         total = {
-            'carbs': user_meal['food_name__carbs_g'],
-            'protein': user_meal['food_name__protein_g'],
-            'fat': user_meal['food_name__fat_g'],
-            'sugar': user_meal['food_name__sugar_g'],
-            'kcal' : user_meal['food_name__energy_kcal'],
-            'nat' : user_meal['food_name__nat_mg'],
-            'col' : user_meal['food_name__col_mg']
+            'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
+            'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
+            'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
+            'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
+            'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
+            'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
+            'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
         }
         meal_nutrient.append(total)
 
-    carbs = sum_nutrients(meal_nutrient, 'carbs') * meal_serving
-    prot = sum_nutrients(meal_nutrient, 'protein') * meal_serving
-    fat = sum_nutrients(meal_nutrient, 'fat') * meal_serving
-    sugar = sum_nutrients(meal_nutrient, 'sugar') * meal_serving
-    kcal = sum_nutrients(meal_nutrient, 'kcal') * meal_serving
-    nat = sum_nutrients(meal_nutrient, 'nat') * meal_serving
-    col = sum_nutrients(meal_nutrient, 'col') * meal_serving
+    carbs = sum_nutrients(meal_nutrient, 'carbs')
+    prot = sum_nutrients(meal_nutrient, 'protein')
+    fat = sum_nutrients(meal_nutrient, 'fat')
+    sugar = sum_nutrients(meal_nutrient, 'sugar')
+    kcal = sum_nutrients(meal_nutrient, 'kcal')
+    nat = sum_nutrients(meal_nutrient, 'nat')
+    col = sum_nutrients(meal_nutrient, 'col')
     
     return carbs, prot, fat, sugar, kcal, nat, col
 
-def evaluate_date_meal(uuid, meal_time):
+def evaluate_date_meal(uuid, meal_date):
     user_uid_after = uuid.replace('-','')
-    user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_time).values(
-        'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
+    user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_date).values(
+        'meal_serving', 'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
     )
 
     meal_nutrient = []
 
     for user_meal in user_meals:
         total = {
-            'carbs': user_meal['food_name__carbs_g'],
-            'protein': user_meal['food_name__protein_g'],
-            'fat': user_meal['food_name__fat_g'],
-            'sugar': user_meal['food_name__sugar_g'],
-            'kcal' : user_meal['food_name__energy_kcal'],
-            'nat' : user_meal['food_name__nat_mg'],
-            'col' : user_meal['food_name__col_mg']
+            'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
+            'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
+            'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
+            'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
+            'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
+            'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
+            'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
         }
         meal_nutrient.append(total)
 

@@ -35,7 +35,8 @@ class Usermeal(models.Model):
     meal_date = models.DateField(blank=True, null=True)
     imagelink = models.ImageField(upload_to='images/')
     food_name = models.ForeignKey(Nutrient, on_delete=models.CASCADE, to_field='food_name', related_name='usermeals')
-    
+    meal_serving = models.FloatField(blank=True, null=True)
+        
     def serialize(self):
         return {
             "uuid": self.uuid,
@@ -43,6 +44,7 @@ class Usermeal(models.Model):
             "meal_date": self.meal_date,
             "imagelink": self.imagelink,
             "food_name": self.food_name,
+            "meal_serving": self.meal_serving,
         }
     
     class Meta:
