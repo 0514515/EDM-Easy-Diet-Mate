@@ -107,7 +107,8 @@ def save_user_meal(request):
             servings = request.data.get('predict', {}).get('serving', [])
             
             existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type).first()
-            existing_evaluation.delete()
+            if existing_evaluation:
+                existing_evaluation.delete()
             for region_key, meal_data in data.items():
                 
                 meal_serving = float(servings.pop(0)) if servings else 1.0
