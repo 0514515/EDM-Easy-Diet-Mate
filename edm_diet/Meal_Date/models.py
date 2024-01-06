@@ -1,5 +1,5 @@
 from django.db import models
-import uuid
+from uuid import *
 
 class Nutrient(models.Model):
     food_name = models.CharField(db_column='Food_Name', max_length=45, primary_key=True)  # Field name made lowercase.
@@ -29,11 +29,16 @@ class Nutrient(models.Model):
         db_table = 'nutrient'
     
 
+def get_image_filename(instance, filename):
+    ext = filename.split('.')[-1]
+    new_filename = f"{uuid4()}.{ext}"
+    return new_filename
+
 class Usermeal(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, max_length=32)
+    uuid = models.UUIDField(default=uuid4, max_length=32)
     meal_type = models.TextField(blank=True, null=True)
     meal_date = models.DateField(blank=True, null=True)
-    imagelink = models.ImageField(upload_to='images/', max_length=3000)
+    imagelink = models.ImageField(upload_to=get_image_filename, max_length=3000)
     food_name = models.ForeignKey(Nutrient, on_delete=models.CASCADE, to_field='food_name', related_name='usermeals')
     meal_serving = models.FloatField(blank=True, null=True)
         
@@ -52,7 +57,7 @@ class Usermeal(models.Model):
 
 
 class Usermealevaluation(models.Model):
-    uuid = models.UUIDField(default=uuid.uuid4, max_length=32)
+    uuid = models.UUIDField(default=uuid4, max_length=32)
     meal_date = models.DateField(blank=True, null=True)
     sum_carb = models.FloatField(blank=True, null=True)
     sum_sugar = models.FloatField(blank=True, null=True)
