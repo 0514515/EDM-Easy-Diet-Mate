@@ -33,7 +33,7 @@ class Usermeal(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, max_length=32)
     meal_type = models.TextField(blank=True, null=True)
     meal_date = models.DateField(blank=True, null=True)
-    imagelink = models.ImageField(upload_to='images/', max_length=30000)
+    imagelink = models.ImageField(upload_to='images/', max_length=3000)
     food_name = models.ForeignKey(Nutrient, on_delete=models.CASCADE, to_field='food_name', related_name='usermeals')
     meal_serving = models.FloatField(blank=True, null=True)
         
