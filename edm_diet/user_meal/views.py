@@ -106,7 +106,7 @@ def save_user_meal(request):
             meal_type = request.data.get('mealType')
             servings = request.data.get('predict', {}).get('serving', [])
             
-            existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type)
+            existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type).first()
             existing_evaluation.delete()
             for region_key, meal_data in data.items():
                 
@@ -120,7 +120,6 @@ def save_user_meal(request):
                     food_name = meal_data.get('food_name'),
                     meal_serving = meal_serving,
                 )
-                print("save")
                 
             return Response({"모두 저장 완료"}, status=status.HTTP_200_OK)
         
