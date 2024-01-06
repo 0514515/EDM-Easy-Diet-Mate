@@ -120,6 +120,7 @@ def save_user_meal(request):
                     food_name = meal_data.get('food_name'),
                     meal_serving = meal_serving,
                 )
+                print("save")
                 
             return Response({"모두 저장 완료"}, status=status.HTTP_200_OK)
         
