@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from Meal_Date.models import Nutrient
+from Meal_Date.models import *
 
 @api_view(['POST'])
 def save_new_food_api(request):
@@ -12,7 +12,7 @@ def save_new_food_api(request):
 
         # 기존 데이터와 일치하지 않는 항목을 저장할 리스트
         non_matching_data = []
-
+        
         for region_key, food_data in data.items():
             food_object, created = Nutrient.objects.get_or_create(  
                 food_name=food_data.get('food_name'),

@@ -98,33 +98,33 @@ def save_user_meal(request):
     uuid = str(get_user_info(token).get('uuid',''))
     
     try:
-        if request.data.get('inferResult') == '1':
+        # if request.data.get('inferResult') == '1':
         
-        # 요청한 JSON 데이터 파싱
-            data = request.data.get('predict', {}).get('ktFoodsInfo', {})
-            meal_date = request.data.get('mealdate')
-            meal_type = request.data.get('mealType')
-            servings = request.data.get('predict', {}).get('serving', [])
+        # # 요청한 JSON 데이터 파싱
+        #     data = request.data.get('predict', {}).get('ktFoodsInfo', {})
+        #     meal_date = request.data.get('mealdate')
+        #     meal_type = request.data.get('mealType')
+        #     servings = request.data.get('predict', {}).get('serving', [])
             
-            existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type).first()
-            if existing_evaluation:
-                existing_evaluation.delete()
-            for region_key, meal_data in data.items():
+        #     existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type).first()
+        #     if existing_evaluation:
+        #         existing_evaluation.delete()
+        #     for region_key, meal_data in data.items():
                 
-                meal_serving = float(servings.pop(0)) if servings else 1.0
+        #         meal_serving = float(servings.pop(0)) if servings else 1.0
                 
-                Usermeal.objects.create( 
-                    uuid = uuid,
-                    meal_type = meal_type,
-                    meal_date = meal_date,
-                    imagelink = request.data.get('imagelink'),
-                    food_name = meal_data.get('food_name'),
-                    meal_serving = meal_serving,
-                )
+        #         Usermeal.objects.create( 
+        #             uuid = uuid,
+        #             meal_type = meal_type,
+        #             meal_date = meal_date,
+        #             imagelink = request.data.get('imagelink'),
+        #             food_name = meal_data.get('food_name'),
+        #             meal_serving = meal_serving,
+        #         )
                 
-            return Response({"모두 저장 완료"}, status=status.HTTP_200_OK)
+        #     return Response({"모두 저장 완료"}, status=status.HTTP_200_OK)
         
-        else :
+        # else :
             
             data = request.data.get('predict', {}).get('foodNames', [])
             meal_date = request.data.get('mealdate')
