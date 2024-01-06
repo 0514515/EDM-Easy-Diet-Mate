@@ -117,7 +117,7 @@ def save_user_meal(request):
                     meal_type = meal_type,
                     meal_date = meal_date,
                     imagelink = request.data.get('imagelink'),
-                    food_name_id = meal_data.get('food_name'),
+                    food_name = meal_data.get('food_name'),
                     meal_serving = meal_serving,
                 )
                 
