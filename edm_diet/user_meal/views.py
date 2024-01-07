@@ -6,6 +6,7 @@ from Meal_Date.models import *
 from Meal_Date.serializers import *
 from django.http import JsonResponse
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view,permission_classes
 import requests
@@ -52,6 +53,33 @@ def get_user_info(token):
         return JsonResponse({'error': f"An error occurred: {e}"}, status=500)
 
 # 유저 식단 평가 조회
+# class ImageView(APIView):
+#     parser_classes = (FileUploadParser,)
+
+#     def post(self, request, *args, **kwargs):
+#         file_serializer = ImagesaveSerializer(data=request.data)
+
+#         if file_serializer.is_valid():
+#             file_serializer.save()
+#             return Response({'image_path': file_serializer.data['image']}, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class ImageView(APIView):
+    parser_classes = (MultiPartParser,)
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = ImagesaveSerializer(data=request.data)
+
+        if file_serializer.is_valid():
+            imagesave_instance = file_serializer.save()
+            image_url = request.build_absolute_uri(imagesave_instance.imagelink.url)
+            print(image_url, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            print("저장 완료")
+            return Response({'image_path': image_url}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_user_meal_evaluation(request):

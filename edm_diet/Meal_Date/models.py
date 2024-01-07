@@ -28,6 +28,8 @@ class Nutrient(models.Model):
     class Meta:
         db_table = 'nutrient'
     
+# def get_image_filename(instance, filename):
+#     return f"images/{filename}"
 
 def get_image_filename(instance, filename):
     ext = filename.split('.')[-1]
@@ -70,3 +72,10 @@ class Usermealevaluation(models.Model):
 
     class Meta:
         db_table = 'usermealevaluation'
+        
+class Imagesave(models.Model):
+    id = models.AutoField(primary_key=True)
+    imagelink = models.ImageField(upload_to=get_image_filename, max_length=3000)
+    
+    class Meta:
+        db_table = 'Imagesave'

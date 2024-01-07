@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Usermeal, Nutrient, Usermealevaluation
+from .models import *
 import uuid
 
 class MealSerializer(serializers.ModelSerializer):
@@ -17,4 +17,9 @@ class UsermealevaluationSerializer(serializers.ModelSerializer):
     user_id = serializers.UUIDField(default=uuid.uuid4)
     class Meta:
         model = Usermealevaluation
+        fields = '__all__'
+        
+class ImagesaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Imagesave
         fields = '__all__'

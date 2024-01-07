@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
+from pathlib import Path    
 import json,os
 from datetime import timedelta
 from django.core.exceptions import ImproperlyConfigured
@@ -50,8 +50,18 @@ def get_secret(setting, secrets=secrets):
 API_KEY1 = get_secret("key1")  
 API_KEY2 = get_secret("key2")
 
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+
+# # 추가
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
