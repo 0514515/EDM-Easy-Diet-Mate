@@ -36,7 +36,8 @@ def display_user_meal_evaluation(request):
                          'total_sugar': diet_rating[1][3], 
                          'total_kcal' : diet_rating[1][4],
                          'total_nat': diet_rating[1][5], 
-                         'total_col': diet_rating[1][6], 
+                         'total_col': diet_rating[1][6],
+                         'imagelink': user_meal_nut[7],
                          'carbs': user_meal_nut[0], 
                          'protein': user_meal_nut[1], 
                          'fat': user_meal_nut[2], 
@@ -93,13 +94,13 @@ def get_user_info(token):
 def get_user_meal(uuid, meal_time, meal_type):
     user_uid_after = uuid.replace('-','')
     user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_time, meal_type = meal_type).values(
-        'meal_serving', 'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
+        'imagelink', 'meal_serving', 'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
     )
 
     meal_nutrient = []
 
     for user_meal in user_meals:
-        print(user_meal, "@@@@@@@@@@@@!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@")
+           
         total = {
             'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
             'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
@@ -107,9 +108,17 @@ def get_user_meal(uuid, meal_time, meal_type):
             'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
             'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
             'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
-            'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
+            'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving'],
+            'imagelink': user_meal['imagelink']
         }
         meal_nutrient.append(total)
+
+    imagelinks = [meal['imagelink'] for meal in meal_nutrient]
+    if imagelinks:
+        imagelink = imagelinks[0]
+    else:
+        imagelink = "이미지가 존재하지 않습니다"  # 또는 기본 이미지 또는 다른 처리 방법
+
 
     carbs = sum_nutrients(meal_nutrient, 'carbs')
     prot = sum_nutrients(meal_nutrient, 'protein')
@@ -119,7 +128,7 @@ def get_user_meal(uuid, meal_time, meal_type):
     nat = sum_nutrients(meal_nutrient, 'nat')
     col = sum_nutrients(meal_nutrient, 'col')
     
-    return carbs, prot, fat, sugar, kcal, nat, col
+    return carbs, prot, fat, sugar, kcal, nat, col, imagelink
 
 def evaluate_date_meal(uuid, meal_date):
     user_uid_after = uuid.replace('-','')
