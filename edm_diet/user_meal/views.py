@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 from datetime import datetime, timedelta
 from operator import itemgetter
 
+
 def validate_token(request):
     authorization_header = request.headers.get('Authorization')
     if not authorization_header:
@@ -73,9 +74,7 @@ class ImageView(APIView):
         if file_serializer.is_valid():
             imagesave_instance = file_serializer.save()
             image_url = request.build_absolute_uri(imagesave_instance.imagelink.url)
-            print(image_url, "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-            print("저장 완료")
-            return Response({'image_path': image_url}, status=status.HTTP_201_CREATED)
+            return Response({'imagelink': image_url}, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
