@@ -5,7 +5,7 @@ http{
     server {
     listen 80;
     server_name localhost;
-    client_max_body_size 30M;
+
     location / {
         proxy_pass http://web:8000;  # 'web'은 Django 서비스의 이름
         proxy_set_header Host $host;
