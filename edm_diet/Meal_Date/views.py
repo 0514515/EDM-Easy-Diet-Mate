@@ -31,28 +31,29 @@ def display_user_meal_evaluation(request):
         if user_meal_nut[7] == -1:
             return JsonResponse({"error": "이미지를 찾을 수 없음"}, status=500)
         
-        template_data = {'diet_rating': diet_rating[0], 
-                        'total_carbs': diet_rating[1][0], 
-                         'total_protein': diet_rating[1][1], 
-                         'total_fat': diet_rating[1][2], 
-                         'total_sugar': diet_rating[1][3], 
-                         'total_kcal' : diet_rating[1][4],
-                         'total_nat': diet_rating[1][5], 
-                         'total_col': diet_rating[1][6],
-                         'imagelink': user_meal_nut[7],
-                         'carbs': user_meal_nut[0], 
-                         'protein': user_meal_nut[1], 
-                         'fat': user_meal_nut[2], 
-                         'sugar': user_meal_nut[3], 
-                         'kcal' : user_meal_nut[4],
-                         'nat': user_meal_nut[5], 
-                         'col': user_meal_nut[6],
-                         'food_name': user_meal_nut[8],
-                         'meal_serving': user_meal_nut[9]
-                         }
+        else :
+            template_data = {'diet_rating': diet_rating[0], 
+                            'total_carbs': diet_rating[1][0], 
+                            'total_protein': diet_rating[1][1], 
+                            'total_fat': diet_rating[1][2], 
+                            'total_sugar': diet_rating[1][3], 
+                            'total_kcal' : diet_rating[1][4],
+                            'total_nat': diet_rating[1][5], 
+                            'total_col': diet_rating[1][6],
+                            'imagelink': user_meal_nut[7],
+                            'carbs': user_meal_nut[0], 
+                            'protein': user_meal_nut[1], 
+                            'fat': user_meal_nut[2], 
+                            'sugar': user_meal_nut[3], 
+                            'kcal' : user_meal_nut[4],
+                            'nat': user_meal_nut[5], 
+                            'col': user_meal_nut[6],
+                            'food_name': user_meal_nut[8],
+                            'meal_serving': user_meal_nut[9]
+                            }
 
-        save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1])
-        return JsonResponse(template_data, safe=False)
+            save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1])
+            return JsonResponse(template_data, safe=False)
     
     except ObjectDoesNotExist:
         # 데이터베이스에서 해당 user_uid에 해당하는 객체가 없을 때의 예외 처리
