@@ -23,11 +23,13 @@ def display_user_meal_evaluation(request):
         uuid = str(user_info.get('uuid', '')) 
         meal_date = request.query_params.get('meal_date', '2023-12-29')
         meal_type = request.query_params.get('meal_type', '아침')
-        meal_serving = float(request.query_params.get('meal_serving', 1))
-        
+
         # 데이터베이스에서 해당 user_uid에 해당하는 객체 가져오기
         diet_rating = evaluate_user_meal(token, meal_date)
         user_meal_nut = get_user_meal(uuid, meal_date, meal_type)
+        
+        if user_meal_nut[7] == -1:
+            return JsonResponse({"error": "이미지를 찾을 수 없음"}, status=500)
         
         template_data = {'diet_rating': diet_rating[0], 
                         'total_carbs': diet_rating[1][0], 
@@ -130,7 +132,7 @@ def get_user_meal(uuid, meal_time, meal_type):
     if imagelinks:
         imagelink = imagelinks[0]
     else:
-        imagelink = ""
+        imagelink = -1
 
     foodname = [meal['food_name'] for meal in meal_nutrient]
     mealserving = [meal['meal_serving'] for meal in meal_nutrient]
@@ -268,15 +270,15 @@ def evaluate(user_meal_nut, recommend):
     errors = [carbs_error, protein_error, fat_error]
     max_error = max(errors)
 
-    if all(error <= 10 for error in errors):
+    if all(error <= 15 for error in errors):
         return 'Perfect'
-    elif all(error <= 15 for error in errors):
-        return 'Very Good'
     elif all(error <= 20 for error in errors):
+        return 'Very Good'
+    elif all(error <= 30 for error in errors):
         return 'Good'
-    elif all(error <= 25 for error in errors):
+    elif all(error <= 40 for error in errors):
         return 'Not Bad'
-    elif max_error >= 40 or any(error > 30 for error in errors):
+    elif max_error >= 50 or any(error > 40 for error in errors):
         return 'Bad'
     else:
         return 'Not Bad'

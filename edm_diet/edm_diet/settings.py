@@ -48,7 +48,6 @@ def get_secret(setting, secrets=secrets):
         raise ImproperlyConfigured(error_msg)
     
 API_KEY1 = get_secret("key1")  
-API_KEY2 = get_secret("key2")
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_ROOT = BASE_DIR / 'media'
