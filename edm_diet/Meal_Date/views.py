@@ -138,7 +138,7 @@ def get_user_meal(uuid, meal_time, meal_type):
             else:
                 imagelink = ""
 
-            foodname = [meal['food_name'] for meal in meal_nutrient]
+            food_name = [meal['food_name'] for meal in meal_nutrient]
             un_food_name= [meal['un_food_name'] for meal in meal_nutrient]
             mealserving = [meal['meal_serving'] for meal in meal_nutrient]
             
