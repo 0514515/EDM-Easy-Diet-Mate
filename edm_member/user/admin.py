@@ -6,9 +6,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from subscribe.models import *
 from django.contrib.admin.views.main import ChangeList
 
+# list_display 
+
+# FAQ 관리
 class FAQAdmin(admin.ModelAdmin):
-    list_display = ['title', 'content']  # 리스트에서 보여줄 필드
-    search_fields = ['title', 'content']  # 검색할 수 있는 필드
+    list_display = ['title', 'content']
+    search_fields = ['title', 'content']
 
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ['title', 'content', 'posted_on']

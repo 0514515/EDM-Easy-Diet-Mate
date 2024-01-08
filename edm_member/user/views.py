@@ -35,6 +35,7 @@ def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQU
         status=status
     )
     
+# 이메일 사용 확인 View
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def check_email_existence(request):
@@ -87,11 +88,13 @@ class CreateUser(generics.CreateAPIView):
         # 유효성 검증에 실패한 경우의 에러 메시지
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# 로그인
 class Login(APIView):
     serializer_class = LoginUserSerializer
     permission_classes = [AllowAny]
     
     def post(self, request):
+        print(request)
         email = request.data['email']
         password = request.data['password']
         
@@ -151,6 +154,7 @@ class Login(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+#회원 정보 조회, 수정, 삭제
 @api_view(['GET','PATCH','POST'])
 @permission_classes([IsAuthenticated])
 def user_info(request):
@@ -292,7 +296,7 @@ def user_info(request):
     else:
         return Response({"message": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
-    
+# 가장 최근의 개인정보 처리방침 조회
 def privacy_policy(request):
     policy = PrivacyPolicy.objects.latest('updated_at')
     return JsonResponse({'content': policy.content})

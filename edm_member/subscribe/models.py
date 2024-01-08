@@ -6,6 +6,7 @@ class SubscribeManager(models.Manager):
         subscribe = self.create(subscribe_from=from_user, subscribe_to=to_user)
         return subscribe
 
+# 구독 모델
 class Subscribe(models.Model):
     subscribe_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_subscribe',to_field="uuid")
     subscribe_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_subscribe',to_field="uuid")

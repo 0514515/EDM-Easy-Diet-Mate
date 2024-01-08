@@ -10,7 +10,7 @@ from rest_framework.decorators import permission_classes
 import uuid
 # Create your views here.
 
-
+# UUID 검증
 def is_valid_uuid(uuid_to_test, version=4):
     try:
         # 하이픈을 제거합니다
@@ -30,6 +30,7 @@ def is_valid_uuid(uuid_to_test, version=4):
 def subscribe(request):
     user = request.user
 
+    # 나의 구독 리스트 조회
     if request.method == 'GET':
         subscriptions = Subscribe.objects.filter(subscribe_from=user)
         serializer = SubscribeSerializer(subscriptions, many=True)
@@ -38,36 +39,6 @@ def subscribe(request):
         values_list = [str(subscription['subscribe_to']).replace('-', '') for subscription in serializer.data]
 
         return Response(values_list)
-    # if request.method == 'GET':
-    #     subscriptions = Subscribe.objects.filter(subscribe_from=user)
-    #     serializer = SubscribeSerializer(subscriptions, many=True)
-    #     return Response(serializer.data)
-
-    # elif request.method == 'POST':
-    #     subscribe_to_uuid = request.data.get('subscribe_to')
-        
-    #     if not is_valid_uuid(request.data.get('subscribe_to')):
-    #         return Response({'message':"subscribe_to's uuid is invalid",
-    #                          "display_message":"유저를 찾을 수 없습니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-    #     # 구독 존재 체크
-    #     if Subscribe.objects.filter(subscribe_from=user, subscribe_to__uuid=subscribe_to_uuid).exists():
-    #         return Response({
-    #             "message" : "subscribe already exists",
-    #             "display_message" : "이미 구독하고 있습니다."
-    #             }, status=status.HTTP_400_BAD_REQUEST)
-        
-    #     data = {'subscribe_from': user.uuid, 'subscribe_to': request.data.get('subscribe_to')}
-    #     serializer = SubscribeSerializer(data=data)
-        
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(
-    #             {   "subscribe" : serializer.data,
-    #                 "message" : "subscribe is success",
-    #                 "display_messgage" : "구독이 완료되었습니다."
-    #             }, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'POST':
         user = request.user
@@ -105,7 +76,8 @@ def subscribe(request):
             }, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+# 구독한 사람의 이름 조회
 @api_view(['GET'])
 def get_user_name(request, uuid):
     try:
@@ -125,7 +97,8 @@ def get_user_name(request, uuid):
 
     except User.DoesNotExist:
         return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+
+# 구독 삭제
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_subscription(request, uuid):
