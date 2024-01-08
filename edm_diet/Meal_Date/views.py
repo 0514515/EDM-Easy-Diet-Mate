@@ -114,6 +114,7 @@ def get_user_meal(uuid, meal_time, meal_type):
     )
     meal_nutrient = []
     carbs, prot, fat, sugar, kcal, nat, col, mealserving = 0, 0, 0, 0, 0, 0, 0, 0
+    imagelink = ""
     # un_meal_nutrient = []
     for user_meal in user_meals:
         
