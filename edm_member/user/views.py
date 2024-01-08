@@ -20,7 +20,6 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.urls import reverse
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from six import text_type
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
@@ -302,45 +301,6 @@ def privacy_policy(request):
     return JsonResponse({'content': policy.content})
 
 
-# class PasswordResetView(APIView):
-#     # User = get_user_model()
-#     permission_classes = [AllowAny]
-#     def post(self, request, *args, **kwargs):
-#         serializer = PasswordResetSerializer(data=request.data)
-#         if serializer.is_valid():
-#             email = serializer.validated_data['email']
-#             try:
-#                 user = User.objects.get(email=email)
-#                 reset_link = build_password_reset_link(user, request)
-#                 send_mail(
-#                     '비밀번호 재설정 요청',
-#                     f'비밀번호를 재설정하려면 여기를 클릭하세요: {reset_link}',
-#                     'from@example.com',
-#                     [email],
-#                     fail_silently=False,
-#                 )
-#                 return Response({
-#                     "display_message": "비밀번호 재설정 이메일이 전송되었습니다.",
-#                     "message:": "password-reset email posted"}, status=status.HTTP_200_OK)
-#             except User.DoesNotExist:
-#                 return Response({"display_message": "이 이메일을 가진 사용자가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
-#         print(serializer.errors)
-#         return Response({"display_message" : "오류가 발생하였습니다."}, status=status.HTTP_400_BAD_REQUEST)
-
-# def build_password_reset_link(user, request):
-#     uid = urlsafe_base64_encode(force_bytes(user.pk))
-#     token = token_generator.make_token(user)
-#     return request.build_absolute_uri(reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
-
-# class TokenGenerator(PasswordResetTokenGenerator):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.password_reset_timeout_days = 3
-        
-#     def _make_hash_value(self, user, timestamp):
-#         return text_type(user.pk) + text_type(timestamp) + text_type(user.is_active)
-
-# token_generator = TokenGenerator()
 class MyPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'reset_password_complete.html'
     

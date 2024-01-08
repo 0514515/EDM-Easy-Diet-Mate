@@ -102,7 +102,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
             diet_purpose=validated_data['diet_purpose'],
             gender=validated_data['gender'],
             password=validated_data['password'],
-            agreed_to_privacy_policy=validated_data['agreed_to_privacy_policy']
         )
 
         if agreed_to_privacy_policy:
