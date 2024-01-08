@@ -259,6 +259,8 @@ def calculate(height, weight, birth_date, sex, activity_level, goal):
     return recommend
 
 def evaluate(user_meal_nut, recommend):
+    
+    print(recommend, "@@@@@@@@@@@@@recommend@@@@@@@@@@@@@@@@@@@@@@@ ")
     def calculate_error(recommend, actual):
         if isinstance(recommend, tuple):
             min_error = abs((actual - recommend[0])) / recommend[0] * 100
