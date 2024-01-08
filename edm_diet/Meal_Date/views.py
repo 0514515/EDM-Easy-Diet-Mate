@@ -229,11 +229,13 @@ def calculate(height, weight, birth_date, sex, activity_level, goal):
 
     if sex == '남자':
         base_rate = 66.47 + (13.75 * (weight-10) + (5 * height) - (6.76 * age))
+        print(base_rate, "@@@@@@@@@@남자 base_rate@@@@@@@@@@@")
     else:
         base_rate = 65.51 + (9.56 * (weight-10) + (1.85 * height) - (4.68 * age))
 
     activity_factors = {1: 0.1, 2: 0.2, 3: 0.375, 4: 0.5, 5: 0.725}
     activity_rate = base_rate * activity_factors.get(activity_level, 0)
+    print(activity_rate, "@@@@@@@@@@@@@@@@@@activity_rate@@@@@@@@@@@@@@@@@@")
 
     goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
     tdee = base_rate + activity_rate + goal_factors.get(goal, 0)
@@ -243,6 +245,7 @@ def calculate(height, weight, birth_date, sex, activity_level, goal):
     elif sex == '여자' and tdee < 1000:
         tdee = 1000
 
+    print(tdee, "@@@@@@@@@@@@@@@@@@@@@@@@@tdee@@@@@@@@@@@@@@@@@@@@@@@")
     protein = calculate_protein(weight, activity_level)
     fat = tdee * 0.2 / 9
     carbs = ((tdee - (protein[0] + fat * 9)) / 4, (tdee - (protein[1] + fat * 9)) / 4)
@@ -269,6 +272,10 @@ def evaluate(user_meal_nut, recommend):
         else:
             return abs((actual - recommend)) / recommend * 100
 
+
+    print(user_meal_nut[0], "@@@@@@@@@@@@@@@@@@carbs@@@@@@@@@@@@@@@@@@")
+    print(user_meal_nut[0], "@@@@@@@@@@@@@@@@@@protein@@@@@@@@@@@@@@@@@@")
+    print(user_meal_nut[0], "@@@@@@@@@@@@@@@@@@fat@@@@@@@@@@@@@@@@@@")
     carbs_error = calculate_error(recommend['carbs'], user_meal_nut[0])
     protein_error = calculate_error(recommend['protein'], user_meal_nut[1])
     fat_error = calculate_error(recommend['fat'], user_meal_nut[2])
