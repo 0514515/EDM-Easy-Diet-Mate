@@ -40,7 +40,7 @@ def get_secret(setting, secrets=secrets):
 SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 # Application definition
@@ -103,7 +103,7 @@ ROOT_URLCONF = "edm_user.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],  # 프로젝트 레벨 템플릿 디렉토리
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

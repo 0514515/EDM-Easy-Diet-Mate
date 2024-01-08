@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
 import uuid
 
-# 유저 CRUD 쿼리 정의
+# 회원 매니저
 class UserManager(BaseUserManager):
     def create_user(self, email, name, birthdate, active_level, height, weight, diet_purpose, gender, password=None):
         if not email:
@@ -148,7 +148,8 @@ class User(AbstractBaseUser):
         verbose_name = "회원"
         verbose_name_plural = "회원 목록"
         
-        
+
+# 개인정보 처리방침 모델        
 class PrivacyPolicy(models.Model):
     content = models.TextField()  # 개인정보 처리방침 내용
     updated_at = models.DateTimeField(auto_now=True)  # 업데이트 날짜

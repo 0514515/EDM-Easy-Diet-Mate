@@ -1,6 +1,8 @@
 version: '3.8'
 
 services:
+  
+  # web 컨테이너
   web:
     build: .
     command: gunicorn -b 0.0.0.0:8000 edm_user.wsgi:application
@@ -14,6 +16,7 @@ services:
       - db
     restart: always
 
+  # nginx 컨테이너
   nginx:
     image: nginx:latest
     ports:
@@ -26,6 +29,7 @@ services:
       - web
     restart: always
 
+  # mysql 컨테이너
   db:
     image: mysql:8.0.20
     volumes:
@@ -34,7 +38,7 @@ services:
       MYSQL_DATABASE: user_service
       MYSQL_USER: user_service
       MYSQL_PASSWORD: aivle
-      MYSQL_ROOT_PASSWORD: aivle  # 여기는 MySQL의 root 비밀번호 설정
+      MYSQL_ROOT_PASSWORD: aivle 
       restart: always
       
 volumes:

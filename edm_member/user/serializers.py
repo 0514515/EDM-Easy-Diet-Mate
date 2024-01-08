@@ -4,13 +4,14 @@ from .exceptions import UserAlreadyExistsException
 from datetime import date
 from django.utils import timezone
 
+# 비밀번호 재설정용 Serializer
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_email(self, value):
-        # 필요한 경우 여기에서 추가적인 이메일 검증을 할 수 있습니다
         return value
 
+# 유저 정보 Serializer
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -26,6 +27,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
             'uuid',
         ]
 
+# 회원가입 Serializer
 class CreateUserSerializer(serializers.ModelSerializer):
     
     def validate_email(self, value):
@@ -125,7 +127,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         ]
        
 
-       
+# 로그인 Seriailizer
 class LoginUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -134,6 +136,7 @@ class LoginUserSerializer(serializers.ModelSerializer):
             "password"
         ]
         
+# 유저 정보 수정 Serializer
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
