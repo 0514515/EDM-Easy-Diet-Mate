@@ -113,6 +113,7 @@ def get_user_meal(uuid, meal_time, meal_type):
         'food_name__col_mg',
     )
     meal_nutrient = []
+    carbs, prot, fat, sugar, kcal, nat, col = 0, 0, 0, 0, 0, 0, 0
     # un_meal_nutrient = []
     for user_meal in user_meals:
         
@@ -154,16 +155,16 @@ def get_user_meal(uuid, meal_time, meal_type):
         
         else :
             total = {
-                'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
-                'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
-                'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
-                'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
-                'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
-                'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
-                'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving'],
+                'carbs': 0,
+                'protein': 0,
+                'fat': 0,
+                'sugar': 0,
+                'kcal' : 0,
+                'nat' : 0,
+                'col' : 0,
                 'imagelink': user_meal['imagelink'],
                 'food_name': "",
-                'meal_serving': user_meal['meal_serving'],
+                'meal_serving': 0,
                 'un_food_name': user_meal['food_name'],
             }
             meal_nutrient.append(total)
@@ -175,10 +176,7 @@ def get_user_meal(uuid, meal_time, meal_type):
                 imagelink = ""
            
             food_name = [meal['food_name'] for meal in meal_nutrient]    
-            un_food_name= [meal['un_food_name'] for meal in meal_nutrient]
-
-            carbs, prot, fat, sugar, kcal, nat, col ,mealserving = 0, 0, 0, 0, 0, 0, 0, 0
-           
+            un_food_name= [meal['un_food_name'] for meal in meal_nutrient]         
             
     return carbs, prot, fat, sugar, kcal, nat, col, imagelink, food_name, mealserving, un_food_name
         
@@ -191,9 +189,11 @@ def evaluate_date_meal(uuid, meal_date):
     )
  
     meal_nutrient = []
-
+    carbs, prot, fat, sugar, kcal, nat, col = 0, 0, 0, 0, 0, 0, 0
+    
     for user_meal in user_meals:
         print(user_meal, "user_Meal")
+        
         if user_meal['food_name__carbs_g'] != -1:
             
             total = {
@@ -217,17 +217,16 @@ def evaluate_date_meal(uuid, meal_date):
     
         else :
             total = {
-                'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
-                'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
-                'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
-                'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
-                'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
-                'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
-                'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
+                'carbs': 0,
+                'protein': 0,
+                'fat': 0,
+                'sugar': 0,
+                'kcal' : 0,
+                'nat' : 0,
+                'col' : 0
             }
             meal_nutrient.append(total)
 
-            carbs, prot, fat, sugar, kcal, nat, col = 0, 0, 0, 0, 0, 0, 0
         
     return carbs, prot, fat, sugar, kcal, nat, col    
 
