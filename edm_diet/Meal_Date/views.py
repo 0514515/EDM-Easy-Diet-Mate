@@ -219,8 +219,8 @@ def calculate_protein(weight, activity_level):
     }
 
     min_factor, max_factor = protein_factors.get(activity_level, (0, 0))
-    min_protein = weight * min_factor * 4
-    max_protein = weight * max_factor * 4
+    min_protein = weight * min_factor
+    max_protein = weight * max_factor
 
     return min_protein, max_protein
 
@@ -245,15 +245,16 @@ def calculate(height, weight, birth_date, sex, activity_level, goal):
         goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
         tdee += goal_factors.get(goal, 0)
     elif sex == '여자' and tdee < 1000:
+        tdee = 1000
         goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
         tdee += goal_factors.get(goal, 0)
-        tdee = 1000
+        
 
     print(tdee, "@@@@@@@@@@@@@@@@@@@@@@@@@tdee@@@@@@@@@@@@@@@@@@@@@@@")
     protein = calculate_protein(weight, activity_level)
     fat = tdee * 0.2 / 9
-    carbs = ((tdee - (protein[0] + fat * 9)) / 4, 
-             (tdee - (protein[1] + fat * 9)) / 4)
+    carbs = ((tdee - (protein[0] * 4 + fat * 9)) / 4, 
+             (tdee - (protein[1] * 4 + fat * 9)) / 4)
     sugar = tdee * 0.1 / 4
 
     recommend = {
