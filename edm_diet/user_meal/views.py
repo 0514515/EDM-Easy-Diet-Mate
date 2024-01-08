@@ -141,6 +141,16 @@ def save_user_meal(request):
                 )
                 
             else :
+                
+                meal_serving = float(servings.pop(0)) if servings else 1.0
+                Usermeal.objects.create( 
+                    uuid = uuid,
+                    meal_type = meal_type,
+                    meal_date = meal_date,
+                    imagelink = request.data.get('imagelink'),
+                    food_name = nutrient_obj,
+                    meal_serving = meal_serving,
+                )
                 print("데이터베이스에 일치하는 데이터가 없습니다: ", food_name)
                 meal_serving = float(servings.pop(0)) if servings else 1.0
             
