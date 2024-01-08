@@ -152,7 +152,6 @@ def save_user_meal(request):
                     meal_serving = meal_serving,
                 )
                 print("데이터베이스에 일치하는 데이터가 없습니다: ", food_name)
-                meal_serving = float(servings.pop(0)) if servings else 1.0
             
         return Response({"식단 저장 완료"}, status=status.HTTP_200_OK)
         
