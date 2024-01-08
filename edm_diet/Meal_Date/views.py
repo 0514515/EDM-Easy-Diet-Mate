@@ -193,7 +193,9 @@ def evaluate_user_meal(token, meal_time):
     user_diet_purpose = user_info.get('diet_purpose', '')
     user_gender = user_info.get('gender', '')
     
+    
     user_data = (user_height, user_weight, user_birthdate, user_gender, user_active_level, user_diet_purpose)
+    print(user_data, "@@@@@@@@@@유저 정보@@@@@@@@@@@@@@")
     recommend_nutrients = calculate(*user_data)
     
     user_meal_nut = evaluate_date_meal(uuid, meal_time)
