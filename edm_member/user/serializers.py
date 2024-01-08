@@ -90,7 +90,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         
     # 검증을 통과한 값인 validated_data의 값만을 넣어줌.
     def create(self, validated_data):
-        agreed_to_privacy_policy = validated_data.pop('agreed_to_privacy_policy', False)
+        agreed_to_privacy_policy = validated_data['agreed_to_privacy_policy']
         
         user = User.objects.create_user(
             email=validated_data['email'],
@@ -102,6 +102,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             diet_purpose=validated_data['diet_purpose'],
             gender=validated_data['gender'],
             password=validated_data['password'],
+            agreed_to_privacy_policy=validated_data['agreed_to_privacy_policy']
         )
 
         if agreed_to_privacy_policy:
