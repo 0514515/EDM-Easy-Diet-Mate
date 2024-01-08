@@ -274,8 +274,8 @@ def evaluate(user_meal_nut, recommend):
 
 
     print(user_meal_nut[0], "@@@@@@@@@@@@@@@@@@carbs@@@@@@@@@@@@@@@@@@")
-    print(user_meal_nut[0], "@@@@@@@@@@@@@@@@@@protein@@@@@@@@@@@@@@@@@@")
-    print(user_meal_nut[0], "@@@@@@@@@@@@@@@@@@fat@@@@@@@@@@@@@@@@@@")
+    print(user_meal_nut[1], "@@@@@@@@@@@@@@@@@@protein@@@@@@@@@@@@@@@@@@")
+    print(user_meal_nut[2], "@@@@@@@@@@@@@@@@@@fat@@@@@@@@@@@@@@@@@@")
     carbs_error = calculate_error(recommend['carbs'], user_meal_nut[0])
     protein_error = calculate_error(recommend['protein'], user_meal_nut[1])
     fat_error = calculate_error(recommend['fat'], user_meal_nut[2])
