@@ -27,7 +27,8 @@ def display_user_meal_evaluation(request):
         # 데이터베이스에서 해당 user_uid에 해당하는 객체 가져오기
         diet_rating = evaluate_user_meal(token, meal_date)
         user_meal_nut = get_user_meal(uuid, meal_date, meal_type)
-        print(user_meal_nut, "@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@")
+        print(diet_rating, "@@@@@@@@@@@@@@하루 식사에 대한 정보@@@@@@@@@@@@@@@@@@@@")
+        print(user_meal_nut, "@@@@@@@@@@@@@@한 끼 식사에 대한 정보@@@@@@@@@@@@@@@@@@@@")
         # if user_meal_nut[7] == -1:
         #     return JsonResponse({"error": "이미지를 찾을 수 없음"}, status=500)
         
@@ -145,7 +146,6 @@ def get_user_meal(uuid, meal_time, meal_type):
     nat = sum_nutrients(meal_nutrient, 'nat')
     col = sum_nutrients(meal_nutrient, 'col')
     
-    print(carbs, prot, fat, sugar, kcal, nat, col, imagelink, foodname, mealserving, "@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@")
     
     return carbs, prot, fat, sugar, kcal, nat, col, imagelink, foodname, mealserving
 
