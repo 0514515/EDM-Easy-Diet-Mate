@@ -131,7 +131,7 @@ DATABASES = {
         'NAME' : 'user_diet',
         'USER' : 'user_diet',
         'PASSWORD' : 'aivle',
-        'HOST' : 'db',
+        'HOST' : 'localhost',
         'PORT' : '3306',
     }
 }

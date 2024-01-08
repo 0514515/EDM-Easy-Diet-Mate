@@ -11,6 +11,8 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view,permission_classes
 
+
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def display_user_meal_evaluation(request):
@@ -45,8 +47,12 @@ def display_user_meal_evaluation(request):
                          'nat': user_meal_nut[5], 
                          'col': user_meal_nut[6],
                          'food_name': user_meal_nut[8],
-                         'meal_serving': user_meal_nut[9]
+                         'meal_serving': user_meal_nut[9],
+                         "un_food_name" : user_meal_nut[10]
                          }
+        
+        # print(template_data, "template_data @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        
         
         save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1])
         return JsonResponse(template_data, safe=False)
@@ -106,74 +112,114 @@ def get_user_meal(uuid, meal_time, meal_type):
         'food_name__nat_mg',
         'food_name__col_mg',
     )
-
     meal_nutrient = []
-
+    un_meal_nutrient = []
     for user_meal in user_meals:
-           
-        total = {
-            'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
-            'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
-            'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
-            'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
-            'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
-            'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
-            'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving'],
-            'imagelink': user_meal['imagelink'],
-            'food_name': user_meal['food_name'],
-            'meal_serving': user_meal['meal_serving']
-        }
-        meal_nutrient.append(total)
-    
-    imagelinks = [meal['imagelink'] for meal in meal_nutrient]
-    if imagelinks:
-        imagelink = imagelinks[0]
-    else:
-        imagelink = ""
+        
+        if user_meal['food_name__carbs_g'] != -1:   
+            total = {
+                'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
+                'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
+                'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
+                'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
+                'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
+                'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
+                'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving'],
+                'imagelink': user_meal['imagelink'],
+                'food_name': user_meal['food_name'],
+                'meal_serving': user_meal['meal_serving'],
+                'un_food_name': ""
+            }
+            meal_nutrient.append(total)
+        
+            imagelinks = [meal['imagelink'] for meal in meal_nutrient]
+            if imagelinks:
+                imagelink = imagelinks[0]
+            else:
+                imagelink = ""
 
-    foodname = [meal['food_name'] for meal in meal_nutrient]
-    mealserving = [meal['meal_serving'] for meal in meal_nutrient]
+            foodname = [meal['food_name'] for meal in meal_nutrient]
+            un_food_name= [meal['un_food_name'] for meal in meal_nutrient]
+            mealserving = [meal['meal_serving'] for meal in meal_nutrient]
+            
+         
+            carbs = sum_nutrients(meal_nutrient, 'carbs')
+            prot = sum_nutrients(meal_nutrient, 'protein')
+            fat = sum_nutrients(meal_nutrient, 'fat')
+            sugar = sum_nutrients(meal_nutrient, 'sugar')
+            kcal = sum_nutrients(meal_nutrient, 'kcal')
+            nat = sum_nutrients(meal_nutrient, 'nat')
+            col = sum_nutrients(meal_nutrient, 'col')        
+            #return carbs, prot, fat, sugar, kcal, nat, col, imagelink, foodname, mealserving, un_food_name
+        
+        else :
+            total = {
+                'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
+                'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
+                'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
+                'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
+                'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
+                'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
+                'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving'],
+                'imagelink': user_meal['imagelink'],
+                'food_name': "",
+                'meal_serving': user_meal['meal_serving'],
+                'un_food_name': user_meal['food_name'],
+            }
+            meal_nutrient.append(total)
+            
+            imagelinks = [meal['imagelink'] for meal in meal_nutrient]
+            if imagelinks:
+                imagelink = imagelinks[0]
+            else:
+                imagelink = ""
+           
+            food_name = [meal['food_name'] for meal in meal_nutrient]    
+            un_food_name= [meal['un_food_name'] for meal in meal_nutrient]
+
+            carbs, prot, fat, sugar, kcal, nat, col ,mealserving = 0, 0, 0, 0, 0, 0, 0, 0
+           
+            
+    return carbs, prot, fat, sugar, kcal, nat, col, imagelink, food_name, mealserving, un_food_name
+        
     
-    carbs = sum_nutrients(meal_nutrient, 'carbs')
-    prot = sum_nutrients(meal_nutrient, 'protein')
-    fat = sum_nutrients(meal_nutrient, 'fat')
-    sugar = sum_nutrients(meal_nutrient, 'sugar')
-    kcal = sum_nutrients(meal_nutrient, 'kcal')
-    nat = sum_nutrients(meal_nutrient, 'nat')
-    col = sum_nutrients(meal_nutrient, 'col')
-    
-    
-    return carbs, prot, fat, sugar, kcal, nat, col, imagelink, foodname, mealserving
 
 def evaluate_date_meal(uuid, meal_date):
     user_uid_after = uuid.replace('-','')
     user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_date).values(
         'meal_serving', 'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
     )
-
+ 
     meal_nutrient = []
 
     for user_meal in user_meals:
-        total = {
-            'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
-            'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
-            'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
-            'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
-            'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
-            'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
-            'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
-        }
-        meal_nutrient.append(total)
+        print(user_meal, "user_Meal")
+        if user_meal['food_name__carbs_g'] != -1:
+            
+            total = {
+                'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
+                'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
+                'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
+                'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
+                'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
+                'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
+                'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
+            }
+            meal_nutrient.append(total)
 
-    carbs = sum_nutrients(meal_nutrient, 'carbs')
-    prot = sum_nutrients(meal_nutrient, 'protein')
-    fat = sum_nutrients(meal_nutrient, 'fat')
-    sugar = sum_nutrients(meal_nutrient, 'sugar')
-    kcal = sum_nutrients(meal_nutrient, 'kcal')
-    nat = sum_nutrients(meal_nutrient, 'nat')
-    col = sum_nutrients(meal_nutrient, 'col')
+            carbs = sum_nutrients(meal_nutrient, 'carbs')
+            prot = sum_nutrients(meal_nutrient, 'protein')
+            fat = sum_nutrients(meal_nutrient, 'fat')
+            sugar = sum_nutrients(meal_nutrient, 'sugar')
+            kcal = sum_nutrients(meal_nutrient, 'kcal')
+            nat = sum_nutrients(meal_nutrient, 'nat')
+            col = sum_nutrients(meal_nutrient, 'col')
     
-    return carbs, prot, fat, sugar, kcal, nat, col
+            return carbs, prot, fat, sugar, kcal, nat, col
+        
+        else :
+            carbs, prot, fat, sugar, kcal, nat, col = 0, 0, 0, 0, 0, 0, 0
+            return carbs, prot, fat, sugar, kcal, nat, col
 
 def sum_nutrients(meal_nutrient, nutrient_key):
     return sum(item[nutrient_key] for item in meal_nutrient)

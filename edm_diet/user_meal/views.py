@@ -81,7 +81,7 @@ def get_user_meal_evaluation(request):
     meal_evaluation_serializers = UsermealevaluationSerializer(user_meals_evaluation,  many=True)
     
     user_meals_evaluation_data = [
-    { 'meal_date': item['meal_date'], 'meal_evaluation': item['meal_evaluation'] } 
+    { 'meal_date': item['meal_date'], 'meal_evaluation': item['meal_evaluation'], 'sum_carb' : item['sum_carb'], 'sum_protein' : item['sum_protein']} 
     for item in meal_evaluation_serializers.data
     ]
     response_data = {
@@ -123,14 +123,18 @@ def save_user_meal(request):
         
         existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type)
         existing_evaluation.delete()
-                
+               
+        non_food_data = []
+        print(data, "data 출력")        
         for food_name in data:
             # Nutrient 모델에서 해당 food_name이 존재하는지 확인
             
             nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
-            non_food_data = []
+            
             print(food_name, "@@@@@@@@@@@@@@@@@@@@")
-            if nutrient_obj:
+            print(nutrient_obj, "nutrient_obj")
+            
+            if nutrient_obj :
                 
                 meal_serving = float(servings.pop(0)) if servings else 1.0
                 Usermeal.objects.create( 
@@ -141,23 +145,42 @@ def save_user_meal(request):
                     food_name = nutrient_obj,
                     meal_serving = meal_serving,
                 )
+                print("존재하는 데이터는 뒤에 저장")
                 
             else :
                 
-                meal_serving = float(servings.pop(0)) if servings else 1.0
-                Usermeal.objects.create( 
-                    uuid = uuid,
-                    meal_type = meal_type,
-                    meal_date = meal_date,
-                    imagelink = request.data.get('imagelink'),
-                    food_name = food_name,
-                    meal_serving = meal_serving,
+                new_data = Nutrient.objects.create(  
+                        food_name = food_name,
+                        weight_g = -1,
+                        energy_kcal = -1,
+                        carbs_g = -1,
+                        sugar_g = -1,
+                        fat_g = -1,
+                        protein_g = -1,
+                        nat_mg = -1,
+                        col_mg = -1,
                 )
                 non_food_data.append(food_name)
+                
+                print("없는 데이터 저장완료")  
+
+                print(food_name, "food_name 조회")
+               
+                print("저장완료")  
+                
+                meal_serving = float(servings.pop(0)) if servings else 1.0
+                Usermeal.objects.create( 
+                        uuid = uuid,
+                        meal_type = meal_type,
+                        meal_date = meal_date,
+                        imagelink = request.data.get('imagelink'),
+                        food_name = new_data,
+                        meal_serving = meal_serving,
+                    )
+                      
               
         print(non_food_data, "@@@@@@@@@@@@@@@@@@@")  
-        return non_food_data
-        #return Response({"식단 저장 완료"}, status=status.HTTP_200_OK)
+        return Response({"식단 저장 완료"}, status=status.HTTP_200_OK)
         
                 
     except Exception as e:
@@ -184,7 +207,7 @@ def get_subscribe_meal_evaluation(request):
      'meal_date': item['meal_date'],
      'sum_carb': item['sum_carb'],
      'sum_sugar': item['sum_sugar'],
-     'sum_protein': item['sum_carb'],
+     'sum_protein': item['sum_protein'],
      'sum_fat': item['sum_fat'],
      'sum_col': item['sum_col'],
      'sum_nat': item['sum_nat'],
@@ -213,7 +236,7 @@ def get_subscribe_meal_evaluation(request):
             })
         else:
         # 이미 존재하는 키에 대해 foodNames에 추가
-            existing_meal = next(item for item in formatted_user_meals if item["mealdate"] == meal_data["meal_date"] and item["mealType"] == meal_data["meal_type"])
+            existing_meal = next(item for item in formatted_user_meals if item["mealdate"] == meal_data["meal_date"])
             existing_meal["predict"]["foodNames"].append(meal_data["food_name"])
             
 # 최종 결과물을 user_meals_data에 반영
