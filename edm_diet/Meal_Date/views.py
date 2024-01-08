@@ -113,7 +113,7 @@ def get_user_meal(uuid, meal_time, meal_type):
         'food_name__col_mg',
     )
     meal_nutrient = []
-    un_meal_nutrient = []
+    # un_meal_nutrient = []
     for user_meal in user_meals:
         
         if user_meal['food_name__carbs_g'] != -1:   
@@ -215,11 +215,21 @@ def evaluate_date_meal(uuid, meal_date):
             nat = sum_nutrients(meal_nutrient, 'nat')
             col = sum_nutrients(meal_nutrient, 'col')
     
-            return carbs, prot, fat, sugar, kcal, nat, col
-        
         else :
+            total = {
+                'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
+                'protein': user_meal['food_name__protein_g'] * user_meal['meal_serving'],
+                'fat': user_meal['food_name__fat_g'] * user_meal['meal_serving'],
+                'sugar': user_meal['food_name__sugar_g'] * user_meal['meal_serving'],
+                'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
+                'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
+                'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
+            }
+            meal_nutrient.append(total)
+
             carbs, prot, fat, sugar, kcal, nat, col = 0, 0, 0, 0, 0, 0, 0
-            return carbs, prot, fat, sugar, kcal, nat, col
+        
+    return carbs, prot, fat, sugar, kcal, nat, col    
 
 def sum_nutrients(meal_nutrient, nutrient_key):
     return sum(item[nutrient_key] for item in meal_nutrient)
