@@ -130,7 +130,7 @@ def get_user_meal(uuid, meal_time, meal_type):
     if imagelinks:
         imagelink = imagelinks[0]
     else:
-        imagelink = "이미지가 존재하지 않습니다"  # 또는 기본 이미지 또는 다른 처리 방법
+        imagelink = ""
 
     foodname = [meal['food_name'] for meal in meal_nutrient]
     mealserving = [meal['meal_serving'] for meal in meal_nutrient]

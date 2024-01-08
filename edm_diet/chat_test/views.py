@@ -76,10 +76,8 @@ def chatbot_view(request):
             uuid = str(get_user_info(token).get('uuid',''))
             
             data = json.loads(request.body.decode('utf-8'))
-            print(data)
+            
             inputText = data.get('message')
-            # inputText = "12월 17일 식단 어땠지?"
-            print(inputText)
             
             if not inputText:
                 return HttpResponseBadRequest("No message provided")
@@ -111,7 +109,6 @@ def chatGPT(inputText, key1, key2, uuid):
     )
     
     result = response["choices"][0]["message"]["content"]
-    print(result)
     today = datetime.now()
     
     # DB
@@ -134,7 +131,6 @@ def chatGPT(inputText, key1, key2, uuid):
         )
         diet_result = diet_response["choices"][0]["message"]["content"]
         # diet_result를 front에 전달
-        print("식단평가 bot")
         return diet_result
     
     # 일상 생활 대화 : 0
@@ -148,6 +144,5 @@ def chatGPT(inputText, key1, key2, uuid):
         max_tokens = 150,
         )
         daily_result = daily_response["choices"][0]["message"]["content"]
-        print("일상대화 bot")
         return daily_result
 
