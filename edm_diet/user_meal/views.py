@@ -129,7 +129,7 @@ def save_user_meal(request):
             
             nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
             non_food_data = []
-            
+            print(food_name, "@@@@@@@@@@@@@@@@@@@@")
             if nutrient_obj:
                 
                 meal_serving = float(servings.pop(0)) if servings else 1.0
