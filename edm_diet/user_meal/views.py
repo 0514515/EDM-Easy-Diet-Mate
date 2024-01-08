@@ -128,6 +128,8 @@ def save_user_meal(request):
             # Nutrient 모델에서 해당 food_name이 존재하는지 확인
             
             nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
+            non_food_data = []
+            
             if nutrient_obj:
                 
                 meal_serving = float(servings.pop(0)) if servings else 1.0
@@ -151,9 +153,11 @@ def save_user_meal(request):
                     food_name = food_name,
                     meal_serving = meal_serving,
                 )
-                print("데이터베이스에 일치하는 데이터가 없습니다: ", food_name)
-            
-        return Response({"식단 저장 완료"}, status=status.HTTP_200_OK)
+                non_food_data.append(food_name)
+              
+        print(non_food_data, "@@@@@@@@@@@@@@@@@@@")  
+        return non_food_data
+        #return Response({"식단 저장 완료"}, status=status.HTTP_200_OK)
         
                 
     except Exception as e:
