@@ -117,6 +117,10 @@ def get_user_meal(uuid, meal_time, meal_type):
     imagelink = ""
     food_name, un_food_name = [], []
     # un_meal_nutrient = []
+    
+    print('fro문 실행 전', imagelink)
+    print('fro문 실행 전 : food_Name', food_name)
+    print('fro문 실행 전 : un_food_name', un_food_name)  
     for user_meal in user_meals:
         
         if user_meal['food_name__carbs_g'] != -1:   
@@ -177,9 +181,15 @@ def get_user_meal(uuid, meal_time, meal_type):
             else:
                 imagelink = ""
            
+            print('fro문 실행 중 : imagelink', imagelink)
             food_name = [meal['food_name'] for meal in meal_nutrient]    
-            un_food_name= [meal['un_food_name'] for meal in meal_nutrient]         
-            
+            un_food_name= [meal['un_food_name'] for meal in meal_nutrient]
+            print('fro문 실행 중 : food_Name', food_name)
+            print('fro문 실행 중 : un_food_name', un_food_name)             
+      
+    print('fro문 실행 후 : imagelink', imagelink) 
+    print('fro문 실행 후 : food_Name', food_name)
+    print('fro문 실행 후 : un_food_name', un_food_name)          
     return carbs, prot, fat, sugar, kcal, nat, col, imagelink, food_name, mealserving, un_food_name
         
     
