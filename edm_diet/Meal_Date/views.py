@@ -27,8 +27,6 @@ def display_user_meal_evaluation(request):
         # 데이터베이스에서 해당 user_uid에 해당하는 객체 가져오기
         diet_rating = evaluate_user_meal(token, meal_date)
         user_meal_nut = get_user_meal(uuid, meal_date, meal_type)
-        print(diet_rating, "@@@@@@@@@@@@@@하루 식사에 대한 정보@@@@@@@@@@@@@@@@@@@@")
-        print(user_meal_nut, "@@@@@@@@@@@@@@한 끼 식사에 대한 정보@@@@@@@@@@@@@@@@@@@@")
         # if user_meal_nut[7] == -1:
         #     return JsonResponse({"error": "이미지를 찾을 수 없음"}, status=500)
         
@@ -133,7 +131,7 @@ def get_user_meal(uuid, meal_time, meal_type):
     if imagelinks:
         imagelink = imagelinks[0]
     else:
-        imagelink = -1
+        imagelink = ""
 
     foodname = [meal['food_name'] for meal in meal_nutrient]
     mealserving = [meal['meal_serving'] for meal in meal_nutrient]
@@ -195,7 +193,6 @@ def evaluate_user_meal(token, meal_time):
     
     
     user_data = (user_height, user_weight, user_birthdate, user_gender, user_active_level, user_diet_purpose)
-    print(user_data, "@@@@@@@@@@유저 정보@@@@@@@@@@@@@@")
     recommend_nutrients = calculate(*user_data)
     
     user_meal_nut = evaluate_date_meal(uuid, meal_time)
@@ -229,13 +226,11 @@ def calculate(height, weight, birth_date, sex, activity_level, goal):
 
     if sex == '남자':
         base_rate = 66.47 + (13.75 * (weight-10) + (5 * height) - (6.76 * age))
-        print(base_rate, "@@@@@@@@@@남자 base_rate@@@@@@@@@@@")
     else:
         base_rate = 65.51 + (9.56 * (weight-10) + (1.85 * height) - (4.68 * age))
 
     activity_factors = {1: 0.1, 2: 0.2, 3: 0.375, 4: 0.5, 5: 0.725}
     activity_rate = base_rate * activity_factors.get(activity_level, 0)
-    print(activity_rate, "@@@@@@@@@@@@@@@@@@activity_rate@@@@@@@@@@@@@@@@@@")
 
     goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
     tdee = base_rate + activity_rate + goal_factors.get(goal, 0)
@@ -248,9 +243,7 @@ def calculate(height, weight, birth_date, sex, activity_level, goal):
         tdee = 1000
         goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
         tdee += goal_factors.get(goal, 0)
-        
-
-    print(tdee, "@@@@@@@@@@@@@@@@@@@@@@@@@tdee@@@@@@@@@@@@@@@@@@@@@@@")
+    
     protein = calculate_protein(weight, activity_level)
     fat = tdee * 0.2 / 9
     carbs = ((tdee - (protein[0] * 4 + fat * 9)) / 4, 
@@ -269,7 +262,6 @@ def calculate(height, weight, birth_date, sex, activity_level, goal):
 
 def evaluate(user_meal_nut, recommend):
     
-    print(recommend, "@@@@@@@@@@@@@recommend@@@@@@@@@@@@@@@@@@@@@@@ ")
     def calculate_error(recommend, actual):
         if isinstance(recommend, tuple):
             min_error = abs((actual - recommend[0])) / recommend[0] * 100
