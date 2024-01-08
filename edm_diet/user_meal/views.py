@@ -53,18 +53,7 @@ def get_user_info(token):
     except Exception as e:
         return JsonResponse({'error': f"An error occurred: {e}"}, status=500)
 
-# 유저 식단 평가 조회
-# class ImageView(APIView):
-#     parser_classes = (FileUploadParser,)
 
-#     def post(self, request, *args, **kwargs):
-#         file_serializer = ImagesaveSerializer(data=request.data)
-
-#         if file_serializer.is_valid():
-#             file_serializer.save()
-#             return Response({'image_path': file_serializer.data['image']}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class ImageView(APIView):
     parser_classes = (MultiPartParser,)
 
@@ -78,7 +67,7 @@ class ImageView(APIView):
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+# 유저 식단 평가 조회
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_user_meal_evaluation(request):
@@ -125,64 +114,37 @@ def save_user_meal(request):
     uuid = str(get_user_info(token).get('uuid',''))
     
     try:
-        # if request.data.get('inferResult') == '1':
+            
+        data = request.data.get('predict', {}).get('foodNames', [])
+        meal_date = request.data.get('mealdate')
+        meal_type = request.data.get('mealType')
         
-        # # 요청한 JSON 데이터 파싱
-        #     data = request.data.get('predict', {}).get('ktFoodsInfo', {})
-        #     meal_date = request.data.get('mealdate')
-        #     meal_type = request.data.get('mealType')
-        #     servings = request.data.get('predict', {}).get('serving', [])
-            
-        #     existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type).first()
-        #     if existing_evaluation:
-        #         existing_evaluation.delete()
-        #     for region_key, meal_data in data.items():
-                
-        #         meal_serving = float(servings.pop(0)) if servings else 1.0
-                
-        #         Usermeal.objects.create( 
-        #             uuid = uuid,
-        #             meal_type = meal_type,
-        #             meal_date = meal_date,
-        #             imagelink = request.data.get('imagelink'),
-        #             food_name = meal_data.get('food_name'),
-        #             meal_serving = meal_serving,
-        #         )
-                
-        #     return Response({"모두 저장 완료"}, status=status.HTTP_200_OK)
+        servings = request.data.get('predict', {}).get('serving', [])
         
-        # else :
-            
-            data = request.data.get('predict', {}).get('foodNames', [])
-            meal_date = request.data.get('mealdate')
-            meal_type = request.data.get('mealType')
-            
-            servings = request.data.get('predict', {}).get('serving', [])
-            
-            existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type)
-            existing_evaluation.delete()
-                    
-            for food_name in data:
-                # Nutrient 모델에서 해당 food_name이 존재하는지 확인
+        existing_evaluation = Usermeal.objects.filter(uuid=uuid, meal_date=meal_date, meal_type = meal_type)
+        existing_evaluation.delete()
                 
-                nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
-                if nutrient_obj:
-                    
-                    meal_serving = float(servings.pop(0)) if servings else 1.0
-                    Usermeal.objects.create( 
-                        uuid = uuid,
-                        meal_type = meal_type,
-                        meal_date = meal_date,
-                        imagelink = request.data.get('imagelink'),
-                        food_name = nutrient_obj,
-                        meal_serving = meal_serving,
-                    )
-                    
-                else :
-                    print("데이터베이스에 일치하는 데이터가 없습니다: ", food_name)
-                    meal_serving = float(servings.pop(0)) if servings else 1.0
+        for food_name in data:
+            # Nutrient 모델에서 해당 food_name이 존재하는지 확인
+            
+            nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
+            if nutrient_obj:
                 
-            return Response({"OCR 저장 완료"}, status=status.HTTP_200_OK)
+                meal_serving = float(servings.pop(0)) if servings else 1.0
+                Usermeal.objects.create( 
+                    uuid = uuid,
+                    meal_type = meal_type,
+                    meal_date = meal_date,
+                    imagelink = request.data.get('imagelink'),
+                    food_name = nutrient_obj,
+                    meal_serving = meal_serving,
+                )
+                
+            else :
+                print("데이터베이스에 일치하는 데이터가 없습니다: ", food_name)
+                meal_serving = float(servings.pop(0)) if servings else 1.0
+            
+        return Response({"식단 저장 완료"}, status=status.HTTP_200_OK)
         
                 
     except Exception as e:

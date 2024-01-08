@@ -52,7 +52,7 @@ def display_user_meal_evaluation(request):
     
     except ObjectDoesNotExist:
         # 데이터베이스에서 해당 user_uid에 해당하는 객체가 없을 때의 예외 처리
-        return Response({'error': '정보를 찾을 수 없음'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': '유저 정보를 찾을 수 없음'}, status=status.HTTP_404_NOT_FOUND)
 
 def validate_token(request):
     authorization_header = request.headers.get('Authorization')
