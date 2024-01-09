@@ -18,8 +18,14 @@ class CardNewsSerializer(serializers.ModelSerializer):
         model = CardNews
         fields = '__all__'
         
-        
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['id', 'content', 'created_at']
+                
 class AskSerializer(serializers.ModelSerializer):
+    answers = AnswerSerializer(many=True, read_only=True)
     class Meta:
         model = Ask
-        fields = ['id', 'title', 'content', 'image', 'created_at']
+        fields = ['id', 'title', 'content', 'image', 'created_at','answers']
+        

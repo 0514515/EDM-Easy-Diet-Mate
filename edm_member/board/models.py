@@ -51,3 +51,15 @@ class Ask(models.Model):
     class Meta:
         verbose_name = "1대1 문의"
         verbose_name_plural = "1대1 문의 목록"
+        
+class Answer(models.Model):
+    ask = models.ForeignKey(Ask, on_delete=models.CASCADE, related_name='answers', verbose_name="문의")
+    content = models.TextField(verbose_name="답변 내용")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="답변 날짜")
+
+    def __str__(self):
+        return f"{self.ask.title}에 대한 답변"
+
+    class Meta:
+        verbose_name = "답변"
+        verbose_name_plural = "답변 목록"
