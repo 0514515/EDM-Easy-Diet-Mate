@@ -1,5 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import *
+
+# 라우터 생성
+router = DefaultRouter()
+router.register(r'asks', AskViewSet)
+
 
 urlpatterns = [
     path('notices/', NoticeList.as_view(), name='notice-list'),
@@ -8,4 +14,5 @@ urlpatterns = [
     path('faqs/<int:pk>/', FAQDetailView.as_view(), name='faq-detail'),
     path('cardnews/', CardNewsListView.as_view(), name='cardnews-list'),
     path('cardnews/<int:pk>/', CardNewsDetailView.as_view(), name='cardnews-detail'),
+    path('', include(router.urls)),
 ]

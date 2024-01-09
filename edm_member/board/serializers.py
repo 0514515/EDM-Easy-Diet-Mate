@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import FAQ, Notice, CardNews
+from .models import *
 
 
 class FAQSerializer(serializers.ModelSerializer):
@@ -17,3 +17,9 @@ class CardNewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CardNews
         fields = '__all__'
+        
+        
+class AskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ask
+        fields = ['id', 'title', 'content', 'image', 'created_at']

@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 class FAQ(models.Model):
     title = models.CharField(max_length=200, verbose_name="질문")
@@ -36,3 +37,17 @@ class CardNews(models.Model):
     class Meta:
         verbose_name = "카드뉴스"
         verbose_name_plural = "카드뉴스 목록"
+        
+class Ask(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='asks', verbose_name="회원")
+    title = models.CharField(max_length=200, verbose_name="제목")
+    content = models.TextField(verbose_name="내용")
+    image = models.ImageField(upload_to='ask_images/', verbose_name="사진", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="문의 날짜")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "1대1 문의"
+        verbose_name_plural = "1대1 문의 목록"

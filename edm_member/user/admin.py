@@ -58,6 +58,9 @@ class PrivacyPolicyAdmin(admin.ModelAdmin):
     list_display = ['updated_at']
     search_fields = ['content']
 
+class AskAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'created_at')  # 관리자 목록에 표시할 필드
+    search_fields = ['title', 'content']  # 검색 가능한 필드
 
 
 admin.site.register(PrivacyPolicy, PrivacyPolicyAdmin)
@@ -66,3 +69,4 @@ admin.site.register(FAQ, FAQAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(CardNews, CardNewsAdmin)
 admin.site.register(Subscribe, SubscribeAdmin)
+admin.site.register(Ask, AskAdmin)
