@@ -39,6 +39,7 @@ class CardNews(models.Model):
         verbose_name_plural = "카드뉴스 목록"
         
 class Ask(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='asks', verbose_name="회원")
     title = models.CharField(max_length=200, verbose_name="제목")
     content = models.TextField(verbose_name="내용")
