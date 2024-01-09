@@ -73,6 +73,9 @@ class AnswerInline(admin.TabularInline):
 class AskAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'created_at')  # 관리자 목록에 표시할 필드
     search_fields = ['title', 'content']  # 검색 가능한 필드
+    inlines = [AnswerInline]    # 1대1문의에서 즉시 답변을 달 수 있게 설정
+    ordering = ['-created_at']  # 가장 최근에 올라온 문의부터 출력
+    
 
 # 1대1 문의 답변 관리
 class AnswerAdmin(admin.ModelAdmin):
