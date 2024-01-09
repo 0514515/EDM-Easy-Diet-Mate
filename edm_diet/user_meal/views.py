@@ -91,21 +91,7 @@ def get_user_meal_evaluation(request): # 식단 조회 API 함수
     
     return JsonResponse(response_data, safe=False)
 
-# class SaveUserMeal(APIView): 
-#     serializer_class = MealSerializer
-    
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         print(serializer)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({
-#                 "message" : "User meal saved"
-#             })
-#         else:
-#             return Response({
-#                 "message" : "User meal failed"
-#             })
+
 
 # 유저 식단 저장 API
 @api_view(['POST'])
