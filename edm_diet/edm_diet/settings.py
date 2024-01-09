@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
-
+from pathlib import Path    
+import json,os
+from datetime import timedelta
+from django.core.exceptions import ImproperlyConfigured
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +23,49 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-!$n=45l=4rk#8029nrk08zy93^z&&=g9^(0@fe9ts)$p7pqp5d"
+secret_file = os.path.join(BASE_DIR, 'secrets.json') # secrets.json 파일 위치를 명시
+ 
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+ 
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+ 
+SECRET_KEY = get_secret("SECRET_KEY")
+
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+   
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "set the {} enviroment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+    
+API_KEY1 = get_secret("key1")  
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+
+# # 추가
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.10.110']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +79,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "Meal_Date",
     "rest_framework",
+    "rest_framework_simplejwt",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,6 +92,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 
 ROOT_URLCONF = "edm_diet.urls"
 
@@ -71,6 +114,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "edm_diet.wsgi.application"
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365*10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365*10),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'USER_ID_FIELD': 'uuid',
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -79,9 +129,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         'NAME' : 'user_diet',
-        'USER' : 'meal_db',
+        'USER' : 'user_diet',
         'PASSWORD' : 'aivle',
-        'HOST' : '192.168.56.1',
+        'HOST' : 'db',
         'PORT' : '3306',
     }
 }
@@ -121,9 +171,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+STATIC_ROOT = '/app/static/'
 
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/app/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# AUTH_USER_MODEL = 'Meal_Date.CustomUser'
