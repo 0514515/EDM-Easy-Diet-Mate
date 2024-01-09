@@ -8,8 +8,8 @@ class SubscribeManager(models.Manager):
 
 # 구독 모델
 class Subscribe(models.Model):
-    subscribe_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_subscribe',to_field="uuid")
-    subscribe_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_subscribe',to_field="uuid")
+    subscribe_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_subscribe',to_field="uuid")   # 구독하는 유저의 uuid 필드
+    subscribe_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_subscribe',to_field="uuid")   # 구독받는 유저의 uuid 필드
     created_at = models.DateTimeField(editable=False,auto_now_add=True)
     
     # 매니저

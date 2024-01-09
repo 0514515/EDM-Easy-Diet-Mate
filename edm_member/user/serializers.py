@@ -49,11 +49,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("이름은 10자 이내로 입력해주세요.")
         return value
     
+    # 생일 검증
     def validate_birthdate(self, value):
         if value > date.today():
             raise serializers.ValidationError("미래의 날짜는 입력할 수 없습니다.")
         return value
     
+    # 활동 레벨 검증
     def validate_active_level(self, value):
         if value not in ['1레벨 - 주 2회 미만, 움직임 거의 없는 사무직',
               '2레벨 - 주 3~4회 이하, 움직임 조금 있는 직종',
@@ -63,26 +65,31 @@ class CreateUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("활동 수준은 1부터 5 사이의 값이어야 합니다.")
         return value
     
+    # 신장 검증
     def validate_height(self, value):
         if value < 0:
             raise serializers.ValidationError("키는 0 이상이어야 합니다.")
         return value
 
+    # 체중 검증
     def validate_weight(self, value):
         if value < 0:
             raise serializers.ValidationError("체중은 0 이상이어야 합니다.")
         return value
     
+    # 다이터트 목적 검증
     def validate_diet_purpose(self, value):
         if value not in ['체중 감량', '체중 유지', '체중 증량']:
             raise serializers.ValidationError("유효한 다이어트 목적을 선택해주세요.")
         return value
 
+    # 성별 검증
     def validate_gender(self, value):
         if value not in ['남자', '여자']:
             raise serializers.ValidationError("성별은 '남자' 혹은 '여자'로 입력해주세요.")
         return value
     
+    # 비밀번호 검증
     def validate_password(self, value):
         if len(value) < 8:
             raise serializers.ValidationError("비밀번호는 8자 이상이어야 합니다.")
@@ -109,7 +116,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             user.privacy_policy_agreed_at = timezone.now()
             user.save()
         return user
-   
+
     class Meta:
         model = User
         fields = [

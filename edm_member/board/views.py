@@ -7,36 +7,43 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 
+# FAQ 리스트 조회
 class FAQList(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = FAQ.objects.all()
     serializer_class = FAQSerializer
 
+# 공지 리스트 조회
 class NoticeList(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = Notice.objects.all()
     serializer_class = NoticeSerializer
     
-    
+
+# 공지 상세 조회
 class NoticeDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     queryset = Notice.objects.all()
     serializer_class = NoticeSerializer
 
+# FAQ 상세 조회
 class FAQDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     queryset = FAQ.objects.all()
     serializer_class = FAQSerializer
-    
+
+# 카드뉴스 리스트 조회
 class CardNewsListView(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = CardNews.objects.all()
     serializer_class = CardNewsSerializer
 
+# 카드뉴스 1건 조회
 class CardNewsDetailView(generics.RetrieveAPIView):
     queryset = CardNews.objects.all()
     serializer_class = CardNewsSerializer
     
+# 1대1 문의 Viewset
 class AskViewSet(viewsets.ModelViewSet):
     queryset = Ask.objects.all()
     serializer_class = AskSerializer
