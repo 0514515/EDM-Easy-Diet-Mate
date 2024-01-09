@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import json,os
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,9 +22,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+ALLOWED_HOSTS = ['*']
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-t*w0m@b(8y6g9xilq5=-fldl$*0lu=wp4d^(f+=o(lx=1pa#gd"
+secret_file = os.path.join(BASE_DIR, 'secrets.json') # secrets.json 파일 위치를 명시
+
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,23 +55,32 @@ INSTALLED_APPS = [
     "rest_framework",
     'rest_framework_simplejwt',
     "user",
+    "subscribe",
+    "corsheaders",
+    "board",
 ]
 
 #JWT
 REST_FRAMEWORK = {	
     # 토큰기반 permission
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    
+    # API 브라우저 뷰 비활성화
+    'DEFAULT_RENDERER_CLASSES': [
+    'rest_framework.renderers.JSONRenderer',
+    ]
 }
+
 REST_USE_JWT = True
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365*10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365*10),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'TOKEN_USER_CLASS': 'user.User',
@@ -64,6 +88,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -78,7 +103,7 @@ ROOT_URLCONF = "edm_user.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],  # 프로젝트 레벨 템플릿 디렉토리
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -133,7 +158,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -143,7 +168,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+STATIC_ROOT = '/app/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/app/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -154,4 +183,36 @@ AUTH_USER_MODEL = 'user.User'
 
 # url 끝에 자동 슬래시 기능.
 # 서버 실행시 에러로 인해 False 해놓음.
-APPEND_SLASH=False
+APPEND_SLASH=True
+
+CORS_ALLOW_HEADERS = [ # 허용할 헤더
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_ALL_ORIGINS: True
+
+CORS_ALLOW_METHODS  =  [ 
+    'DELETE' , 
+    'GET' , 
+    'OPTIONS' , 
+    'PATCH' , 
+    'POST' , 
+    'PUT' , 
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = get_secret("EMAIL")
+EMAIL_HOST_PASSWORD = get_secret("PASSWORD")
+EMAIL_USE_TLS = True
