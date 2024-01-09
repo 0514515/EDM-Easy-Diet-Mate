@@ -28,8 +28,6 @@ class Nutrient(models.Model):
     class Meta:
         db_table = 'nutrient'
     
-# def get_image_filename(instance, filename):
-#     return f"images/{filename}"
 
 def get_image_filename(instance, filename):
     ext = filename.split('.')[-1]

@@ -17,11 +17,11 @@ from operator import itemgetter
 
 
 def validate_token(request):
-    authorization_header = request.headers.get('Authorization')
-    if not authorization_header:
+    authorization_header = request.headers.get('Authorization') # header 에서 'Authorization'에서 사용자의 토큰을 받아옴
+    if not authorization_header: # header 에서 'Authorization' 값이 없다면 출력
         return JsonResponse({"message": "Authorization header missing"}, status=status.HTTP_401_UNAUTHORIZED)
     
-    jwt_authenticator = JWTAuthentication()
+    jwt_authenticator = JWTAuthentication() # JWTAuthentication 라이브러리를 사용하여 토큰을 검증
     try:
         validated_token = jwt_authenticator.get_validated_token(request.headers.get('Authorization').split(' ')[1])
         return str(validated_token)
@@ -30,9 +30,9 @@ def validate_token(request):
         return JsonResponse({"message": "Invalid token"}, status=status.HTTP_403_FORBIDDEN)
 
 def get_user_info(token):
-    if isinstance(token, JsonResponse):
+    if isinstance(token, JsonResponse): # 토큰이 그대로 반환되었다면 
         return token 
-    url = 'http://edm.japaneast.cloudapp.azure.com/api/user/info/'
+    url = 'http://edm.japaneast.cloudapp.azure.com/api/user/info/' # 유저 정보를 조회할 때 사용하는 API 주소
     headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token, # 실제로 받는 토큰
@@ -41,9 +41,9 @@ def get_user_info(token):
     try:
         response = requests.get(url, headers=headers)
 
-        if response.status_code == 200:
-            data = response.json()
-            user_info = data.get('user', {})
+        if response.status_code == 200: # API 응답에 성공 하였을 때
+            data = response.json() # 응답받은 JSON 파일을 data에 저장
+            user_info = data.get('user', {}) # data에서 유저 정보를 가져옴
             user_info['uuid'] = str(user_info.get('uuid', ''))  # uuid를 문자열로 변환
             return user_info
 
@@ -131,9 +131,6 @@ def save_user_meal(request):
             
             nutrient_obj = Nutrient.objects.filter(food_name=food_name).first()
             
-            print(food_name, "@@@@@@@@@@@@@@@@@@@@")
-            print(nutrient_obj, "nutrient_obj")
-            
             if nutrient_obj :
                 
                 meal_serving = float(servings.pop(0)) if servings else 1.0
@@ -145,7 +142,6 @@ def save_user_meal(request):
                     food_name = nutrient_obj,
                     meal_serving = meal_serving,
                 )
-                print("존재하는 데이터는 뒤에 저장")
                 
             else :
                 
@@ -162,12 +158,6 @@ def save_user_meal(request):
                 )
                 non_food_data.append(food_name)
                 
-                print("없는 데이터 저장완료")  
-
-                print(food_name, "food_name 조회")
-               
-                print("저장완료")  
-                
                 meal_serving = float(servings.pop(0)) if servings else 1.0
                 Usermeal.objects.create( 
                         uuid = uuid,
@@ -178,8 +168,6 @@ def save_user_meal(request):
                         meal_serving = meal_serving,
                     )
                       
-              
-        print(non_food_data, "@@@@@@@@@@@@@@@@@@@")  
         return Response({"식단 저장 완료"}, status=status.HTTP_200_OK)
         
                 

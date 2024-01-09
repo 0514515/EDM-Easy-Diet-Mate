@@ -51,7 +51,6 @@ def display_user_meal_evaluation(request):
                          "un_food_name" : user_meal_nut[10]
                          }
         
-        # print(template_data, "template_data @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         
         
         save_user_evaluation(uuid, meal_date, diet_rating[0], diet_rating[1])
@@ -113,14 +112,11 @@ def get_user_meal(uuid, meal_time, meal_type):
         'food_name__col_mg',
     )
     meal_nutrient = []
-    carbs, prot, fat, sugar, kcal, nat, col, mealserving = 0, 0, 0, 0, 0, 0, 0, 0
+    carbs, prot, fat, sugar, kcal, nat, col, mealserving, un_mealserving = 0, 0, 0, 0, 0, 0, 0, 0, 0
     imagelink = ""
     food_name, un_food_name = [], []
-    # un_meal_nutrient = []
-    
-    print('fro문 실행 전', imagelink)
-    print('fro문 실행 전 : food_Name', food_name)
-    print('fro문 실행 전 : un_food_name', un_food_name)  
+
+
     for user_meal in user_meals:
         
         if user_meal['food_name__carbs_g'] != -1:   
@@ -146,7 +142,6 @@ def get_user_meal(uuid, meal_time, meal_type):
                 imagelink = ""
 
             food_name = [meal['food_name'] for meal in meal_nutrient]
-            un_food_name= [meal['un_food_name'] for meal in meal_nutrient]
             mealserving = [meal['meal_serving'] for meal in meal_nutrient]
             
          
@@ -157,7 +152,7 @@ def get_user_meal(uuid, meal_time, meal_type):
             kcal = sum_nutrients(meal_nutrient, 'kcal')
             nat = sum_nutrients(meal_nutrient, 'nat')
             col = sum_nutrients(meal_nutrient, 'col')        
-            #return carbs, prot, fat, sugar, kcal, nat, col, imagelink, foodname, mealserving, un_food_name
+
         
         else :
             total = {
@@ -169,8 +164,8 @@ def get_user_meal(uuid, meal_time, meal_type):
                 'nat' : 0,
                 'col' : 0,
                 'imagelink': user_meal['imagelink'],
-                'food_name': "",
-                'meal_serving': 0,
+                'food_name': user_meal['food_name'],
+                'meal_serving': user_meal['meal_serving'],
                 'un_food_name': user_meal['food_name'],
             }
             meal_nutrient.append(total)
@@ -180,16 +175,11 @@ def get_user_meal(uuid, meal_time, meal_type):
                 imagelink = imagelinks[0]
             else:
                 imagelink = ""
-           
-            print('fro문 실행 중 : imagelink', imagelink)
-            food_name = [meal['food_name'] for meal in meal_nutrient]    
+                
+            food_name = [meal['food_name'] for meal in meal_nutrient]
             un_food_name= [meal['un_food_name'] for meal in meal_nutrient]
-            print('fro문 실행 중 : food_Name', food_name)
-            print('fro문 실행 중 : un_food_name', un_food_name)             
-      
-    print('fro문 실행 후 : imagelink', imagelink) 
-    print('fro문 실행 후 : food_Name', food_name)
-    print('fro문 실행 후 : un_food_name', un_food_name)          
+            
+
     return carbs, prot, fat, sugar, kcal, nat, col, imagelink, food_name, mealserving, un_food_name
         
     
