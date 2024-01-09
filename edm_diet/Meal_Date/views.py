@@ -15,7 +15,7 @@ from rest_framework.decorators import api_view,permission_classes
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def display_user_meal_evaluation(request):
+def display_user_meal_evaluation(request): # 사용자의 하루 식단에 대한 평가와 한 끼 식사에 대한 정보들을 반환해 주는 함수
     token = validate_token(request)
     if isinstance(token, JsonResponse):
         return token  # validate_token이 Response 객체를 반환한 경우, 해당 응답을 그대로 반환
@@ -23,8 +23,8 @@ def display_user_meal_evaluation(request):
     try:
         user_info = get_user_info(token)
         uuid = str(user_info.get('uuid', '')) 
-        meal_date = request.query_params.get('meal_date', '2023-12-29')
-        meal_type = request.query_params.get('meal_type', '아침')
+        meal_date = request.query_params.get('meal_date', '2023-12-29') # 날짜 정보를 파라미터에 받아온다 
+        meal_type = request.query_params.get('meal_type', '아침') # 식사 타입의 정보를 파라미터에 받아온다
 
         # 데이터베이스에서 해당 user_uid에 해당하는 객체 가져오기
         diet_rating = evaluate_user_meal(token, meal_date) # 하루 식단에 대한 평가 및 정보
@@ -135,7 +135,7 @@ def get_user_meal(uuid, meal_time, meal_type): # 한끼 식사에 대한 정보 
                 'meal_serving': user_meal['meal_serving'],
                 'un_food_name': "" # 음식 데이터가 없는 음식 이름을 저장하는 컬럼
             }
-            meal_nutrient.append(total) #meal_nutrient 에 모든 데이터 추가
+            meal_nutrient.append(total) # meal_nutrient 에 모든 데이터 추가
         
             imagelinks = [meal['imagelink'] for meal in meal_nutrient] # 한 끼 식사에 대한 이미지는 하나만 필요함
             if imagelinks: 
@@ -196,7 +196,6 @@ def evaluate_date_meal(uuid, meal_date): # 하루에 대한 식사 정보 및 �
     carbs, prot, fat, sugar, kcal, nat, col = 0, 0, 0, 0, 0, 0, 0
     
     for user_meal in user_meals:
-        print(user_meal, "user_Meal")
         
         if user_meal['food_name__carbs_g'] != -1:
             
@@ -209,8 +208,9 @@ def evaluate_date_meal(uuid, meal_date): # 하루에 대한 식사 정보 및 �
                 'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
                 'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
             }
-            meal_nutrient.append(total)
-
+            meal_nutrient.append(total) # meal_nutrient 에 모든 데이터 추가
+            
+            # meal_nutrient에 저장된 모든 영양 정보들의 합을 각 변수에 저장 
             carbs = sum_nutrients(meal_nutrient, 'carbs')
             prot = sum_nutrients(meal_nutrient, 'protein')
             fat = sum_nutrients(meal_nutrient, 'fat')
@@ -328,7 +328,8 @@ def evaluate(user_meal_nut, recommend): # 식단 평가 함수
             return min(min_error, max_error)
         else:
             return abs((actual - recommend)) / recommend * 100
-
+    
+    # 하루 식사에서 각 영양소들에 대한 오차를 반환
     carbs_error = calculate_error(recommend['carbs'], user_meal_nut[0])
     protein_error = calculate_error(recommend['protein'], user_meal_nut[1])
     fat_error = calculate_error(recommend['fat'], user_meal_nut[2])

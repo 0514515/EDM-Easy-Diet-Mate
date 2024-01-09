@@ -91,21 +91,21 @@ def get_user_meal_evaluation(request): # 식단 조회 API 함수
     
     return JsonResponse(response_data, safe=False)
 
-class SaveUserMeal(APIView): 
-    serializer_class = MealSerializer
+# class SaveUserMeal(APIView): 
+#     serializer_class = MealSerializer
     
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        print(serializer)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({
-                "message" : "User meal saved"
-            })
-        else:
-            return Response({
-                "message" : "User meal failed"
-            })
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
+#         print(serializer)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({
+#                 "message" : "User meal saved"
+#             })
+#         else:
+#             return Response({
+#                 "message" : "User meal failed"
+#             })
 
 # 유저 식단 저장 API
 @api_view(['POST'])
@@ -178,8 +178,7 @@ def save_user_meal(request):
     except Exception as e:
         # 데이터 처리 중 발생할 수 있는 예외 처리
         return Response({"message": f"오류: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-# Create your views here.
-
+    
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_subscribe_meal_evaluation(request): # uuid를 기반으로 구독자 한 명의 식단 평가 데이터를 가져오는 API 
