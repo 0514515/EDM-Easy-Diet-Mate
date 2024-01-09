@@ -30,7 +30,8 @@ def display_user_meal_evaluation(request): # 사용자의 하루 식단에 대�
         diet_rating = evaluate_user_meal(token, meal_date) # 하루 식단에 대한 평가 및 정보
         user_meal_nut = get_user_meal(uuid, meal_date, meal_type) # 한끼 식사에 대한 식사 정보
         
-        template_data = {'diet_rating': diet_rating[0], 
+        template_data = {
+                        'diet_rating': diet_rating[0], 
                         'total_carbs': diet_rating[1][0], 
                          'total_protein': diet_rating[1][1], 
                          'total_fat': diet_rating[1][2], 
@@ -66,9 +67,9 @@ def validate_token(request):
         return JsonResponse({"message": "Authorization header missing"}, status=status.HTTP_401_UNAUTHORIZED)
     
     jwt_authenticator = JWTAuthentication() # JWTAuthentication 라이브러리를 토큰을 검증할 때 사용
-    try: # 토큰 검중 후 토큰이 유효할 때
-        validated_token = jwt_authenticator.get_validated_token(request.headers.get('Authorization').split(' ')[1]) 
-        return str(validated_token)
+    try: 
+        validated_token = jwt_authenticator.get_validated_token(request.headers.get('Authorization').split(' ')[1]) # 토큰을 가져와 검증
+        return str(validated_token) # 토근을 문자열로 반환
     
     except Exception as e: # 토큰 검증 후 유효하지 않을 때 출력
         return JsonResponse({"message": "Invalid token"}, status=status.HTTP_403_FORBIDDEN)
@@ -103,7 +104,8 @@ def get_user_meal(uuid, meal_time, meal_type): # 한끼 식사에 대한 정보 
         'food_name',
         'imagelink', 
         'meal_serving', 
-        'food_name__carbs_g', # 외래키로 지정된 food_name 을 활용하여 food_name에 대한 영양정보들을 영양소 모델에서 데이터들을 모두 가져옴
+    # 외래키로 지정된 food_name 을 활용하여 food_name에 대한 영양정보들을 영양소 모델에서 데이터들을 모두 가져옴
+        'food_name__carbs_g', 
         'food_name__protein_g', 
         'food_name__fat_g', 
         'food_name__sugar_g',
@@ -134,7 +136,7 @@ def get_user_meal(uuid, meal_time, meal_type): # 한끼 식사에 대한 정보 
                 'food_name': user_meal['food_name'],
                 'meal_serving': user_meal['meal_serving'],
                 'un_food_name': "" # 음식 데이터가 없는 음식 이름을 저장하는 컬럼
-            }
+                }
             meal_nutrient.append(total) # meal_nutrient 에 모든 데이터 추가
         
             imagelinks = [meal['imagelink'] for meal in meal_nutrient] # 한 끼 식사에 대한 이미지는 하나만 필요함
@@ -157,7 +159,7 @@ def get_user_meal(uuid, meal_time, meal_type): # 한끼 식사에 대한 정보 
 
         
         else : # 영양정보에 -1 값이 들어가 있을 때
-            total = { # 평가에 사용 될 모든 영양 정보를 0으로 저장 -> 영양정보에 없는 데이터의 음식은 평가에 적용되지 않기 위함
+            total = { # 평가에 사용 될 모든 영양 정보를 0으로 저장 -> 영양정보에 없는 데이터의 음식은 영양정보를 합치지 않고 제외
                 'carbs': 0,
                 'protein': 0,
                 'fat': 0,
@@ -169,7 +171,7 @@ def get_user_meal(uuid, meal_time, meal_type): # 한끼 식사에 대한 정보 
                 'food_name': user_meal['food_name'],
                 'meal_serving': user_meal['meal_serving'],
                 'un_food_name': user_meal['food_name'],
-            }
+                }
             meal_nutrient.append(total)
             
             imagelinks = [meal['imagelink'] for meal in meal_nutrient]
@@ -188,16 +190,18 @@ def get_user_meal(uuid, meal_time, meal_type): # 한끼 식사에 대한 정보 
 
 def evaluate_date_meal(uuid, meal_date): # 하루에 대한 식사 정보 및 영양 정보를 반환하는 함수
     user_uid_after = uuid.replace('-','') 
-    user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_date).values(
+    user_meals = Usermeal.objects.filter(uuid=user_uid_after, meal_date=meal_date).values( # 식단 모델에서 uuid 와 meal_date가 모두 일치하는 데이터들을 가져옴
         'meal_serving', 'food_name__carbs_g', 'food_name__protein_g', 'food_name__fat_g', 'food_name__sugar_g', 'food_name__energy_kcal', 'food_name__nat_mg', 'food_name__col_mg',
     )
- 
+    
+    # 변수 선언 및 초기화
     meal_nutrient = []
     carbs, prot, fat, sugar, kcal, nat, col = 0, 0, 0, 0, 0, 0, 0
     
-    for user_meal in user_meals:
+    for user_meal in user_meals:  
         
-        if user_meal['food_name__carbs_g'] != -1:
+        if user_meal['food_name__carbs_g'] != -1:   # -1은 영양소 정보가 없는 food_name에 모든 영양정보 값에 -1이 들어가 있음
+                                                    # -1이 아닌 영양소 값이 들어 가 있다면 실행
             
             total = { # 하루 식사의 영양 정보를 저장
                 'carbs': user_meal['food_name__carbs_g'] * user_meal['meal_serving'],
@@ -207,7 +211,7 @@ def evaluate_date_meal(uuid, meal_date): # 하루에 대한 식사 정보 및 �
                 'kcal' : user_meal['food_name__energy_kcal'] * user_meal['meal_serving'],
                 'nat' : user_meal['food_name__nat_mg'] * user_meal['meal_serving'],
                 'col' : user_meal['food_name__col_mg'] * user_meal['meal_serving']
-            }
+                }
             meal_nutrient.append(total) # meal_nutrient 에 모든 데이터 추가
             
             # meal_nutrient에 저장된 모든 영양 정보들의 합을 각 변수에 저장 
@@ -220,7 +224,7 @@ def evaluate_date_meal(uuid, meal_date): # 하루에 대한 식사 정보 및 �
             col = sum_nutrients(meal_nutrient, 'col')
     
         else :
-            total = {
+            total = { # 평가에 사용 될 모든 영양 정보를 0으로 저장 -> 영양정보에 없는 데이터의 음식은 평가에 적용되지 않기 위함
                 'carbs': 0,
                 'protein': 0,
                 'fat': 0,
@@ -228,19 +232,19 @@ def evaluate_date_meal(uuid, meal_date): # 하루에 대한 식사 정보 및 �
                 'kcal' : 0,
                 'nat' : 0,
                 'col' : 0
-            }
+                }
             meal_nutrient.append(total)
 
         
     return carbs, prot, fat, sugar, kcal, nat, col # 하루 식사에 대한 평가를 하기 위한 영양 정보를 반환 
 
-def sum_nutrients(meal_nutrient, nutrient_key): # 영양소를 더하는 함수
+def sum_nutrients(meal_nutrient, nutrient_key): # 영양소별로 더하는 함수
     return sum(item[nutrient_key] for item in meal_nutrient)
 
 def evaluate_user_meal(token, meal_time): # 하루 식사를 평가하기 위해 데이터들을 가져오는 함수
     user_info = get_user_info(token)
     # token을 사용하여 유저 정보를 가져옴
-    
+    # 가져온 유저 정보에서 데이터 추출
     uuid = user_info.get('uuid', '')
     user_height = user_info.get('height', '')
     user_weight = user_info.get('weight', '')
@@ -254,10 +258,10 @@ def evaluate_user_meal(token, meal_time): # 하루 식사를 평가하기 위해
     # 사용자에 대한 알맞는 영양 정보들을 계산하는 calculate 함수에 user_data를 전달
     recommend_nutrients = calculate(*user_data)
     
-    user_meal_nut = evaluate_date_meal(uuid, meal_time)
-    diet_rating = evaluate(user_meal_nut, recommend_nutrients)
+    user_meal_nut = evaluate_date_meal(uuid, meal_time) # 하루의 식단에 대한 정보를 가져오는 함수
+    diet_rating = evaluate(user_meal_nut, recommend_nutrients) # 가져온 식단 정보를 기반으로 평가하는 함수
     
-    return diet_rating, user_meal_nut
+    return diet_rating, user_meal_nut # 평가 정보와 하루의 식단 정보를 반환
 
 def calculate_age(birth_date): # 현재 날짜를 기반으로 생일과 차이로 나이를 계산하는 함수
     today = datetime.now()
@@ -283,18 +287,20 @@ def calculate_protein(weight, activity_level):
 def calculate(height, weight, birth_date, sex, activity_level, goal): # 사용자의 신체 정보를 기반하여 최적의 영양정보를 반환하는 함수 (독립적인 평가식 사용)
     age = calculate_age(birth_date)
 
-    if sex == '남자':
+    if sex == '남자': # 설계한 평가식을 바탕으로 계산된 '남자'에 대한 기준치
         base_rate = 66.47 + (13.75 * (weight-10) + (5 * height) - (6.76 * age))
-    else:
+    else: # 설계한 평가식을 바탕으로 계산된 '여자'에 대한 기준치  
         base_rate = 65.51 + (9.56 * (weight-10) + (1.85 * height) - (4.68 * age))
 
-    activity_factors = {1: 0.1, 2: 0.2, 3: 0.375, 4: 0.5, 5: 0.725}
-    activity_rate = base_rate * activity_factors.get(activity_level, 0)
+    activity_factors = {1: 0.1, 2: 0.2, 3: 0.375, 4: 0.5, 5: 0.725} # 활동량을 기준으로 평가식에 사용 될 계수 설정
+    activity_rate = base_rate * activity_factors.get(activity_level, 0) # 활동량을 사용자 정보에서 받아옴
 
-    goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
-    tdee = base_rate + activity_rate + goal_factors.get(goal, 0)
+    goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200} # 계산식에 목표를 반영
+    tdee = base_rate + activity_rate + goal_factors.get(goal, 0) # 목표를 사용자 정보에서 받아옴
 
-    if sex == '남자' and tdee < 1500:
+    # tdee 는 일일 칼로리 카운터 값
+    
+    if sex == '남자' and tdee < 1500: 
         tdee = 1500
         goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
         tdee += goal_factors.get(goal, 0)
@@ -303,13 +309,14 @@ def calculate(height, weight, birth_date, sex, activity_level, goal): # 사용�
         goal_factors = {'체중 감량': -200, '체중 유지': 0, '체중증량': 200}
         tdee += goal_factors.get(goal, 0)
     
-    protein = calculate_protein(weight, activity_level)
+    # 활동량에 따른 모든 영양소 계산 
+    protein = calculate_protein(weight, activity_level) 
     fat = tdee * 0.2 / 9
     carbs = ((tdee - (protein[0] * 4 + fat * 9)) / 4, 
              (tdee - (protein[1] * 4 + fat * 9)) / 4)
     sugar = tdee * 0.1 / 4
 
-    recommend = { # 사용자의 권장 영양정보를 반환
+    recommend = { # 사용자의 권장 영양정보 반환
         'age': int(age),
         'protein': protein,
         'fat': fat,
@@ -323,7 +330,8 @@ def evaluate(user_meal_nut, recommend): # 식단 평가 함수
     
     def calculate_error(recommend, actual): # 평가식을 사용한 사용자 권장 영양정보와 와 사용자가 등록한 식단의 영양정보의 오차를 반환하는 함수
         if isinstance(recommend, tuple):
-            min_error = abs((actual - recommend[0])) / recommend[0] * 100
+            # 권장 범위를 기반으로 최소 및 최대 오차 계산
+            min_error = abs((actual - recommend[0])) / recommend[0] * 100  
             max_error = abs((actual - recommend[1])) / recommend[1] * 100
             return min(min_error, max_error)
         else:
@@ -337,7 +345,7 @@ def evaluate(user_meal_nut, recommend): # 식단 평가 함수
     errors = [carbs_error, protein_error, fat_error]
     max_error = max(errors)
 
-    # 오차를 비교하여 식단을 평가
+    # 오차를 비교하여 식단을 평가함
     if all(error <= 15 for error in errors):
         return 'Perfect'
     elif all(error <= 20 for error in errors):
