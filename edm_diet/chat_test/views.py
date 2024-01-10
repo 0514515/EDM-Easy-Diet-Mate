@@ -23,7 +23,7 @@ class OpenAI_Client:
         )
        
 # 사용자 채팅 - 일상생활 대화:0, 식단평가 문의:1로 분류
-binary_model = 'ft:gpt-3.5-turbo-1106:personal::8dab18BV'
+binary_model = 'ft:gpt-3.5-turbo-1106:personal::8dZMIYUW'
  
 # chatAPI key - settings.py 에 숨겨둠
 API_KEY1 = settings.API_KEY1
@@ -152,7 +152,7 @@ def chatGPT(inputText, key1, uuid):
         daily_response = key1.chat_completion(
         model = 'gpt-4',
         messages = [
-            {"role": "system", "content": "너는 max_tokens가 있어도 문장을 뚝 끊지 않고 마무리해주는 사용자 맞춤형 챗봇이야."},
+            {"role": "system", "content": "너는 max_tokens가 있어도 문장을 뚝 끊지 않고 마무리해줘."},
             {"role": "user", "content": inputText},
         ],
         # 최대 토큰 수 제한
