@@ -1,6 +1,8 @@
 from django.db import models
 from uuid import *
 
+
+# 음식의 영양정보가 저장되어 있는 모델
 class Nutrient(models.Model):
     food_name = models.CharField(db_column='Food_Name', max_length=45, primary_key=True)  # Field name made lowercase.
     weight_g = models.FloatField(blank=True, null=True)
@@ -28,12 +30,13 @@ class Nutrient(models.Model):
     class Meta:
         db_table = 'nutrient'
     
-
+# 이미지 주소를 받아와 변환하는 함수
 def get_image_filename(instance, filename):
     ext = filename.split('.')[-1]
     new_filename = f"{uuid4()}.{ext}"
     return new_filename
 
+# 사용자의 식단이 저장되어 있는 모델
 class Usermeal(models.Model):
     uuid = models.UUIDField(default=uuid4, max_length=32)
     meal_type = models.TextField(blank=True, null=True)
@@ -55,7 +58,7 @@ class Usermeal(models.Model):
     class Meta:
         db_table = 'usermeal'
 
-
+# 사용자의 식단에 대한 평가와 정보가 저장되어 있는 모델
 class Usermealevaluation(models.Model):
     uuid = models.UUIDField(default=uuid4, max_length=32)
     meal_date = models.DateField(blank=True, null=True)
