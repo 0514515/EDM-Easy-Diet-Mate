@@ -25,6 +25,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordResetCompleteView,PasswordResetConfirmView
 
+# 커스텀 response
 def user_response(message="", display_message="",status=status.HTTP_400_BAD_REQUEST):
     return Response(
         {
@@ -66,7 +67,7 @@ def check_email_existence(request):
 
 # 회원가입
 class CreateUser(generics.CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny] # 회원 가입은 토큰 없이도 가능해야하기에 토큰 없는 접근 허용
     serializer_class = CreateUserSerializer
     
     def post(self, request, *args, **kwargs):
@@ -90,7 +91,7 @@ class CreateUser(generics.CreateAPIView):
 # 로그인
 class Login(APIView):
     serializer_class = LoginUserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny] # 로그인은 토큰 없이도 가능해야하기에 토큰 없는 접근 허용
     
     def post(self, request):
         print(request)
@@ -136,8 +137,6 @@ class Login(APIView):
                     status=status.HTTP_200_OK
                 )
                 
-                # response.set_cookie("access_token",access_token,httponly=True)
-                # response.set_cookie("refresh_token",refresh_token,httponly=True)
                 return response
             
             else:
@@ -158,6 +157,7 @@ class Login(APIView):
 @permission_classes([IsAuthenticated])
 def user_info(request):
     
+    # 토큰 검증과 토큰 속 uuid 디코딩
     jwt_authenticator = JWTAuthentication()
     try:
         validated_token = jwt_authenticator.get_validated_token(request.headers.get('Authorization').split(' ')[1])
@@ -166,10 +166,13 @@ def user_info(request):
     except Exception as e:
         return Response({"message": "Invalid token"}, status=status.HTTP_403_FORBIDDEN)
     
+    # 회원 정보 수정
     if request.method=='PATCH':
         try:
             user = User.objects.filter(uuid=uuid).first()
             data = request.data
+            
+            # 키와 몸무게가 값이 없을 경우 유저의 기존 값으로 대체
             if data['height']=='':
                 data['height']=user.height
             if data['weight']=='':
@@ -177,6 +180,7 @@ def user_info(request):
             data = UpdateUserSerializer(request.data).data
             
             
+            # 회원이 없는 경우
             if not user:
                 print("user is not exists")
                 return user_response(
@@ -185,9 +189,11 @@ def user_info(request):
                     status=status.HTTP_400_BAD_REQUEST
                 )
                 
+            # Update 완료한 유저를 Serialize
             serializer = UpdateUserSerializer(user, data=data, partial=True)
             print(serializer)
             
+            # Serializer된 값 검증
             if serializer.is_valid():
                 print(data['height'])
                 serializer.update(instance=user,validated_data=data)
@@ -206,15 +212,21 @@ def user_info(request):
             )
     
     
+    # 회원 삭제
+    # 회원 삭제에 email과 비밀번호 확인 때문에 body로 정보를 전송하므로
+    # DELETE가 아닌 POST로 처리
     elif request.method=='POST':
         
         try:
             email = request.data['email']
             password = request.data['password']
             
+            # 보낸 토큰 속 uuid로 사용자를 조회
             user1 = User.objects.filter(uuid=uuid).first()
+            # body에 있는 email을 조회
             user2 = User.objects.filter(email=email).first()
             
+            # 토큰 속 uuid의 유저를 찾을 수 없을 경우
             if not user1:
                 print("user is not exists")
                 return user_response(
@@ -222,7 +234,10 @@ def user_info(request):
                     display_message="존재하지 않는 회원입니다.",
                     status=status.HTTP_400_BAD_REQUEST
                 )
-                    
+            
+            
+            # 토큰 속 uuid 유저의 email과 body 속 email이 다를 경우
+            # (내 이메일을 올바르게 입력하지 않았을 경우)        
             if user1 != user2:
                 print("invalid email")
                 return user_response(
@@ -239,34 +254,39 @@ def user_info(request):
                     display_message="비밀번호가 틀렸습니다.",
                     status=status.HTTP_400_BAD_REQUEST
                 )
-                
+            
+            # 삭제   
             if (email==user1.email) and check_password(password, user1.password):
-                # 삭제
                 user1.delete()
                 return user_response(
                     display_message="회원탈퇴에 성공하였습니다.",
                     message="delete user success",
                     status=status.HTTP_200_OK
                 )
-                
+            
+            # 모든 경우가 아닐 때
             return user_response(
                 display_message="회원 삭제에 실패하였습니다.",
                 message="delete user failed",
                 status=status.HTTP_400_BAD_REQUEST
             )
+            
+        # 예외 발생시
         except:
             return user_response(
                 display_message="회원 삭제에 실패하였습니다.",
                 message="delete user failed",
                 status=status.HTTP_400_BAD_REQUEST
             )
-          
+    
+    # 회원 정보 조회
     elif request.method=='GET':
         try:
             data = UpdateUserSerializer(request.data).data
             
             user = User.objects.filter(uuid=uuid).first()
             
+            # 회원 찾을 수 없을 때
             if not user:
                 print("user is not exists")
                 return user_response(
@@ -277,21 +297,27 @@ def user_info(request):
                 
             serializer = UpdateUserSerializer(user, data=data, partial=True)
             
+            # serializer 유효성 검증 올바를 때
             if serializer.is_valid():
                 serializer.save()
                 return Response({
                     "user" : UserInfoSerializer(user).data,
                 }
                 )
+                
+            # 올바르지 않을 때
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        # 기타 예외 발생하였을 때
         except:
             return user_response(
                 display_message="회원 조회에 실패하였습니다.",
                 message="search user failed",
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+    
+    # HTTP 메소드 종류 잘못되었을 때
     else:
         return Response({"message": "Method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
@@ -301,12 +327,13 @@ def privacy_policy(request):
     return JsonResponse({'content': policy.content})
 
 
+# 비밀번호 재설정 완료 페이지 View
 class MyPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'reset_password_complete.html'
     
 
+# 비밀번호 재설정 이메일 요청 View
 class PasswordResetView(APIView):
-    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
@@ -322,77 +349,12 @@ class PasswordResetView(APIView):
                 [email],
                 fail_silently=False,
             )
-            return Response({"message": "비밀번호 재설정 링크가 발송되었습니다."})
+            return Response({"message": "비밀번호 재설정 링크가 발송되었습니다."}, status=status.HTTP_200_OK)
+        
+        # 이메일 주소를 찾을 수 없을 때
         except User.DoesNotExist:
-            return Response({"error": "이 이메일 주소를 가진 사용자가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
-
-# class UserInfoApi(APIView):
-# uuid 기반 유저 정보 단일 조회
-# class GetUserInfo(generics.RetrieveAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserInfoSerializer
-#     lookup_field = 'uuid'
-    
-
-# class UpdateUserInfo(generics.UpdateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UpdateUserSerializer
-#     lookup_field = 'uuid'
-
-
-# class DeleteUserInfo(generics.DestroyAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = DeleteUserSerializer
-#     lookup_field = 'uuid'
-
-            
-# class DeleteUser(APIView):
-#     def post(self, request):
-#         email = request.data['email']
-#         password = request.data['password']
+            return Response({"message": "이 이메일 주소를 가진 사용자가 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
         
-#         user = User.objects.filter(email=email).first()
-
-#         # 계정 없을 때
-#         if is_user_exist(email):
-#             return user_error_response(
-#                 message="user is not exists",
-#                 display_message="존재하지 않는 회원입니다.",
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-            
-#         # 비밀번호 틀렸을 때
-#         if not check_password(password, user.password):
-#             return user_error_response(
-#                 message="password is not valid",
-#                 display_message="비밀번호가 틀렸습니다.",
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-            
-#         # 정보 다 맞으면
-#         if user is not None:
-  
-#             token = TokenObtainPairSerializer.get_token(user) # 리프레시 토큰 생성
-#             refresh_token = str(token)
-#             access_token = str(token.access_token)
-            
-#             response = Response(
-#                 {
-#                     "access": access_token,
-#                     "refresh": refresh_token,
-#                 },
-#                 status=status.HTTP_200_OK
-#             )
-            
-#             # response.set_cookie("access_token",access_token,httponly=True)
-#             # response.set_cookie("refresh_token",refresh_token,httponly=True)
-#             return response
-        
-#         else:
-#             return Response(
-#                 {"message","로그인에 실패하였습니다"}, status=status.HTTP_400_BAD_REQUEST
-#             )
-
-# # 회원탈퇴
-# class DeleteUser(generics.DestroyAPIView):
-#     queryset
+        # 기타 예외
+        except Exception as e:
+            return Response({"message": "비밀번호 재설정에 실패하였습니다."}, status=status.HTTP_400_BAD_REQUEST)
