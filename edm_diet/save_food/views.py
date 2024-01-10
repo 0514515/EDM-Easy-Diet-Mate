@@ -37,5 +37,6 @@ def save_new_food_api(request):
         return Response({"non_matching_data": non_matching_data}, status=status.HTTP_200_OK) # 영양정보 모델에 없는 데이터들을 반환
 
     except Exception as e:
+        
         # 데이터 처리 중 발생할 수 있는 예외 처리
-        return Response({"message": f"오류: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"non_matching_data": non_matching_data}, status=status.HTTP_200_OK)
