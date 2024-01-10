@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn -b 0.0.0.0:8000 edm_diet.wsgi:application
+    command: gunicorn -b 0.0.0.0:8000 edm_diet.wsgi:application --timeout 360
     volumes:
       - static_volume:/app/static/
       - media_volume:/app/media/
