@@ -156,7 +156,7 @@ def chatGPT(inputText, key1, uuid):
             {"role": "user", "content": inputText},
         ],
         # 최대 토큰 수 제한
-        max_tokens = 150,
+        max_tokens = 300,
         )
         # 일상 대화에 대한 답변
         daily_result = daily_response["choices"][0]["message"]["content"]
